@@ -1,76 +1,78 @@
-# Design Guidelines for Bourarro-Inspired Real Estate Website
+# Design Guidelines for Ultra-Luxury Real Estate Investment Website
 
 ## Design Approach
-**Reference-Based Approach**: Drawing inspiration from Bourarro.com's clean, professional aesthetic while modernizing the visual presentation for better user engagement and trust-building in the property investment sector.
+**Reference-Based Approach**: Drawing inspiration from luxury brands like Rolls-Royce, Four Seasons, and premium financial services, creating an exclusive, sophisticated experience that commands respect and trust from high-net-worth investors.
 
 ## Core Design Elements
 
 ### Color Palette
 **Primary Colors:**
-- Deep Navy: 220 85% 15% (primary brand color)
-- Clean White: 0 0% 100% (backgrounds, text contrast)
-- Professional Gray: 220 10% 95% (section backgrounds)
+- Deep Charcoal: 210 15% 12% (primary background)
+- Rich Black: 210 20% 8% (section backgrounds, depth)
+- Pure White: 0 0% 100% (primary text, contrast)
 
 **Accent Colors:**
-- Trust Blue: 210 100% 45% (CTAs, links, highlights)
-- Success Green: 145 65% 40% (guarantees, positive indicators)
+- Champagne Gold: 45 65% 75% (premium highlights, CTAs)
+- Warm Gold: 40 85% 65% (interactive elements, borders)
 
-**Dark Mode:**
-- Background: 220 15% 8%
-- Surface: 220 12% 12%
-- Text Primary: 0 0% 95%
+**Supporting Colors:**
+- Platinum Gray: 210 8% 85% (secondary text)
+- Smoke Gray: 210 12% 25% (cards, surfaces)
 
 ### Typography
-**Primary Font**: Inter (Google Fonts) - clean, professional, highly readable
-- Headlines: 600-700 weight, sizes from text-2xl to text-5xl
-- Body Text: 400-500 weight, text-base to text-lg
-- Accent Text: 500-600 weight for emphasis
+**Primary Font**: Playfair Display (Google Fonts) - elegant serif for headlines
+**Secondary Font**: Inter (Google Fonts) - clean sans-serif for body text
+- Headlines: Playfair Display, 600-700 weight, text-3xl to text-6xl
+- Body Text: Inter, 400-500 weight, text-base to text-lg
+- Accent Text: Inter, 600 weight for emphasis and labels
 
 ### Layout System
-**Spacing Primitives**: Tailwind units of 4, 6, 8, 12, 16, 24
-- Consistent rhythm using p-6, m-8, gap-12, etc.
-- Generous whitespace for premium feel
-- Maximum content width of max-w-7xl
+**Spacing Primitives**: Tailwind units of 6, 8, 12, 16, 24, 32
+- Generous spacing with p-12, m-16, gap-24 for premium feel
+- Maximum content width of max-w-6xl
+- Asymmetrical layouts for visual interest
 
 ### Component Library
 
-**Navigation**: Clean header with logo, main navigation, and prominent CTA button
+**Navigation**: Minimal header with refined logo, selective navigation items, and gold CTA button
 
-**Hero Section**: Full-width with background overlay, centered content, dual CTAs (primary solid, secondary outline with blurred background)
+**Hero Section**: Full-viewport with luxury property imagery, elegant typography overlay, single prominent gold CTA
 
-**Feature Cards**: Grid layout with icons, headlines, and descriptions - subtle shadows and hover states
+**Investment Cards**: Dark cards with gold borders, property imagery, ROI data, and guarantee badges
 
-**Testimonials**: Quote format with client photos, names, and titles
+**Testimonials**: Quote format with executive photos, company affiliations, and investment amounts
 
-**FAQ Section**: Expandable accordion-style with clean typography hierarchy
+**Guarantee Section**: Dedicated area highlighting rental guarantee with legal disclaimers
 
-**Forms**: Floating labels, consistent styling, clear validation states
+**Contact Forms**: Sophisticated styling with gold focus states and validation
 
 ## Visual Treatments
 
 ### Gradients
-Subtle gradients for depth:
-- Hero overlays: Deep navy to transparent
-- Section dividers: Light gray gradients for separation
-- Button backgrounds: Slight blue-to-blue variations
+Sophisticated gradients for luxury appeal:
+- Hero overlays: Deep charcoal to rich black with gold shimmer
+- Card backgrounds: Subtle charcoal-to-black gradients
+- Section dividers: Gold-to-transparent accent lines
 
 ### Background Treatments
-- Clean white/light gray section alternation
-- Subtle geometric patterns for visual interest without distraction
-- Professional photography overlays with dark gradients for text readability
+- Deep charcoal base with rich black section alternation
+- Subtle metallic texture overlays for depth
+- Gold geometric accent lines and borders
+- Premium property photography with dark gradients
 
 ## Images
-**Hero Image**: Large, professional property/handshake image with gradient overlay
-**Feature Icons**: Clean, minimal icons (Heroicons) for service benefits
-**Testimonial Photos**: Professional headshots of satisfied landlords
-**Section Imagery**: High-quality stock photos of properties, keys, documents
-**Background Elements**: Subtle architectural line drawings or geometric patterns
+**Hero Image**: Ultra-luxury property (penthouse/mansion) with sophisticated overlay
+**Property Gallery**: High-end real estate photography showcasing premium developments
+**Executive Portraits**: Professional headshots of satisfied investors and company leadership
+**Lifestyle Imagery**: Sophisticated scenes of luxury living and financial success
+**Background Elements**: Subtle architectural details, city skylines, premium textures
 
 ## Key Design Principles
-1. **Trust First**: Every element should reinforce credibility and professionalism
-2. **Clarity Over Creativity**: Information hierarchy and readability paramount
-3. **Mobile Excellence**: Touch-friendly interactions, readable text sizes
-4. **Conversion Focus**: Strategic placement of CTAs and trust signals
-5. **Premium Feel**: Quality imagery, generous spacing, refined typography
+1. **Exclusivity First**: Design conveys membership in an elite investment circle
+2. **Sophisticated Restraint**: Luxury through refinement, not ostentation
+3. **Trust Through Prestige**: Every element reinforces premium quality and reliability
+4. **Strategic Gold Usage**: Accent color used sparingly for maximum impact
+5. **Investment Focus**: Clear ROI presentation and guarantee prominence
+6. **Mobile Elegance**: Maintaining luxury feel across all devices
 
-The design emphasizes trust-building through clean aesthetics, clear information hierarchy, and professional presentation while maintaining modern web standards for performance and accessibility.
+The design emphasizes exclusivity and sophistication through dark, premium aesthetics, strategic use of gold accents, elegant typography hierarchy, and refined visual treatments that resonate with high-net-worth investors seeking guaranteed returns on luxury property investments.
