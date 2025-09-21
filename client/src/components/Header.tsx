@@ -20,16 +20,14 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60 shadow-sm">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center space-x-3">
-          <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-primary to-chart-1 flex items-center justify-center shadow-lg">
-            <span className="text-primary-foreground font-black text-lg">B</span>
+        <div className="flex items-center space-x-2">
+          <div className="h-8 w-8 rounded bg-primary flex items-center justify-center">
+            <span className="text-primary-foreground font-bold text-sm">B</span>
           </div>
-          <span className="font-bold text-xl bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
-            Bourarro Properties
-          </span>
+          <span className="font-bold text-xl text-foreground">Bourarro Properties</span>
         </div>
 
         {/* Desktop Navigation */}

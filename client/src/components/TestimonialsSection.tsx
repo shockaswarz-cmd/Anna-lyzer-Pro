@@ -34,55 +34,45 @@ export default function TestimonialsSection() {
   };
 
   return (
-    <section className="py-24 bg-gradient-to-r from-background via-muted/10 to-background relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-20 left-20 w-40 h-40 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 right-20 w-32 h-32 bg-gradient-to-l from-chart-2/10 to-primary/10 rounded-full blur-2xl"></div>
-      
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-20">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-              What Our Clients Say
-            </span>
+    <section className="py-24 bg-background">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
+            What Our Clients Say
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Real experiences from landlords who have transformed their property investments 
             with our guaranteed rent services.
           </p>
-          <div className="w-24 h-1 bg-gradient-to-r from-accent to-primary mx-auto mt-6 rounded-full"></div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
             <Card 
               key={index} 
-              className="hover-elevate cursor-pointer h-full group transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 border-0 bg-gradient-to-br from-background via-card to-muted/10"
+              className="hover-elevate cursor-pointer h-full"
               onClick={() => handleTestimonialClick(testimonial.name)}
               data-testid={`testimonial-card-${index}`}
             >
-              <CardContent className="p-8 h-full flex flex-col relative overflow-hidden">
-                {/* Background glow */}
-                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary via-accent to-chart-2 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+              <CardContent className="p-8 h-full flex flex-col">
+                <Quote className="w-8 h-8 text-primary/60 mb-6" />
                 
-                <Quote className="w-10 h-10 text-primary/80 mb-6 group-hover:text-primary group-hover:scale-110 transition-all duration-300" />
-                
-                <blockquote className="text-lg text-muted-foreground leading-relaxed mb-8 flex-grow group-hover:text-foreground/90 transition-colors duration-300 italic">
+                <blockquote className="text-lg text-muted-foreground leading-relaxed mb-8 flex-grow">
                   "{testimonial.quote}"
                 </blockquote>
 
                 <div className="flex items-center gap-4">
-                  <Avatar className="w-14 h-14 group-hover:scale-110 transition-transform duration-300 ring-2 ring-transparent group-hover:ring-primary/30">
+                  <Avatar className="w-12 h-12">
                     <AvatarImage src={testimonial.image} alt={testimonial.name} />
-                    <AvatarFallback className="bg-gradient-to-br from-primary/20 to-accent/20 text-primary font-bold text-lg">
+                    <AvatarFallback className="bg-primary/10 text-primary font-semibold">
                       {testimonial.initials}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <div className="font-bold text-foreground group-hover:text-primary transition-colors duration-300" data-testid={`testimonial-name-${index}`}>
+                    <div className="font-semibold text-foreground" data-testid={`testimonial-name-${index}`}>
                       {testimonial.name}
                     </div>
-                    <div className="text-sm text-muted-foreground font-medium" data-testid={`testimonial-title-${index}`}>
+                    <div className="text-sm text-muted-foreground" data-testid={`testimonial-title-${index}`}>
                       {testimonial.title}
                     </div>
                   </div>

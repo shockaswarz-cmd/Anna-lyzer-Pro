@@ -12,33 +12,24 @@ export default function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image with Enhanced Overlay */}
+      {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img 
           src={heroImage} 
           alt="Modern luxury property" 
-          className="w-full h-full object-cover scale-110 animate-pulse"
+          className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/60 via-primary/40 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-accent/20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/40 to-background/60" />
+        <div className="absolute inset-0 bg-primary/30" />
       </div>
-
-      {/* Floating Elements */}
-      <div className="absolute top-1/4 left-10 w-32 h-32 bg-primary/10 rounded-full blur-3xl animate-bounce"></div>
-      <div className="absolute bottom-1/3 right-10 w-24 h-24 bg-accent/10 rounded-full blur-2xl animate-pulse"></div>
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            <span className="bg-gradient-to-r from-white via-white to-accent bg-clip-text text-transparent">
-              Guaranteed Rent,
-            </span>{" "}
-            <span className="bg-gradient-to-r from-chart-2 to-accent bg-clip-text text-transparent font-extrabold">
-              Zero Hassle
-            </span>,{" "}
-            <span className="text-white">Every Month</span>
+            Guaranteed Rent,{" "}
+            <span className="text-accent-foreground">Zero Hassle</span>,{" "}
+            Every Month
           </h1>
           
           <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
@@ -47,27 +38,27 @@ export default function Hero() {
           </p>
 
           {/* Key Benefits */}
-          <div className="flex flex-wrap justify-center gap-8 mb-12">
-            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20" data-testid="benefit-commission">
-              <div className="w-3 h-3 bg-gradient-to-r from-chart-2 to-accent rounded-full animate-pulse"></div>
-              <span className="text-lg font-semibold text-white">0% Commission</span>
+          <div className="flex flex-wrap justify-center gap-6 mb-12 text-white/90">
+            <div className="flex items-center gap-2" data-testid="benefit-commission">
+              <div className="w-2 h-2 bg-chart-2 rounded-full"></div>
+              <span className="text-lg font-medium">0% Commission</span>
             </div>
-            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20" data-testid="benefit-lease">
-              <div className="w-3 h-3 bg-gradient-to-r from-chart-2 to-accent rounded-full animate-pulse"></div>
-              <span className="text-lg font-semibold text-white">3-5 Year Flexible Lease</span>
+            <div className="flex items-center gap-2" data-testid="benefit-lease">
+              <div className="w-2 h-2 bg-chart-2 rounded-full"></div>
+              <span className="text-lg font-medium">3-5 Year Flexible Lease</span>
             </div>
-            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20" data-testid="benefit-management">
-              <div className="w-3 h-3 bg-gradient-to-r from-chart-2 to-accent rounded-full animate-pulse"></div>
-              <span className="text-lg font-semibold text-white">Full Property Management</span>
+            <div className="flex items-center gap-2" data-testid="benefit-management">
+              <div className="w-2 h-2 bg-chart-2 rounded-full"></div>
+              <span className="text-lg font-medium">Full Property Management</span>
             </div>
           </div>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button 
               size="lg" 
               onClick={handleGetQuote}
-              className="text-lg px-10 py-7 h-auto bg-gradient-to-r from-primary to-chart-1 hover:from-primary/90 hover:to-chart-1/90 text-white font-semibold shadow-2xl hover:shadow-primary/50 transition-all duration-300 transform hover:scale-105 border-0"
+              className="text-lg px-8 py-6 h-auto bg-primary hover:bg-primary/90 text-primary-foreground"
               data-testid="button-hero-quote"
             >
               Get Your Guaranteed Rent Quote
@@ -76,7 +67,7 @@ export default function Hero() {
               size="lg" 
               variant="outline" 
               onClick={handleLearnMore}
-              className="text-lg px-10 py-7 h-auto bg-white/15 border-2 border-white/40 text-white hover:bg-white/25 backdrop-blur-md font-semibold transition-all duration-300 transform hover:scale-105"
+              className="text-lg px-8 py-6 h-auto bg-white/10 border-white/30 text-white hover:bg-white/20 backdrop-blur-sm"
               data-testid="button-hero-learn"
             >
               Learn More
