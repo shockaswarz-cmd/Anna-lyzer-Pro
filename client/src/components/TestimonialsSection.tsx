@@ -3,6 +3,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Quote } from "lucide-react";
 import testimonialMan from "@assets/generated_images/professional_businessman_testimonial_photo_0e9ca4a4.png";
 import testimonialWoman from "@assets/generated_images/professional_businesswoman_testimonial_photo_705e7be5.png";
+import testimonialWomanGlasses from "@assets/generated_images/professional_woman_glasses_testimonial_64a414e7.png";
+import testimonialYoungMan from "@assets/generated_images/young_professional_man_testimonial_affae0c7.png";
+import testimonialSeniorWoman from "@assets/generated_images/senior_businesswoman_testimonial_023c9063.png";
+import testimonialBeardedMan from "@assets/generated_images/bearded_professional_man_testimonial_95036613.png";
+import testimonialYoungWoman from "@assets/generated_images/young_businesswoman_dark_hair_testimonial_b3a8ed3b.png";
+import testimonialNavySuit from "@assets/generated_images/man_navy_suit_testimonial_c404bd61.png";
 
 const testimonials = [
   {
@@ -23,8 +29,113 @@ const testimonials = [
     quote: "The guaranteed rent scheme has given me complete peace of mind. No more worrying about void periods or difficult tenants.",
     name: "Michael Chen",
     title: "Portfolio Landlord",
-    image: testimonialMan,
+    image: testimonialBeardedMan,
     initials: "MC"
+  },
+  {
+    quote: "Five years into our partnership and I couldn't be happier. The monthly payments arrive like clockwork, every single month.",
+    name: "Sarah Richardson",
+    title: "Buy-to-Let Investor",
+    image: testimonialWomanGlasses,
+    initials: "SR"
+  },
+  {
+    quote: "I was skeptical about guaranteed rent at first, but Bourarro delivered everything they promised. Best decision I've made for my property business.",
+    name: "David Kumar",
+    title: "Real Estate Entrepreneur", 
+    image: testimonialYoungMan,
+    initials: "DK"
+  },
+  {
+    quote: "After 30 years as a landlord, I wish I'd found Bourarro sooner. They handle everything while I enjoy my retirement stress-free.",
+    name: "Margaret Wilson",
+    title: "Retired Landlord",
+    image: testimonialSeniorWoman,
+    initials: "MW"
+  },
+  {
+    quote: "The transparency and professionalism is outstanding. No hidden fees, no surprises, just reliable monthly income as promised.",
+    name: "Robert Zhang",
+    title: "Property Portfolio Manager",
+    image: testimonialNavySuit,
+    initials: "RZ"
+  },
+  {
+    quote: "Working full-time, I needed someone I could trust with my rental property. Bourarro has exceeded all my expectations.",
+    name: "Emily Foster",
+    title: "First-Time Landlord",
+    image: testimonialYoungWoman,
+    initials: "EF"
+  },
+  {
+    quote: "The rent guarantee product is brilliant. I get market rate rent whether the property is occupied or not - it's revolutionary.",
+    name: "Alexander Price",
+    title: "Commercial Property Owner",
+    image: testimonialMan,
+    initials: "AP"
+  },
+  {
+    quote: "Bourarro's team is incredibly responsive. Any issues are resolved quickly and professionally. I sleep well at night knowing they're managing my properties.",
+    name: "Lisa Campbell",
+    title: "Multi-Property Investor",
+    image: testimonialWoman,
+    initials: "LC"
+  },
+  {
+    quote: "I've worked with several letting agents over the years, but none compare to Bourarro's level of service and reliability.",
+    name: "Thomas Anderson",
+    title: "Property Developer",
+    image: testimonialBeardedMan,
+    initials: "TA"
+  },
+  {
+    quote: "The guaranteed rent model has transformed my cashflow. I can now plan my finances with complete confidence.",
+    name: "Jennifer Hayes",
+    title: "Property Investment Consultant",
+    image: testimonialWomanGlasses,
+    initials: "JH"
+  },
+  {
+    quote: "As a busy professional, I appreciate how Bourarro handles all the tenant headaches. I just receive my monthly payment and that's it.",
+    name: "Mark Thompson",
+    title: "IT Director & Landlord",
+    image: testimonialYoungMan,
+    initials: "MT"
+  },
+  {
+    quote: "The maintenance service is exceptional. They've actually improved the condition of my property over the lease period.",
+    name: "Patricia Moore",
+    title: "Experienced Landlord",
+    image: testimonialSeniorWoman,
+    initials: "PM"
+  },
+  {
+    quote: "I was losing money with void periods and problem tenants. Bourarro solved all of that with their guaranteed rent scheme.",
+    name: "Steven Clark",
+    title: "Property Investment Specialist",
+    image: testimonialNavySuit,
+    initials: "SC"
+  },
+  {
+    quote: "The contract terms are fair and transparent. No complicated clauses or hidden costs - just straightforward property management.",
+    name: "Rachel Green",
+    title: "Legal Professional & Investor",
+    image: testimonialYoungWoman,
+    initials: "RG"
+  },
+  {
+    quote: "Bourarro has helped me scale my property portfolio faster than I ever imagined. The guaranteed income gives me confidence to invest more.",
+    name: "Andrew Scott",
+    title: "Property Portfolio Builder",
+    image: testimonialMan,
+    initials: "AS"
+  },
+  {
+    quote: "The peace of mind is invaluable. I know my property is in safe hands and my income is guaranteed regardless of market conditions.",
+    name: "Caroline Brown",
+    title: "Investment Property Owner",
+    image: testimonialWoman,
+    initials: "CB"
   }
 ];
 
