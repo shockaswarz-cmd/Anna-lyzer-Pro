@@ -23,57 +23,57 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-primary text-primary-foreground">
-      <div className="container mx-auto px-4 py-16">
+    <footer className="bg-background border-t border-border">
+      <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="h-8 w-8 rounded bg-primary-foreground flex items-center justify-center">
-                <span className="text-primary font-bold text-sm">B</span>
+              <div className="h-8 w-8 rounded bg-muted flex items-center justify-center">
+                <span className="text-foreground font-bold text-sm">B</span>
               </div>
-              <span className="font-bold text-xl">Bourarro Properties</span>
+              <span className="font-bold text-xl text-foreground">Bourarro Properties</span>
             </div>
-            <p className="text-primary-foreground/80 leading-relaxed">
+            <p className="text-muted-foreground leading-relaxed">
               Professional property management with guaranteed rent services. 
               Transforming property investment for landlords across the UK.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-2">
               <Button 
                 variant="ghost" 
                 size="icon"
                 onClick={() => handleSocialClick('facebook')}
-                className="text-primary-foreground hover:bg-primary-foreground/10"
+                className="text-muted-foreground hover:text-foreground"
                 data-testid="social-facebook"
               >
-                <Facebook className="w-5 h-5" />
+                <Facebook className="w-4 h-4" />
               </Button>
               <Button 
                 variant="ghost" 
                 size="icon"
                 onClick={() => handleSocialClick('twitter')}
-                className="text-primary-foreground hover:bg-primary-foreground/10"
+                className="text-muted-foreground hover:text-foreground"
                 data-testid="social-twitter"
               >
-                <Twitter className="w-5 h-5" />
+                <Twitter className="w-4 h-4" />
               </Button>
               <Button 
                 variant="ghost" 
                 size="icon"
                 onClick={() => handleSocialClick('linkedin')}
-                className="text-primary-foreground hover:bg-primary-foreground/10"
+                className="text-muted-foreground hover:text-foreground"
                 data-testid="social-linkedin"
               >
-                <Linkedin className="w-5 h-5" />
+                <Linkedin className="w-4 h-4" />
               </Button>
               <Button 
                 variant="ghost" 
                 size="icon"
                 onClick={() => handleSocialClick('instagram')}
-                className="text-primary-foreground hover:bg-primary-foreground/10"
+                className="text-muted-foreground hover:text-foreground"
                 data-testid="social-instagram"
               >
-                <Instagram className="w-5 h-5" />
+                <Instagram className="w-4 h-4" />
               </Button>
             </div>
           </div>
@@ -84,35 +84,35 @@ export default function Footer() {
             <div className="space-y-2">
               <button 
                 onClick={() => handleLinkClick('home')}
-                className="block text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                className="block text-muted-foreground hover:text-foreground transition-colors"
                 data-testid="footer-link-home"
               >
                 Home
               </button>
               <button 
                 onClick={() => handleLinkClick('services')}
-                className="block text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                className="block text-muted-foreground hover:text-foreground transition-colors"
                 data-testid="footer-link-services"
               >
                 Services
               </button>
               <button 
                 onClick={() => handleLinkClick('about')}
-                className="block text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                className="block text-muted-foreground hover:text-foreground transition-colors"
                 data-testid="footer-link-about"
               >
                 About Us
               </button>
               <button 
                 onClick={() => handleLinkClick('faq')}
-                className="block text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                className="block text-muted-foreground hover:text-foreground transition-colors"
                 data-testid="footer-link-faq"
               >
                 FAQ
               </button>
               <button 
                 onClick={() => handleLinkClick('contact')}
-                className="block text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                className="block text-muted-foreground hover:text-foreground transition-colors"
                 data-testid="footer-link-contact"
               >
                 Contact
@@ -126,35 +126,35 @@ export default function Footer() {
             <div className="space-y-2">
               <button 
                 onClick={() => handleLinkClick('guaranteed-rent')}
-                className="block text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                className="block text-muted-foreground hover:text-foreground transition-colors"
                 data-testid="footer-service-guaranteed-rent"
               >
                 Guaranteed Rent
               </button>
               <button 
                 onClick={() => handleLinkClick('property-management')}
-                className="block text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                className="block text-muted-foreground hover:text-foreground transition-colors"
                 data-testid="footer-service-management"
               >
                 Property Management
               </button>
               <button 
                 onClick={() => handleLinkClick('maintenance')}
-                className="block text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                className="block text-muted-foreground hover:text-foreground transition-colors"
                 data-testid="footer-service-maintenance"
               >
                 Maintenance Services
               </button>
               <button 
                 onClick={() => handleLinkClick('legal-compliance')}
-                className="block text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                className="block text-muted-foreground hover:text-foreground transition-colors"
                 data-testid="footer-service-legal"
               >
                 Legal Compliance
               </button>
               <button 
                 onClick={() => handleLinkClick('portfolio-advice')}
-                className="block text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                className="block text-muted-foreground hover:text-foreground transition-colors"
                 data-testid="footer-service-advice"
               >
                 Portfolio Advice
@@ -168,16 +168,16 @@ export default function Footer() {
             
             <div className="space-y-3">
               <div className="flex items-center gap-3" data-testid="footer-contact-email">
-                <Mail className="w-4 h-4 text-primary-foreground/60" />
-                <span className="text-sm text-primary-foreground/80">info@bourarro.com</span>
+                <Mail className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">info@bourarro.com</span>
               </div>
               <div className="flex items-center gap-3" data-testid="footer-contact-phone">
-                <Phone className="w-4 h-4 text-primary-foreground/60" />
-                <span className="text-sm text-primary-foreground/80">0800 123 4567</span>
+                <Phone className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">0800 123 4567</span>
               </div>
               <div className="flex items-center gap-3" data-testid="footer-contact-address">
-                <MapPin className="w-4 h-4 text-primary-foreground/60" />
-                <span className="text-sm text-primary-foreground/80">London, UK</span>
+                <MapPin className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">London, UK</span>
               </div>
             </div>
 
@@ -190,7 +190,7 @@ export default function Footer() {
                   value={newsletterEmail}
                   onChange={(e) => setNewsletterEmail(e.target.value)}
                   placeholder="Your email"
-                  className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/60"
+                  className="bg-muted/50 border-border text-foreground placeholder:text-muted-foreground"
                   required
                   data-testid="input-newsletter"
                 />
@@ -208,29 +208,29 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-primary-foreground/20 mt-12 pt-8">
+        <div className="border-t border-border mt-8 pt-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="text-sm text-primary-foreground/60">
+            <div className="text-sm text-muted-foreground">
               © 2024 Bourarro Properties. All rights reserved.
             </div>
             <div className="flex space-x-6 text-sm">
               <button 
                 onClick={() => handleLinkClick('privacy')}
-                className="text-primary-foreground/60 hover:text-primary-foreground transition-colors"
+                className="text-muted-foreground hover:text-foreground transition-colors"
                 data-testid="footer-legal-privacy"
               >
                 Privacy Policy
               </button>
               <button 
                 onClick={() => handleLinkClick('terms')}
-                className="text-primary-foreground/60 hover:text-primary-foreground transition-colors"
+                className="text-muted-foreground hover:text-foreground transition-colors"
                 data-testid="footer-legal-terms"
               >
                 Terms & Conditions
               </button>
               <button 
                 onClick={() => handleLinkClick('cookies')}
-                className="text-primary-foreground/60 hover:text-primary-foreground transition-colors"
+                className="text-muted-foreground hover:text-foreground transition-colors"
                 data-testid="footer-legal-cookies"
               >
                 Cookie Policy

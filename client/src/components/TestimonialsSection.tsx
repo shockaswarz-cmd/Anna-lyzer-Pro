@@ -107,24 +107,21 @@ const StarRating = ({ rating }: { rating: number }) => {
     <div className="flex items-center gap-1" data-testid="star-rating">
       {/* Full stars */}
       {[...Array(fullStars)].map((_, i) => (
-        <Star key={`full-${i}`} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+        <Star key={`full-${i}`} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
       ))}
       {/* Half star */}
       {hasHalfStar && (
         <div className="relative">
-          <Star className="w-4 h-4 text-gray-300" />
+          <Star className="w-3 h-3 text-gray-300" />
           <div className="absolute inset-0 overflow-hidden w-1/2">
-            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
           </div>
         </div>
       )}
       {/* Empty stars */}
       {[...Array(emptyStars)].map((_, i) => (
-        <Star key={`empty-${i}`} className="w-4 h-4 text-gray-300" />
+        <Star key={`empty-${i}`} className="w-3 h-3 text-gray-300" />
       ))}
-      <span className="ml-2 text-sm text-muted-foreground font-medium">
-        {rating}/5
-      </span>
     </div>
   );
 };
@@ -160,13 +157,12 @@ export default function TestimonialsSection() {
   return (
     <section className="py-24 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-foreground mb-4">
             What Our Clients Say
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Real experiences from landlords who have transformed their property investments 
-            with our guaranteed rent services.
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Real experiences from landlords who transformed their investments.
           </p>
         </div>
 
@@ -239,8 +235,8 @@ export default function TestimonialsSection() {
             </div>
           </div>
 
-          {/* Carousel Indicators */}
-          <div className="flex justify-center gap-2 mt-8">
+          {/* Carousel Indicators - Hidden on Desktop */}
+          <div className="flex justify-center gap-2 mt-8 lg:hidden">
             {testimonials.map((_, index) => (
               <div
                 key={index}

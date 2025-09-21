@@ -41,15 +41,14 @@ export default function ContactSection() {
   };
 
   return (
-    <section className="py-24 bg-background">
+    <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-foreground mb-4">
             Get Your Guaranteed Rent Quote
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Start your journey to stress-free property investment. Get a personalized quote 
-            and discover how much you could earn with guaranteed monthly rent.
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Start your journey to stress-free property investment with guaranteed monthly rent.
           </p>
         </div>
 
@@ -57,13 +56,13 @@ export default function ContactSection() {
           {/* Contact Form */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-2xl">Request Your Quote</CardTitle>
+              <CardTitle className="text-xl">Request Your Quote</CardTitle>
               <CardDescription>
-                Fill in your property details and we'll provide a guaranteed rent estimate.
+                Fill in your details for a guaranteed rent estimate.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6" data-testid="contact-form">
+              <form onSubmit={handleSubmit} className="space-y-4" data-testid="contact-form">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="name">Full Name</Label>

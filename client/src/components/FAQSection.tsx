@@ -42,15 +42,14 @@ const faqs = [
 
 export default function FAQSection() {
   return (
-    <section className="py-24 bg-muted/30">
+    <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-foreground mb-4">
             Frequently Asked Questions
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Get answers to the most common questions about our guaranteed rent services 
-            and property management solutions.
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Get answers to common questions about our guaranteed rent services.
           </p>
         </div>
 

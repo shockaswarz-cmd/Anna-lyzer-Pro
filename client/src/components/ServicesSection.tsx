@@ -13,43 +13,33 @@ import {
 const services = [
   {
     icon: Calendar,
-    title: "1 to 5+ Year Lease",
-    description: "Your property will be 100% managed for the whole period. You will not have to worry about finding tenants or leaving your property unoccupied.",
+    title: "3-5 Year Guaranteed Lease",
+    description: "Long-term guaranteed tenancy with full property management throughout the entire period.",
   },
   {
     icon: DollarSign,
     title: "0% Commission",
-    description: "No hidden fees or charges, our leasing service is absolutely free. We manage the property free of charge and handle small maintenance issues at our cost.",
-  },
-  {
-    icon: Home,
-    title: "Market Value Rent",
-    description: "Bourarro Properties will ensure we are able to offer you top end market value rent for your property investment.",
+    description: "No hidden fees or charges. The rent agreed is the rent you receive, every month.",
   },
   {
     icon: Clock,
-    title: "Guaranteed Rent for 365 Days",
-    description: "Whether your property is occupied or vacant – you get paid, no rent breaks, no rent stops, ensuring great rental yields.",
-  },
-  {
-    icon: Receipt,
-    title: "No Utility Bills or Council Tax",
-    description: "You are not responsible for paying any utility bills or council tax during the lease period.",
+    title: "365-Day Rent Guarantee",
+    description: "Get paid whether your property is occupied or vacant. No rent breaks, ever.",
   },
   {
     icon: Wrench,
-    title: "Free Repairs",
-    description: "We have a large team of trained maintenance operatives. We complete minor repairs free of charge as part of our management service.",
+    title: "Free Maintenance",
+    description: "Complete minor repairs at no cost with our in-house maintenance team.",
   },
   {
     icon: CreditCard,
-    title: "Prompt Rental Payments",
-    description: "Bourarro Properties will pay your rent on the same day every month via an automated BACS payment system direct into your bank account.",
+    title: "Automated Payments",
+    description: "Receive your rent on the same day every month via direct bank transfer.",
   },
   {
     icon: KeyRound,
-    title: "Returning Your Property",
-    description: "When Bourarro Properties returns your property the internal condition is guaranteed, subject to fair wear and tear.",
+    title: "Property Protection",
+    description: "Property returned in guaranteed condition, subject to fair wear and tear.",
   },
 ];
 
@@ -59,19 +49,18 @@ export default function ServicesSection() {
   };
 
   return (
-    <section className="py-24 bg-muted/30">
+    <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
-            Landlords: Why Choose Us?
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-foreground mb-4">
+            Why Choose Us?
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Professional property management services designed to maximize your returns 
-            while minimizing your stress and involvement.
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Professional property management designed to maximize your returns.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {services.map((service, index) => {
             const IconComponent = service.icon;
             return (
@@ -83,14 +72,12 @@ export default function ServicesSection() {
               >
                 <CardContent className="p-6 h-full flex flex-col">
                   <div className="mb-4">
-                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                      <IconComponent className="w-6 h-6 text-primary" />
-                    </div>
+                    <IconComponent className="w-6 h-6 text-primary mb-4" />
                     <h3 className="text-xl font-semibold text-foreground mb-3">
                       {service.title}
                     </h3>
                   </div>
-                  <p className="text-muted-foreground leading-relaxed flex-grow">
+                  <p className="text-muted-foreground leading-relaxed flex-grow line-clamp-2">
                     {service.description}
                   </p>
                 </CardContent>
