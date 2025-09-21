@@ -12,6 +12,8 @@ import testimonialSeniorWoman from "@assets/generated_images/senior_businesswoma
 import testimonialBeardedMan from "@assets/generated_images/bearded_professional_man_testimonial_95036613.png";
 import testimonialYoungWoman from "@assets/generated_images/young_businesswoman_dark_hair_testimonial_b3a8ed3b.png";
 import testimonialNavySuit from "@assets/generated_images/man_navy_suit_testimonial_c404bd61.png";
+import testimonialOlderMan from "@assets/generated_images/older_professional_man_grey_hair_4be05ae2.png";
+import testimonialBlondeWoman from "@assets/generated_images/young_blonde_woman_professional_ce686a66.png";
 
 const testimonials = [
   {
@@ -77,6 +79,22 @@ const testimonials = [
     image: testimonialYoungWoman,
     initials: "EF",
     rating: 5
+  },
+  {
+    quote: "In my 25 years of property investment, I've never found a service as reliable as Bourarro. The guaranteed rent has revolutionized my retirement planning.",
+    name: "William Harrison",
+    title: "Veteran Property Investor",
+    image: testimonialOlderMan,
+    initials: "WH",
+    rating: 5
+  },
+  {
+    quote: "As a new investor, I was nervous about the rental market. Bourarro's team guided me through everything and now I earn consistent income without any stress.",
+    name: "Sophie Williams",
+    title: "New Property Investor",
+    image: testimonialBlondeWoman,
+    initials: "SW",
+    rating: 4.5
   }
 ];
 
