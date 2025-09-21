@@ -41,24 +41,36 @@ export default function ContactSection() {
   };
 
   return (
-    <section className="py-24 bg-background">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
-            Get Your Guaranteed Rent Quote
+    <section className="py-24 bg-gradient-to-br from-background via-muted/5 to-background relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute top-20 left-10 w-80 h-80 bg-gradient-to-br from-primary/10 to-accent/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 right-10 w-60 h-60 bg-gradient-to-tl from-chart-2/10 to-primary/10 rounded-full blur-3xl"></div>
+      
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="text-center mb-20">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+            <span className="bg-gradient-to-r from-primary to-chart-1 bg-clip-text text-transparent">
+              Get Your Guaranteed Rent Quote
+            </span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Start your journey to stress-free property investment. Get a personalized quote 
             and discover how much you could earn with guaranteed monthly rent.
           </p>
+          <div className="w-28 h-1 bg-gradient-to-r from-primary to-chart-1 mx-auto mt-6 rounded-full"></div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           {/* Contact Form */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl">Request Your Quote</CardTitle>
-              <CardDescription>
+          <Card className="border-0 shadow-2xl bg-gradient-to-br from-background via-card to-background hover:shadow-3xl transition-all duration-500 relative overflow-hidden">
+            {/* Card glow effect */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
+            
+            <CardHeader className="relative z-10">
+              <CardTitle className="text-2xl bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
+                Request Your Quote
+              </CardTitle>
+              <CardDescription className="text-muted-foreground">
                 Fill in your property details and we'll provide a guaranteed rent estimate.
               </CardDescription>
             </CardHeader>
@@ -179,7 +191,11 @@ export default function ContactSection() {
                   />
                 </div>
 
-                <Button type="submit" className="w-full text-lg py-6" data-testid="button-submit">
+                <Button 
+                  type="submit" 
+                  className="w-full text-lg py-6 bg-gradient-to-r from-primary to-chart-1 hover:from-primary/90 hover:to-chart-1/90 font-semibold shadow-xl hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300 transform hover:scale-[1.02]" 
+                  data-testid="button-submit"
+                >
                   Get My Guaranteed Rent Quote
                 </Button>
               </form>
@@ -188,17 +204,19 @@ export default function ContactSection() {
 
           {/* Contact Information */}
           <div className="space-y-8">
-            <Card>
+            <Card className="border-0 shadow-2xl bg-gradient-to-br from-background via-card to-muted/20 hover:shadow-3xl transition-all duration-500">
               <CardHeader>
-                <CardTitle className="text-2xl">Contact Information</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-2xl bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
+                  Contact Information
+                </CardTitle>
+                <CardDescription className="text-muted-foreground">
                   Get in touch with our property experts for immediate assistance.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="flex items-center gap-4" data-testid="contact-email">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <Mail className="w-6 h-6 text-primary" />
+              <CardContent className="space-y-8">
+                <div className="flex items-center gap-4 group hover-elevate p-4 rounded-xl transition-all duration-300" data-testid="contact-email">
+                  <div className="w-14 h-14 bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Mail className="w-6 h-6 text-primary group-hover:text-chart-1 transition-colors duration-300" />
                   </div>
                   <div>
                     <div className="font-semibold">Email Us</div>
@@ -206,22 +224,22 @@ export default function ContactSection() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4" data-testid="contact-phone">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <Phone className="w-6 h-6 text-primary" />
+                <div className="flex items-center gap-4 group hover-elevate p-4 rounded-xl transition-all duration-300" data-testid="contact-phone">
+                  <div className="w-14 h-14 bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Phone className="w-6 h-6 text-primary group-hover:text-chart-1 transition-colors duration-300" />
                   </div>
                   <div>
-                    <div className="font-semibold">Call Us</div>
+                    <div className="font-semibold group-hover:text-primary transition-colors duration-300">Call Us</div>
                     <div className="text-muted-foreground">0800 123 4567</div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4" data-testid="contact-address">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <MapPin className="w-6 h-6 text-primary" />
+                <div className="flex items-center gap-4 group hover-elevate p-4 rounded-xl transition-all duration-300" data-testid="contact-address">
+                  <div className="w-14 h-14 bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <MapPin className="w-6 h-6 text-primary group-hover:text-chart-1 transition-colors duration-300" />
                   </div>
                   <div>
-                    <div className="font-semibold">Visit Us</div>
+                    <div className="font-semibold group-hover:text-primary transition-colors duration-300">Visit Us</div>
                     <div className="text-muted-foreground">
                       123 Property Street<br />
                       London, UK W1A 0AA
