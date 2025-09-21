@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertQuoteRequestSchema, PropertyDataSchema } from "../shared/schema";
+import { sendEmail, formatQuoteEmail } from "./email";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Quote request endpoints
@@ -30,6 +31,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
       validatedData.rentalYield = propertyData.rentalYield.toString();
       
       const quoteId = await storage.insertQuoteRequest(validatedData);
+      
+      // Send email notification to Marcus
+      try {
+        const emailData = {
+          ...validatedData,
+          quoteId,
+          postcode,
+        };
+        const { subject, html, text } = formatQuoteEmail(emailData);
+        
+        await sendEmail({
+          to: 'Marcus@bourarroproperties.co.uk',
+          from: 'noreply@bourarroproperties.co.uk', // This should be a verified sender in SendGrid
+          subject,
+          html,
+          text,
+        });
+        
+        console.log('Quote notification email sent to Marcus@bourarroproperties.co.uk');
+      } catch (emailError) {
+        // Don't fail the quote request if email fails
+        console.error('Failed to send email notification:', emailError);
+      }
       
       res.json({
         success: true,
