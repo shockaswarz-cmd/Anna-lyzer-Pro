@@ -4,8 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Mail, Phone, MapPin, Calculator } from "lucide-react";
+import { Mail, Phone, MapPin, Calculator, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({
@@ -19,25 +21,119 @@ export default function ContactSection() {
   });
 
   const [estimatedRent, setEstimatedRent] = useState<number | null>(null);
+  const [propertyData, setPropertyData] = useState<any>(null);
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     console.log(`Form field updated: ${field} = ${value}`);
   };
 
-  const calculateRent = () => {
-    // Mock calculation based on current rent
-    const current = parseFloat(formData.currentRent) || 0;
-    const estimated = Math.round(current * 1.15); // 15% increase simulation
-    setEstimatedRent(estimated);
-    console.log('Rent calculation triggered:', { current, estimated });
+  const calculateRent = async () => {
+    if (!formData.propertyAddress) {
+      toast({
+        title: "Address Required",
+        description: "Please enter a property address with postcode first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsCalculating(true);
+    try {
+      // Extract postcode from address
+      const postcodeMatch = formData.propertyAddress.match(/([A-Z]{1,2}[0-9][A-Z0-9]?\s*[0-9][A-Z]{2})/i);
+      if (!postcodeMatch) {
+        throw new Error('No valid UK postcode found in address');
+      }
+      
+      const postcode = postcodeMatch[1];
+      const response = await fetch(`/api/property-data/${encodeURIComponent(postcode)}`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch property data');
+      }
+      
+      const data = await response.json();
+      setPropertyData(data);
+      
+      // Calculate guaranteed rent (85% of market rent)
+      const guaranteedRent = Math.round(data.averageRent * 0.85);
+      setEstimatedRent(guaranteedRent);
+      
+      toast({
+        title: "Quote Calculated",
+        description: `Based on real market data for ${postcode}`,
+      });
+      
+    } catch (error) {
+      console.error('Rent calculation error:', error);
+      toast({
+        title: "Calculation Error",
+        description: error instanceof Error ? error.message : "Failed to calculate rent estimate",
+        variant: "destructive",
+      });
+    } finally {
+      setIsCalculating(false);
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Contact form submitted:', formData);
-    // TODO: Remove mock functionality - replace with actual form submission
-    alert('Thank you for your enquiry! We will contact you within 24 hours.');
+    setIsSubmitting(true);
+    
+    try {
+      // Extract postcode from address
+      const postcodeMatch = formData.propertyAddress.match(/([A-Z]{1,2}[0-9][A-Z0-9]?\s*[0-9][A-Z]{2})/i);
+      const postcode = postcodeMatch ? postcodeMatch[1].toUpperCase().replace(/\s+/g, ' ') : '';
+      
+      const response = await apiRequest('POST', '/api/quote', {
+        ...formData,
+        postcode,
+        currentRent: formData.currentRent ? parseInt(formData.currentRent) : null,
+        estimatedValue: propertyData?.averagePrice || null,
+        marketRent: propertyData?.averageRent || null,
+        guaranteedRent: estimatedRent || null,
+        rentalYield: propertyData?.rentalYield?.toString() || null,
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to submit quote request');
+      }
+      
+      const result = await response.json();
+      
+      toast({
+        title: "Quote Request Submitted",
+        description: "We'll contact you within 24 hours with your guaranteed rent quote.",
+      });
+      
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        propertyType: "",
+        propertyAddress: "",
+        currentRent: "",
+        message: ""
+      });
+      setEstimatedRent(null);
+      setPropertyData(null);
+      
+    } catch (error) {
+      console.error('Form submission error:', error);
+      toast({
+        title: "Submission Error",
+        description: error instanceof Error ? error.message : "Failed to submit quote request",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -148,20 +244,40 @@ export default function ContactSection() {
                     type="button" 
                     variant="outline"
                     onClick={calculateRent}
+                    disabled={isCalculating || !formData.propertyAddress}
                     className="gap-2"
                     data-testid="button-calculate"
                   >
-                    <Calculator className="w-4 h-4" />
-                    Calculate
+                    {isCalculating ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Calculator className="w-4 h-4" />
+                    )}
+                    {isCalculating ? 'Calculating...' : 'Calculate'}
                   </Button>
                 </div>
 
-                {estimatedRent && (
+                {estimatedRent && propertyData && (
                   <div className="bg-primary/5 border border-primary/20 rounded-lg p-4" data-testid="rent-estimate">
-                    <p className="text-sm text-muted-foreground mb-1">Estimated Guaranteed Rent:</p>
-                    <p className="text-2xl font-bold text-primary">£{estimatedRent}/month</p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      *This is an estimate. Final rent guaranteed after property assessment.
+                    <div className="grid grid-cols-2 gap-4 mb-3">
+                      <div>
+                        <p className="text-xs text-muted-foreground">Market Rent</p>
+                        <p className="text-lg font-semibold text-foreground">£{propertyData.averageRent}/month</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Property Value</p>
+                        <p className="text-lg font-semibold text-foreground">£{propertyData.averagePrice.toLocaleString()}</p>
+                      </div>
+                    </div>
+                    <div className="border-t pt-3">
+                      <p className="text-sm text-muted-foreground mb-1">Guaranteed Rent (85% of market):</p>
+                      <p className="text-2xl font-bold text-primary">£{estimatedRent}/month</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Rental Yield: {propertyData.rentalYield}% • Based on {propertyData.transactionCount} recent sales
+                      </p>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      *Based on Land Registry property sales (England & Wales only). Rental estimates are calculated from property values. Final rent guaranteed after property assessment.
                     </p>
                   </div>
                 )}
@@ -178,8 +294,20 @@ export default function ContactSection() {
                   />
                 </div>
 
-                <Button type="submit" className="w-full text-lg py-6" data-testid="button-submit">
-                  Get My Guaranteed Rent Quote
+                <Button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="w-full text-lg py-6" 
+                  data-testid="button-submit"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    'Get My Guaranteed Rent Quote'
+                  )}
                 </Button>
               </form>
             </CardContent>
