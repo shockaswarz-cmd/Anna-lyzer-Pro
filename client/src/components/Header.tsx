@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import bourrarroLogo from "@assets/Properties (1)_1758478693104.png";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,11 +24,12 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center space-x-2">
-          <div className="h-8 w-8 rounded bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-sm">B</span>
-          </div>
-          <span className="font-bold text-xl text-foreground">Bourarro Properties</span>
+        <div className="flex items-center space-x-3">
+          <img 
+            src={bourrarroLogo} 
+            alt="Bourarro Properties" 
+            className="h-10 w-auto"
+          />
         </div>
 
         {/* Desktop Navigation */}
