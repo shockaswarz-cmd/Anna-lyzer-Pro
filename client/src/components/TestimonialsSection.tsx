@@ -1,6 +1,9 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Quote } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Quote, Star, ChevronLeft, ChevronRight } from "lucide-react";
+import useEmblaCarousel from 'embla-carousel-react';
+import { useCallback } from "react";
 import testimonialMan from "@assets/generated_images/professional_businessman_testimonial_photo_0e9ca4a4.png";
 import testimonialWoman from "@assets/generated_images/professional_businesswoman_testimonial_photo_705e7be5.png";
 import testimonialWomanGlasses from "@assets/generated_images/professional_woman_glasses_testimonial_64a414e7.png";
@@ -16,60 +19,122 @@ const testimonials = [
     name: "James Martin",
     title: "Property Investor",
     image: testimonialMan,
-    initials: "JM"
+    initials: "JM",
+    rating: 5
   },
   {
     quote: "Unlocking the best opportunities in the property market, Bourarro Properties has been pivotal in guiding me towards profitable investment endeavors.",
     name: "Nora Thomas",
     title: "Landlord & Investor", 
     image: testimonialWoman,
-    initials: "NT"
+    initials: "NT",
+    rating: 5
   },
   {
     quote: "The guaranteed rent scheme has given me complete peace of mind. No more worrying about void periods or difficult tenants.",
     name: "Michael Chen",
     title: "Portfolio Landlord",
     image: testimonialBeardedMan,
-    initials: "MC"
+    initials: "MC",
+    rating: 4.5
   },
   {
     quote: "Five years into our partnership and I couldn't be happier. The monthly payments arrive like clockwork, every single month.",
     name: "Sarah Richardson",
     title: "Buy-to-Let Investor",
     image: testimonialWomanGlasses,
-    initials: "SR"
+    initials: "SR",
+    rating: 5
   },
   {
     quote: "I was skeptical about guaranteed rent at first, but Bourarro delivered everything they promised. Best decision I've made for my property business.",
     name: "David Kumar",
     title: "Real Estate Entrepreneur", 
     image: testimonialYoungMan,
-    initials: "DK"
+    initials: "DK",
+    rating: 4.5
   },
   {
     quote: "After 30 years as a landlord, I wish I'd found Bourarro sooner. They handle everything while I enjoy my retirement stress-free.",
     name: "Margaret Wilson",
     title: "Retired Landlord",
     image: testimonialSeniorWoman,
-    initials: "MW"
+    initials: "MW",
+    rating: 5
   },
   {
     quote: "The transparency and professionalism is outstanding. No hidden fees, no surprises, just reliable monthly income as promised.",
     name: "Robert Zhang",
     title: "Property Portfolio Manager",
     image: testimonialNavySuit,
-    initials: "RZ"
+    initials: "RZ",
+    rating: 4.5
   },
   {
     quote: "Working full-time, I needed someone I could trust with my rental property. Bourarro has exceeded all my expectations.",
     name: "Emily Foster",
     title: "First-Time Landlord",
     image: testimonialYoungWoman,
-    initials: "EF"
+    initials: "EF",
+    rating: 5
   }
 ];
 
+const StarRating = ({ rating }: { rating: number }) => {
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 !== 0;
+  const emptyStars = 5 - Math.ceil(rating);
+
+  return (
+    <div className="flex items-center gap-1" data-testid="star-rating">
+      {/* Full stars */}
+      {[...Array(fullStars)].map((_, i) => (
+        <Star key={`full-${i}`} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+      ))}
+      {/* Half star */}
+      {hasHalfStar && (
+        <div className="relative">
+          <Star className="w-4 h-4 text-gray-300" />
+          <div className="absolute inset-0 overflow-hidden w-1/2">
+            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+          </div>
+        </div>
+      )}
+      {/* Empty stars */}
+      {[...Array(emptyStars)].map((_, i) => (
+        <Star key={`empty-${i}`} className="w-4 h-4 text-gray-300" />
+      ))}
+      <span className="ml-2 text-sm text-muted-foreground font-medium">
+        {rating}/5
+      </span>
+    </div>
+  );
+};
+
 export default function TestimonialsSection() {
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: 'start',
+    slidesToScroll: 1,
+    breakpoints: {
+      '(min-width: 768px)': { slidesToScroll: 2 },
+      '(min-width: 1024px)': { slidesToScroll: 3 },
+    }
+  });
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) {
+      emblaApi.scrollPrev();
+      console.log('Carousel scrolled to previous');
+    }
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) {
+      emblaApi.scrollNext();
+      console.log('Carousel scrolled to next');
+    }
+  }, [emblaApi]);
+
   const handleTestimonialClick = (name: string) => {
     console.log(`Testimonial clicked: ${name}`);
   };
@@ -87,40 +152,85 @@ export default function TestimonialsSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <Card 
-              key={index} 
-              className="hover-elevate cursor-pointer h-full"
-              onClick={() => handleTestimonialClick(testimonial.name)}
-              data-testid={`testimonial-card-${index}`}
+        <div className="relative">
+          {/* Carousel Navigation */}
+          <div className="flex justify-center gap-4 mb-8">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={scrollPrev}
+              className="h-12 w-12"
+              data-testid="carousel-prev"
             >
-              <CardContent className="p-8 h-full flex flex-col">
-                <Quote className="w-8 h-8 text-primary/60 mb-6" />
-                
-                <blockquote className="text-lg text-muted-foreground leading-relaxed mb-8 flex-grow">
-                  "{testimonial.quote}"
-                </blockquote>
+              <ChevronLeft className="h-5 w-5" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={scrollNext}
+              className="h-12 w-12"
+              data-testid="carousel-next"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </Button>
+          </div>
 
-                <div className="flex items-center gap-4">
-                  <Avatar className="w-12 h-12">
-                    <AvatarImage src={testimonial.image} alt={testimonial.name} />
-                    <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                      {testimonial.initials}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <div className="font-semibold text-foreground" data-testid={`testimonial-name-${index}`}>
-                      {testimonial.name}
-                    </div>
-                    <div className="text-sm text-muted-foreground" data-testid={`testimonial-title-${index}`}>
-                      {testimonial.title}
-                    </div>
-                  </div>
+          {/* Carousel Container */}
+          <div className="overflow-hidden" ref={emblaRef} data-testid="testimonials-carousel">
+            <div className="flex gap-6">
+              {testimonials.map((testimonial, index) => (
+                <div
+                  key={index}
+                  className="flex-[0_0_100%] md:flex-[0_0_calc(50%-12px)] lg:flex-[0_0_calc(33.333%-16px)] min-w-0"
+                >
+                  <Card 
+                    className="hover-elevate cursor-pointer h-full"
+                    onClick={() => handleTestimonialClick(testimonial.name)}
+                    data-testid={`testimonial-card-${index}`}
+                  >
+                    <CardContent className="p-8 h-full flex flex-col">
+                      <div className="flex items-center justify-between mb-6">
+                        <Quote className="w-8 h-8 text-primary/60" />
+                        <StarRating rating={testimonial.rating} />
+                      </div>
+                      
+                      <blockquote className="text-lg text-muted-foreground leading-relaxed mb-8 flex-grow">
+                        "{testimonial.quote}"
+                      </blockquote>
+
+                      <div className="flex items-center gap-4">
+                        <Avatar className="w-12 h-12">
+                          <AvatarImage src={testimonial.image} alt={testimonial.name} />
+                          <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                            {testimonial.initials}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <div className="font-semibold text-foreground" data-testid={`testimonial-name-${index}`}>
+                            {testimonial.name}
+                          </div>
+                          <div className="text-sm text-muted-foreground" data-testid={`testimonial-title-${index}`}>
+                            {testimonial.title}
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
+              ))}
+            </div>
+          </div>
+
+          {/* Carousel Indicators */}
+          <div className="flex justify-center gap-2 mt-8">
+            {testimonials.map((_, index) => (
+              <div
+                key={index}
+                className="w-2 h-2 rounded-full bg-muted-foreground/30"
+                data-testid={`carousel-indicator-${index}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
