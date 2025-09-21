@@ -2,9 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { 
   Calendar, 
   DollarSign, 
-  Home, 
   Clock, 
-  Receipt, 
   Wrench, 
   CreditCard, 
   KeyRound 
@@ -13,33 +11,33 @@ import {
 const services = [
   {
     icon: Calendar,
-    title: "3-5 Year Guaranteed Lease",
-    description: "Long-term guaranteed tenancy with full property management throughout the entire period.",
+    title: "Guaranteed Lease Terms",
+    description: "Exclusive 3-5 year guaranteed tenancy agreements with comprehensive luxury property management throughout the entire investment period.",
   },
   {
     icon: DollarSign,
-    title: "0% Commission",
-    description: "No hidden fees or charges. The rent agreed is the rent you receive, every month.",
+    title: "Zero Commission Structure",
+    description: "Transparent pricing with no hidden fees or charges. The premium rent agreed upon is the exact amount you receive, every single month.",
   },
   {
     icon: Clock,
-    title: "365-Day Rent Guarantee",
-    description: "Get paid whether your property is occupied or vacant. No rent breaks, ever.",
+    title: "365-Day Income Guarantee",
+    description: "Continuous rental income whether your premium property is occupied or vacant. Guaranteed monthly payments without exception.",
   },
   {
     icon: Wrench,
-    title: "Free Maintenance",
-    description: "Complete minor repairs at no cost with our in-house maintenance team.",
+    title: "Concierge Maintenance",
+    description: "White-glove property maintenance and repairs at no additional cost through our premium in-house service team.",
   },
   {
     icon: CreditCard,
-    title: "Automated Payments",
-    description: "Receive your rent on the same day every month via direct bank transfer.",
+    title: "Seamless Payment System",
+    description: "Automated luxury service with guaranteed rent payments transferred directly to your account on the same date each month.",
   },
   {
     icon: KeyRound,
-    title: "Property Protection",
-    description: "Property returned in guaranteed condition, subject to fair wear and tear.",
+    title: "Property Stewardship",
+    description: "Your valuable investment property returned in immaculate condition with our comprehensive care and protection guarantee.",
   },
 ];
 
@@ -49,41 +47,75 @@ export default function ServicesSection() {
   };
 
   return (
-    <section className="py-20 bg-muted/30">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-foreground mb-4">
-            Why Choose Us?
+    <section id="services" className="py-24 bg-secondary relative overflow-hidden">
+      {/* Luxury Background Elements */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-20 left-10 w-96 h-96 bg-primary/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl"></div>
+      </div>
+      
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-6 py-3 mb-8">
+            <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+            <span className="text-primary font-semibold text-sm tracking-wide uppercase">Premium Services</span>
+          </div>
+          <h2 className="text-5xl lg:text-6xl font-bold text-foreground mb-6">
+            Exclusive <span className="text-primary italic">Investment</span> Benefits
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Professional property management designed to maximize your returns.
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            Sophisticated property management solutions designed for discerning investors seeking guaranteed returns.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {services.map((service, index) => {
             const IconComponent = service.icon;
             return (
               <Card 
                 key={index} 
-                className="hover-elevate cursor-pointer h-full"
+                className="bg-card/80 backdrop-blur-sm border-2 border-primary/20 hover:border-primary/40 hover-elevate cursor-pointer h-full transition-all duration-500 group"
                 onClick={() => handleServiceClick(service.title)}
                 data-testid={`service-card-${index}`}
               >
-                <CardContent className="p-6 h-full flex flex-col">
-                  <div className="mb-4">
-                    <IconComponent className="w-6 h-6 text-primary mb-4" />
-                    <h3 className="text-xl font-semibold text-foreground mb-3">
+                <CardContent className="p-8 h-full flex flex-col">
+                  <div className="mb-6">
+                    <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors duration-300">
+                      <IconComponent className="w-8 h-8 text-primary" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-foreground mb-4">
                       {service.title}
                     </h3>
                   </div>
-                  <p className="text-muted-foreground leading-relaxed flex-grow line-clamp-2">
+                  <p className="text-muted-foreground leading-relaxed flex-grow text-lg">
                     {service.description}
                   </p>
                 </CardContent>
               </Card>
             );
           })}
+        </div>
+        
+        {/* Luxury Trust Indicators */}
+        <div className="mt-20 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-primary mb-2">£2.5M+</div>
+              <div className="text-muted-foreground">Assets Managed</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-primary mb-2">500+</div>
+              <div className="text-muted-foreground">Properties</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-primary mb-2">99.8%</div>
+              <div className="text-muted-foreground">Satisfaction Rate</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-primary mb-2">5+</div>
+              <div className="text-muted-foreground">Year Guarantees</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

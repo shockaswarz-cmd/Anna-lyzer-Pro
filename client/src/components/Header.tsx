@@ -12,28 +12,42 @@ export default function Header() {
   };
 
   const handleNavClick = (section: string) => {
-    console.log(`Navigation clicked: ${section}`);
+    let sectionId = section;
+    if (section === 'home') sectionId = '';
+    if (section === 'about') sectionId = 'testimonials'; // Link About to testimonials section
+    
+    const element = sectionId ? document.getElementById(sectionId) : document.body;
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
     setIsMenuOpen(false);
   };
 
   const handleGetQuote = () => {
-    console.log('Get Quote button clicked');
+    const element = document.getElementById('contact');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
-        {/* Logo */}
-        <div className="flex items-center space-x-3">
+    <header className="sticky top-0 z-50 w-full border-b border-primary/20 bg-background/98 backdrop-blur-xl supports-[backdrop-filter]:bg-background/95">
+      <div className="container flex h-20 items-center justify-between px-6">
+        {/* Luxury Logo */}
+        <div className="flex items-center space-x-4">
           <img 
             src={bourrarroLogo} 
-            alt="Bourarro Properties" 
-            className="h-10 w-auto"
+            alt="Bourarro Properties - Luxury Investment" 
+            className="h-12 w-auto filter brightness-110"
           />
+          <div className="hidden lg:block w-px h-8 bg-primary/30"></div>
+          <div className="hidden lg:block">
+            <span className="text-primary text-sm font-semibold tracking-wider uppercase">Premium Investments</span>
+          </div>
         </div>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
+        {/* Luxury Desktop Navigation */}
+        <nav className="hidden md:flex items-center space-x-10">
           <button 
             onClick={() => handleNavClick('home')}
             className="text-muted-foreground hover:text-foreground transition-colors"
@@ -71,13 +85,13 @@ export default function Header() {
           </button>
         </nav>
 
-        {/* CTA Button - Desktop */}
+        {/* Luxury CTA Button - Desktop */}
         <Button 
           onClick={handleGetQuote}
-          className="hidden md:flex"
+          className="hidden md:flex px-8 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full transition-all duration-300 hover:scale-105 shadow-lg"
           data-testid="button-get-quote"
         >
-          Get Your Quote
+          Request Quote
         </Button>
 
         {/* Mobile Menu Button */}
@@ -92,10 +106,10 @@ export default function Header() {
         </Button>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* Luxury Mobile Navigation */}
       {isMenuOpen && (
-        <div className="md:hidden border-t bg-background">
-          <div className="container py-4 space-y-4">
+        <div className="md:hidden border-t border-primary/20 bg-background/98 backdrop-blur-xl">
+          <div className="container py-6 space-y-4 px-6">
             <button 
               onClick={() => handleNavClick('home')}
               className="block w-full text-left text-muted-foreground hover:text-foreground transition-colors py-2"
@@ -133,10 +147,10 @@ export default function Header() {
             </button>
             <Button 
               onClick={handleGetQuote}
-              className="w-full mt-4"
+              className="w-full mt-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full transition-all duration-300"
               data-testid="mobile-button-get-quote"
             >
-              Get Your Quote
+              Request Quote
             </Button>
           </div>
         </div>

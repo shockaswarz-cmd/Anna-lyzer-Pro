@@ -3,72 +3,109 @@ import heroImage from "@assets/generated_images/luxury_apartment_building_hero_7
 
 export default function Hero() {
   const handleGetQuote = () => {
-    console.log('Get Quote button clicked from hero');
+    const element = document.getElementById('contact');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleLearnMore = () => {
-    console.log('Learn More button clicked from hero');
+    const element = document.getElementById('services');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image with Overlay */}
+      {/* Background Image with Luxury Overlay */}
       <div className="absolute inset-0 z-0">
         <img 
           src={heroImage} 
-          alt="Modern luxury property" 
-          className="w-full h-full object-cover"
+          alt="Ultra-luxury property investment opportunity" 
+          className="w-full h-full object-cover scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/20 to-transparent" />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 text-center">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-5xl font-bold text-white mb-6 leading-tight">
-            Guaranteed Rent, Zero Hassle
+      {/* Luxury Content */}
+      <div className="relative z-10 container mx-auto px-6 text-center">
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-8">
+            <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-6 py-3 mb-8">
+              <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+              <span className="text-primary font-semibold text-sm tracking-wide uppercase">Exclusive Investment Opportunity</span>
+            </div>
+          </div>
+          
+          <h1 className="text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight tracking-tight">
+            Guaranteed <span className="text-primary italic">Premium</span> Returns
           </h1>
           
-          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Market value rent, 0% commission, and full property management for 3-5 years.
+          <p className="text-2xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
+            Exclusive property investment with guaranteed rental income, zero fees, and comprehensive luxury property management.
           </p>
 
-          {/* Key Benefits */}
-          <div className="flex flex-wrap justify-center gap-6 mb-12 text-white/90">
-            <div className="flex items-center gap-2" data-testid="benefit-commission">
-              <div className="w-2 h-2 bg-chart-2 rounded-full"></div>
-              <span className="text-lg font-medium">0% Commission</span>
+          {/* Premium Benefits */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 max-w-4xl mx-auto">
+            <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-2xl p-6 text-center" data-testid="benefit-commission">
+              <div className="w-4 h-4 bg-primary rounded-full mx-auto mb-3"></div>
+              <h3 className="text-xl font-semibold text-white mb-2">Zero Fees</h3>
+              <p className="text-white/80 text-sm">No commission, no hidden costs</p>
             </div>
-            <div className="flex items-center gap-2" data-testid="benefit-lease">
-              <div className="w-2 h-2 bg-chart-2 rounded-full"></div>
-              <span className="text-lg font-medium">3-5 Year Flexible Lease</span>
+            <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-2xl p-6 text-center" data-testid="benefit-lease">
+              <div className="w-4 h-4 bg-primary rounded-full mx-auto mb-3"></div>
+              <h3 className="text-xl font-semibold text-white mb-2">Flexible Terms</h3>
+              <p className="text-white/80 text-sm">3-5 year guaranteed lease options</p>
             </div>
-            <div className="flex items-center gap-2" data-testid="benefit-management">
-              <div className="w-2 h-2 bg-chart-2 rounded-full"></div>
-              <span className="text-lg font-medium">Full Property Management</span>
+            <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-2xl p-6 text-center" data-testid="benefit-management">
+              <div className="w-4 h-4 bg-primary rounded-full mx-auto mb-3"></div>
+              <h3 className="text-xl font-semibold text-white mb-2">White-Glove Service</h3>
+              <p className="text-white/80 text-sm">Complete luxury property management</p>
             </div>
           </div>
 
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          {/* Luxury CTAs */}
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <Button 
               size="lg" 
               onClick={handleGetQuote}
-              className="px-8 py-3"
+              className="px-12 py-4 text-lg font-semibold bg-primary hover:bg-primary/90 text-primary-foreground border-2 border-primary rounded-full transition-all duration-300 hover:scale-105 shadow-2xl"
               data-testid="button-hero-quote"
             >
-              Get Your Quote
+              Request Exclusive Quote
             </Button>
             <Button 
               size="lg" 
               variant="outline" 
               onClick={handleLearnMore}
-              className="px-8 py-3 bg-white/10 border-white/30 text-white hover:bg-white/20 backdrop-blur-sm"
+              className="px-12 py-4 text-lg font-semibold bg-white/5 border-2 border-white/40 text-white hover:bg-white/10 backdrop-blur-lg rounded-full transition-all duration-300 hover:scale-105"
               data-testid="button-hero-learn"
             >
-              Learn More
+              Discover More
             </Button>
           </div>
+          
+          {/* Trust Indicator */}
+          <div className="mt-16 text-center">
+            <p className="text-white/60 text-sm font-light mb-3">Trusted by high-net-worth investors across the UK</p>
+            <div className="flex justify-center items-center gap-8 text-white/40">
+              <div className="text-xs">£2.5M+ Managed</div>
+              <div className="w-1 h-1 bg-white/40 rounded-full"></div>
+              <div className="text-xs">500+ Properties</div>
+              <div className="w-1 h-1 bg-white/40 rounded-full"></div>
+              <div className="text-xs">99.8% Satisfaction</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Luxury Scroll Indicator */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
+        <div className="flex flex-col items-center gap-2 text-white/60">
+          <span className="text-xs font-light tracking-widest uppercase">Scroll to Explore</span>
+          <div className="w-px h-8 bg-gradient-to-b from-white/60 to-transparent"></div>
         </div>
       </div>
     </section>

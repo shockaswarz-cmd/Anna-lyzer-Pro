@@ -53,10 +53,16 @@ export default function ContactSection() {
       const response = await fetch(`/api/property-data/${encodeURIComponent(postcode)}`);
       
       if (!response.ok) {
-        throw new Error('Failed to fetch property data');
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage = errorData.error || 'Failed to fetch property data for this postcode';
+        throw new Error(errorMessage);
       }
       
       const data = await response.json();
+      
+      if (!data.averagePrice || data.averagePrice === 0) {
+        throw new Error('No recent property sales data found for this postcode. Please try a different address.');
+      }
       setPropertyData(data);
       
       // Calculate guaranteed rent (85% of market rent)
@@ -65,7 +71,7 @@ export default function ContactSection() {
       
       toast({
         title: "Quote Calculated",
-        description: `Based on real market data for ${postcode}`,
+        description: `Based on Land Registry sales (England & Wales only). Rental estimates are calculated from property values. Final rent guaranteed after property assessment.`,
       });
       
     } catch (error) {
@@ -137,7 +143,7 @@ export default function ContactSection() {
   };
 
   return (
-    <section className="py-20 bg-muted/30">
+    <section id="contact" className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-foreground mb-4">
