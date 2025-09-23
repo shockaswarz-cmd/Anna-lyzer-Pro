@@ -106,6 +106,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // SEO Sitemap endpoint
+  app.get("/sitemap.xml", (req, res) => {
+    const baseUrl = "https://bourarroproperties.co.uk";
+    const currentDate = new Date().toISOString();
+    
+    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${baseUrl}/</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/privacy-policy</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/terms-conditions</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/cookie-policy</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>`;
+
+    res.set('Content-Type', 'application/xml');
+    res.send(sitemap);
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
