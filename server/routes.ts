@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertQuoteRequestSchema, PropertyDataSchema } from "../shared/schema";
 import { sendEmail, formatQuoteEmail } from "./email";
+import { fetchLodgifyProperties } from "./lodgify";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Quote request endpoints
@@ -86,6 +87,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(400).json({ 
         success: false, 
         error: 'Failed to fetch property data for this postcode' 
+      });
+    }
+  });
+
+  // Lodgify properties endpoint
+  app.get("/api/lodgify/properties", async (req, res) => {
+    try {
+      console.log('Fetching Lodgify properties...');
+      const properties = await fetchLodgifyProperties();
+      res.json(properties);
+    } catch (error) {
+      console.error('Error fetching Lodgify properties:', error);
+      res.status(500).json({ 
+        error: 'Failed to fetch properties',
+        message: 'Unable to load property listings at this time'
       });
     }
   });
