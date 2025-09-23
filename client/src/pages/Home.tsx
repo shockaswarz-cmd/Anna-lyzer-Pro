@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import ServicesSection from "@/components/ServicesSection";
 import ServicedAccommodationSection from "@/components/ServicedAccommodationSection";
 import AboutSection from "@/components/AboutSection";
+import InvestorDealsSection from "@/components/InvestorDealsSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FAQSection from "@/components/FAQSection";
 import ContactSection from "@/components/ContactSection";
@@ -111,6 +112,7 @@ export default function Home() {
       <ServicesSection />
       <ServicedAccommodationSection />
       <AboutSection />
+      <InvestorDealsSection />
       <TestimonialsSection />
       <FAQSection />
       <ContactSection />
