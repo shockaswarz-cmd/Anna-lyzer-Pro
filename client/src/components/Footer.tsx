@@ -64,6 +64,9 @@ export default function Footer() {
       case 'linkedin':
         window.open('https://www.linkedin.com/company/23675412/admin/dashboard/', '_blank');
         break;
+      case 'instagram':
+        window.open('https://www.instagram.com/Bourarropropertiesltd/', '_blank');
+        break;
       // Add other social media links here as needed
       default:
         break;
