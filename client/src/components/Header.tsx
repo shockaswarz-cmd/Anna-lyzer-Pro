@@ -76,6 +76,13 @@ export default function Header() {
             About
           </button>
           <button 
+            onClick={() => handleNavClick('investors')}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+            data-testid="nav-investors"
+          >
+            Investors
+          </button>
+          <button 
             onClick={() => handleNavClick('faq')}
             className="text-muted-foreground hover:text-foreground transition-colors"
             data-testid="nav-faq"
@@ -143,6 +150,13 @@ export default function Header() {
               data-testid="mobile-nav-about"
             >
               About
+            </button>
+            <button 
+              onClick={() => handleNavClick('investors')}
+              className="block w-full text-left text-muted-foreground hover:text-foreground transition-colors py-2"
+              data-testid="mobile-nav-investors"
+            >
+              Investors
             </button>
             <button 
               onClick={() => handleNavClick('faq')}
