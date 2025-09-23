@@ -59,6 +59,15 @@ export default function Footer() {
 
   const handleSocialClick = (platform: string) => {
     console.log(`Social media clicked: ${platform}`);
+    
+    switch(platform) {
+      case 'linkedin':
+        window.open('https://www.linkedin.com/company/23675412/admin/dashboard/', '_blank');
+        break;
+      // Add other social media links here as needed
+      default:
+        break;
+    }
   };
 
   return (
