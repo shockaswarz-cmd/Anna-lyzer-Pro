@@ -71,7 +71,7 @@ export default function AboutSection() {
         </div>
 
         {/* Company Story */}
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="max-w-4xl mx-auto">
           <div>
             <h3 className="text-3xl font-bold font-serif text-foreground mb-6">
               Making Investment Excellence Accessible
@@ -90,30 +90,6 @@ export default function AboutSection() {
                 We believe every investor deserves access to <span className="text-primary font-medium">institutional-grade 
                 opportunities</span> with the personal attention that builds lasting wealth.
               </p>
-            </div>
-          </div>
-
-          <div className="lg:pl-8">
-            <div className="bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/20 rounded-2xl p-8">
-              <h4 className="text-2xl font-bold font-serif text-foreground mb-6">Why Choose Bourarro?</h4>
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                  <p className="text-muted-foreground">Guaranteed rental income removes investment uncertainty</p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                  <p className="text-muted-foreground">Real-time market data ensures optimal investment timing</p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                  <p className="text-muted-foreground">Comprehensive support from initial quote to portfolio growth</p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                  <p className="text-muted-foreground">Proven track record of delivering on our investment promises</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
