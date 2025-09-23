@@ -41,7 +41,7 @@ export default function Header() {
           />
           <div className="hidden lg:block w-px h-8 bg-primary/30"></div>
           <div className="hidden lg:block">
-            <span className="text-primary text-sm font-semibold tracking-wider uppercase">Premium Investments</span>
+            <span className="text-primary text-sm font-semibold tracking-wider uppercase">Bourarro Properties</span>
           </div>
         </div>
 

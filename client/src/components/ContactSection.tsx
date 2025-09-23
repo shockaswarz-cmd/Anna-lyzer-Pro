@@ -234,33 +234,16 @@ export default function ContactSection() {
                   />
                 </div>
 
-                <div className="flex gap-4 items-end">
-                  <div className="flex-1">
-                    <Label htmlFor="currentRent">Current Monthly Rent (£)</Label>
-                    <Input
-                      id="currentRent"
-                      type="number"
-                      value={formData.currentRent}
-                      onChange={(e) => handleInputChange("currentRent", e.target.value)}
-                      placeholder="1500"
-                      data-testid="input-current-rent"
-                    />
-                  </div>
-                  <Button 
-                    type="button" 
-                    variant="outline"
-                    onClick={calculateRent}
-                    disabled={isCalculating || !formData.propertyAddress}
-                    className="gap-2"
-                    data-testid="button-calculate"
-                  >
-                    {isCalculating ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Calculator className="w-4 h-4" />
-                    )}
-                    {isCalculating ? 'Calculating...' : 'Calculate'}
-                  </Button>
+                <div>
+                  <Label htmlFor="currentRent">Current Monthly Rent (£)</Label>
+                  <Input
+                    id="currentRent"
+                    type="number"
+                    value={formData.currentRent}
+                    onChange={(e) => handleInputChange("currentRent", e.target.value)}
+                    placeholder="1500"
+                    data-testid="input-current-rent"
+                  />
                 </div>
 
                 {estimatedRent && propertyData && (
