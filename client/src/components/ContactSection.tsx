@@ -357,7 +357,7 @@ export default function ContactSection() {
                   </li>
                   <li className="flex items-start gap-2">
                     <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                    <span>500+ satisfied landlords in our portfolio</span>
+                    <span>50+ satisfied landlords in our portfolio</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
