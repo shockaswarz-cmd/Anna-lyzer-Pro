@@ -37,7 +37,7 @@ export default function Header() {
           <img 
             src={bourrarroLogo} 
             alt="Bourarro Properties - Property Investment" 
-            className="h-12 w-auto filter brightness-110"
+            className="h-10 w-auto opacity-90 transition-opacity hover:opacity-100 filter drop-shadow-sm"
           />
           <div className="hidden lg:block w-px h-8 bg-primary/30"></div>
           <div className="hidden lg:block">
