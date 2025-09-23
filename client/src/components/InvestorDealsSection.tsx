@@ -176,20 +176,6 @@ export default function InvestorDealsSection() {
         {/* CTA Section */}
         <div className="text-center">
           <Button 
-            variant="outline" 
-            size="lg" 
-            className="text-lg px-8 py-6 mr-4 mb-4"
-            onClick={() => {
-              const processSection = document.querySelector('#investors h3');
-              if (processSection) {
-                processSection.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
-            data-testid="button-see-process"
-          >
-            See How We Work
-          </Button>
-          <Button 
             variant="secondary" 
             size="lg" 
             className="text-lg px-8 py-6 mb-4"
