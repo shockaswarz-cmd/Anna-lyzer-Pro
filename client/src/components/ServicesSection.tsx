@@ -100,11 +100,11 @@ export default function ServicesSection() {
         <div className="mt-20 text-center">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary mb-2">£2.5M+</div>
-              <div className="text-muted-foreground">Assets Managed</div>
+              <div className="text-3xl font-bold text-primary mb-2">£150k+</div>
+              <div className="text-muted-foreground">Avg Monthly Revenue Managed</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary mb-2">500+</div>
+              <div className="text-3xl font-bold text-primary mb-2">20+</div>
               <div className="text-muted-foreground">Properties</div>
             </div>
             <div className="text-center">

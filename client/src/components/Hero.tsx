@@ -91,9 +91,9 @@ export default function Hero() {
           <div className="mt-16 text-center">
             <p className="text-white/60 text-sm font-light mb-3">Trusted by high-net-worth investors across the UK</p>
             <div className="flex justify-center items-center gap-8 text-white/40">
-              <div className="text-xs">£2.5M+ Managed</div>
+              <div className="text-xs">£150k+ Avg Monthly Revenue Managed</div>
               <div className="w-1 h-1 bg-white/40 rounded-full"></div>
-              <div className="text-xs">500+ Properties</div>
+              <div className="text-xs">20+ Properties</div>
               <div className="w-1 h-1 bg-white/40 rounded-full"></div>
               <div className="text-xs">99.8% Satisfaction</div>
             </div>
