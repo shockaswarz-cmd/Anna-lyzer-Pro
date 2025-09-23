@@ -335,7 +335,7 @@ export default function ContactSection() {
                   </div>
                   <div>
                     <div className="font-semibold">Email Us</div>
-                    <div className="text-muted-foreground">info@bourarro.com</div>
+                    <div className="text-muted-foreground">Info@Bourarroproperties.co.uk</div>
                   </div>
                 </div>
 
@@ -345,7 +345,7 @@ export default function ContactSection() {
                   </div>
                   <div>
                     <div className="font-semibold">Call Us</div>
-                    <div className="text-muted-foreground">0800 123 4567</div>
+                    <div className="text-muted-foreground">07435549937</div>
                   </div>
                 </div>
 
@@ -356,8 +356,8 @@ export default function ContactSection() {
                   <div>
                     <div className="font-semibold">Visit Us</div>
                     <div className="text-muted-foreground">
-                      123 Property Street<br />
-                      London, UK W1A 0AA
+                      Unit 4536, 182-184 High Street North<br />
+                      London, England, E6 2JA, United Kingdom
                     </div>
                   </div>
                 </div>

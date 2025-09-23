@@ -171,15 +171,15 @@ export default function Footer() {
             <div className="space-y-3">
               <div className="flex items-center gap-3" data-testid="footer-contact-email">
                 <Mail className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">info@bourarro.com</span>
+                <span className="text-sm text-muted-foreground">Info@Bourarroproperties.co.uk</span>
               </div>
               <div className="flex items-center gap-3" data-testid="footer-contact-phone">
                 <Phone className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">0800 123 4567</span>
+                <span className="text-sm text-muted-foreground">07435549937</span>
               </div>
               <div className="flex items-center gap-3" data-testid="footer-contact-address">
                 <MapPin className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">London, UK</span>
+                <span className="text-sm text-muted-foreground">Unit 4536, 182-184 High Street North, London, England, E6 2JA, United Kingdom</span>
               </div>
             </div>
 

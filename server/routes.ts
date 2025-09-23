@@ -43,14 +43,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const { subject, html, text } = formatQuoteEmail(emailData);
         
         await sendEmail({
-          to: 'Marcus@bourarroproperties.co.uk',
+          to: 'Info@Bourarroproperties.co.uk',
           from: 'noreply@bourarroproperties.co.uk', // This should be a verified sender in SendGrid
           subject,
           html,
           text,
         });
         
-        console.log('Quote notification email sent to Marcus@bourarroproperties.co.uk');
+        console.log('Quote notification email sent to Info@Bourarroproperties.co.uk');
       } catch (emailError) {
         // Don't fail the quote request if email fails
         console.error('Failed to send email notification:', emailError);
