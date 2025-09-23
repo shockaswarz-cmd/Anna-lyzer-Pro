@@ -2,10 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
 import { useState } from "react";
+import { useLocation } from "wouter";
 import bourrarroLogo from "@assets/Properties (1)_1758478693104.png";
 
 export default function Footer() {
   const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [, setLocation] = useLocation();
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,6 +19,42 @@ export default function Footer() {
 
   const handleLinkClick = (link: string) => {
     console.log(`Footer link clicked: ${link}`);
+    
+    // Navigate to appropriate sections or pages
+    switch(link) {
+      case 'home':
+        setLocation('/');
+        break;
+      case 'services':
+        setLocation('/');
+        setTimeout(() => {
+          document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+        break;
+      case 'about':
+        setLocation('/');
+        setTimeout(() => {
+          document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+        break;
+      case 'contact':
+        setLocation('/');
+        setTimeout(() => {
+          document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+        break;
+      case 'privacy':
+        setLocation('/privacy-policy');
+        break;
+      case 'terms':
+        setLocation('/terms-conditions');
+        break;
+      case 'cookies':
+        setLocation('/cookie-policy');
+        break;
+      default:
+        break;
+    }
   };
 
   const handleSocialClick = (platform: string) => {
