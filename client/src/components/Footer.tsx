@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin, Instagram } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import bourrarroLogo from "@assets/Properties (1)_1758478693104.png";
@@ -107,24 +107,6 @@ export default function Footer() {
               Transforming property investment for landlords across the UK.
             </p>
             <div className="flex space-x-2">
-              <Button 
-                variant="ghost" 
-                size="icon"
-                onClick={() => handleSocialClick('facebook')}
-                className="text-muted-foreground hover:text-foreground"
-                data-testid="social-facebook"
-              >
-                <Facebook className="w-4 h-4" />
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="icon"
-                onClick={() => handleSocialClick('twitter')}
-                className="text-muted-foreground hover:text-foreground"
-                data-testid="social-twitter"
-              >
-                <Twitter className="w-4 h-4" />
-              </Button>
               <Button 
                 variant="ghost" 
                 size="icon"
