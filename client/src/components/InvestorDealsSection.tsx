@@ -59,13 +59,6 @@ export default function InvestorDealsSection() {
     }
   ];
 
-  const handleDealsRequest = () => {
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   const handleWhatsAppJoin = () => {
     window.open('https://chat.whatsapp.com/DR10Vs1zkXO07s7C0VMymb?mode=ems_copy_t', '_blank');
   };
@@ -182,15 +175,6 @@ export default function InvestorDealsSection() {
 
         {/* CTA Section */}
         <div className="text-center">
-          <Button 
-            size="lg" 
-            className="text-lg px-8 py-6 mr-4 mb-4" 
-            onClick={handleDealsRequest}
-            data-testid="button-request-deals"
-          >
-            Request Investment Deals
-            <ArrowRight className="w-5 h-5 ml-2" />
-          </Button>
           <Button 
             variant="outline" 
             size="lg" 
