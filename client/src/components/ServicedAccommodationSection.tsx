@@ -29,13 +29,13 @@ export default function ServicedAccommodationSection() {
   const [selectedSize, setSelectedSize] = useState<string>("all");
 
   // Fetch properties from Lodgify API
-  const { data: properties = [], isLoading, error } = useQuery({
+  const { data: properties = [], isLoading, error } = useQuery<Property[]>({
     queryKey: ['/api/lodgify/properties'],
     enabled: true,
   });
 
   // Filter properties based on selected filters
-  const filteredProperties = properties.filter((property: Property) => {
+  const filteredProperties = (properties as Property[]).filter((property: Property) => {
     const locationMatch = selectedLocation === "all" || property.location.toLowerCase().includes(selectedLocation.toLowerCase());
     
     const priceMatch = selectedPriceRange === "all" || 
@@ -52,7 +52,7 @@ export default function ServicedAccommodationSection() {
   });
 
   // Get unique locations for filter
-  const locations = [...new Set(properties.map((p: Property) => p.location))];
+  const locations = Array.from(new Set((properties as Property[]).map((p: Property) => p.location)));
 
   return (
     <section id="accommodations" className="py-24 bg-gradient-to-b from-muted/20 to-background">
@@ -218,14 +218,14 @@ export default function ServicedAccommodationSection() {
         )}
 
         {/* No Properties Found */}
-        {!isLoading && !error && filteredProperties.length === 0 && properties.length > 0 && (
+        {!isLoading && !error && filteredProperties.length === 0 && (properties as Property[]).length > 0 && (
           <div className="text-center py-12">
             <p className="text-muted-foreground">No properties match your current filters. Try adjusting your selection.</p>
           </div>
         )}
 
         {/* No Properties Available */}
-        {!isLoading && !error && properties.length === 0 && (
+        {!isLoading && !error && (properties as Property[]).length === 0 && (
           <div className="text-center py-12">
             <p className="text-muted-foreground">No properties are currently available. Check back soon for new listings!</p>
           </div>
