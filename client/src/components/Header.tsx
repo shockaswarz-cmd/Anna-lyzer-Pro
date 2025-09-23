@@ -36,7 +36,7 @@ export default function Header() {
         <div className="flex items-center space-x-4">
           <img 
             src={bourrarroLogo} 
-            alt="Bourarro Properties - Luxury Investment" 
+            alt="Bourarro Properties - Property Investment" 
             className="h-12 w-auto filter brightness-110"
           />
           <div className="hidden lg:block w-px h-8 bg-primary/30"></div>

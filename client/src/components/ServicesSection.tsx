@@ -12,27 +12,27 @@ const services = [
   {
     icon: Calendar,
     title: "Guaranteed Lease Terms",
-    description: "Exclusive 3-5 year guaranteed tenancy agreements with comprehensive luxury property management throughout the entire investment period.",
+    description: "Comprehensive 3-5 year guaranteed tenancy agreements with full-service property management throughout the entire investment period.",
   },
   {
     icon: DollarSign,
     title: "Zero Commission Structure",
-    description: "Transparent pricing with no hidden fees or charges. The premium rent agreed upon is the exact amount you receive, every single month.",
+    description: "Transparent pricing with no hidden fees or charges. The agreed rent amount is the exact amount you receive, every single month.",
   },
   {
     icon: Clock,
     title: "365-Day Income Guarantee",
-    description: "Continuous rental income whether your premium property is occupied or vacant. Guaranteed monthly payments without exception.",
+    description: "Continuous rental income whether your property is occupied or vacant. Guaranteed monthly payments without exception.",
   },
   {
     icon: Wrench,
     title: "Concierge Maintenance",
-    description: "White-glove property maintenance and repairs at no additional cost through our premium in-house service team.",
+    description: "Professional property maintenance and repairs at no additional cost through our experienced in-house service team.",
   },
   {
     icon: CreditCard,
     title: "Seamless Payment System",
-    description: "Automated luxury service with guaranteed rent payments transferred directly to your account on the same date each month.",
+    description: "Automated payment service with guaranteed rent transfers directly to your account on the same date each month.",
   },
   {
     icon: KeyRound,
@@ -58,13 +58,13 @@ export default function ServicesSection() {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-6 py-3 mb-8">
             <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
-            <span className="text-primary font-semibold text-sm tracking-wide uppercase">Premium Services</span>
+            <span className="text-primary font-semibold text-sm tracking-wide uppercase">Our Services</span>
           </div>
           <h2 className="text-5xl lg:text-6xl font-bold text-foreground mb-6">
-            Exclusive <span className="text-primary italic">Investment</span> Benefits
+            Comprehensive <span className="text-primary italic">Investment</span> Benefits
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Sophisticated property management solutions designed for discerning investors seeking guaranteed returns.
+            Professional property management solutions designed for investors seeking guaranteed returns.
           </p>
         </div>
 

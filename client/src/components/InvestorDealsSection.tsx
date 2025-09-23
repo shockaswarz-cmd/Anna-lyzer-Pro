@@ -12,7 +12,7 @@ export default function InvestorDealsSection() {
     {
       icon: Key,
       title: "Off-Market Access",
-      description: "Exclusive access to off-market opportunities through direct relationships with agents, developers, and landlords"
+      description: "Direct access to off-market opportunities through established relationships with agents, developers, and landlords"
     },
     {
       icon: LineChart,

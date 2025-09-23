@@ -22,7 +22,7 @@ export default function Hero() {
       <div className="absolute inset-0 z-0">
         <img 
           src={heroImage} 
-          alt="Ultra-luxury property investment opportunity" 
+          alt="Professional property investment opportunity" 
           className="w-full h-full object-cover scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/40" />
@@ -35,16 +35,16 @@ export default function Hero() {
           <div className="mb-8">
             <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-6 py-3 mb-8">
               <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
-              <span className="text-primary font-semibold text-sm tracking-wide uppercase">Exclusive Investment Opportunity</span>
+              <span className="text-primary font-semibold text-sm tracking-wide uppercase">Property Investment Opportunity</span>
             </div>
           </div>
           
           <h1 className="text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight tracking-tight">
-            Guaranteed <span className="text-primary italic">Premium</span> Returns
+            Guaranteed <span className="text-primary italic">Rental</span> Returns
           </h1>
           
           <p className="text-2xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
-            Exclusive property investment with guaranteed rental income, zero fees, and comprehensive luxury property management.
+            Professional property investment with guaranteed rental income, zero fees, and comprehensive property management services.
           </p>
 
           {/* Premium Benefits */}
@@ -61,8 +61,8 @@ export default function Hero() {
             </div>
             <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-2xl p-6 text-center" data-testid="benefit-management">
               <div className="w-4 h-4 bg-primary rounded-full mx-auto mb-3"></div>
-              <h3 className="text-xl font-semibold text-white mb-2">White-Glove Service</h3>
-              <p className="text-white/80 text-sm">Complete luxury property management</p>
+              <h3 className="text-xl font-semibold text-white mb-2">Comprehensive Management</h3>
+              <p className="text-white/80 text-sm">Complete property management</p>
             </div>
           </div>
 
@@ -74,7 +74,7 @@ export default function Hero() {
               className="px-12 py-4 text-lg font-semibold bg-primary hover:bg-primary/90 text-primary-foreground border-2 border-primary rounded-full transition-all duration-300 hover:scale-105 shadow-2xl"
               data-testid="button-hero-quote"
             >
-              Request Exclusive Quote
+              Request Quote
             </Button>
             <Button 
               size="lg" 

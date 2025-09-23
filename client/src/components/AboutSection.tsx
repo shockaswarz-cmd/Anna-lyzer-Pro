@@ -20,8 +20,8 @@ export default function AboutSection() {
           <div className="text-center mb-8">
             <h3 className="text-3xl font-bold font-serif text-foreground mb-6">Our Mission</h3>
             <p className="text-lg text-muted-foreground leading-relaxed max-w-4xl mx-auto">
-              To make property investing <span className="text-primary font-semibold">better and easier</span> for discerning investors 
-              by delivering guaranteed rental income, comprehensive market analysis, and white-glove service that removes 
+              To make property investing <span className="text-primary font-semibold">better and easier</span> for investors 
+              by delivering guaranteed rental income, comprehensive market analysis, and professional service that removes 
               the complexity and risk from real estate investment.
             </p>
           </div>
@@ -53,7 +53,7 @@ export default function AboutSection() {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 border border-primary/20 rounded-full mb-6 group-hover:bg-primary/20 transition-colors duration-300">
               <Building2 className="w-8 h-8 text-primary" />
             </div>
-            <h4 className="text-xl font-bold text-foreground mb-3">Premium Properties</h4>
+            <h4 className="text-xl font-bold text-foreground mb-3">Quality Properties</h4>
             <p className="text-muted-foreground leading-relaxed">
               Carefully curated portfolio of high-yield investment opportunities
             </p>

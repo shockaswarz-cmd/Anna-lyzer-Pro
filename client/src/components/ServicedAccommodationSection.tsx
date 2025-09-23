@@ -82,8 +82,8 @@ export default function ServicedAccommodationSection() {
           </h2>
           <div className="w-24 h-1 bg-primary mx-auto mb-6"></div>
           <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-            Discover Bourarro's premium serviced apartments, updated live from our booking platform. 
-            Each property is professionally managed and ready to welcome you with luxury amenities and exceptional service.
+            Discover Bourarro's professional serviced apartments, updated live from our booking platform. 
+            Each property is professionally managed and ready to welcome you with modern amenities and exceptional service.
           </p>
         </div>
 
@@ -112,7 +112,7 @@ export default function ServicedAccommodationSection() {
                 <SelectItem value="all">All Prices</SelectItem>
                 <SelectItem value="budget">Budget (£0-150)</SelectItem>
                 <SelectItem value="mid">Mid-Range (£151-300)</SelectItem>
-                <SelectItem value="luxury">Luxury (£301+)</SelectItem>
+                <SelectItem value="luxury">Executive (£301+)</SelectItem>
               </SelectContent>
             </Select>
           </div>
