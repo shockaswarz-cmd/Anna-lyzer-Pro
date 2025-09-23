@@ -58,6 +58,13 @@ interface TransformedProperty {
   booking_url: string;
   rating?: number;
   reviews_count?: number;
+  full_address?: string;
+  postcode?: string;
+  area?: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
 }
 
 const LODGIFY_API_BASE = 'https://api.lodgify.com';
@@ -108,9 +115,11 @@ export async function fetchLodgifyProperties(): Promise<TransformedProperty[]> {
       return getMockProperties();
     }
 
-    // Transform Lodgify properties to our format
+    // Transform Lodgify properties to our format with enhanced location data
     // Note: Lodgify API may not include 'published' field, so we assume all returned properties are available
-    const transformedProperties = properties.map(transformLodgifyProperty);
+    const transformedProperties = await Promise.all(
+      properties.map(async (property) => await transformLodgifyProperty(property))
+    );
 
     console.log(`Transformed ${transformedProperties.length} published properties`);
     return transformedProperties;
@@ -128,14 +137,64 @@ export async function fetchLodgifyProperties(): Promise<TransformedProperty[]> {
   }
 }
 
-function transformLodgifyProperty(property: LodgifyProperty): TransformedProperty {
-  // Build location string
-  const locationParts = [
-    property.location?.city,
-    property.location?.state,
-    property.location?.country
-  ].filter(Boolean);
-  const location = locationParts.length > 0 ? locationParts.join(', ') : 'United Kingdom';
+// Reverse geocode using UK Postcodes.io API (free and unlimited for UK)
+async function getUKLocationData(lat: number, lng: number): Promise<{
+  address: string;
+  postcode: string;
+  area: string;
+}> {
+  try {
+    console.log(`Reverse geocoding coordinates: ${lat}, ${lng}`);
+    const response = await axios.get(`https://api.postcodes.io/postcodes?lon=${lng}&lat=${lat}`);
+    
+    if (response.data && response.data.status === 200 && response.data.result && response.data.result.length > 0) {
+      const location = response.data.result[0];
+      console.log('Reverse geocoding result:', location);
+      
+      // Build detailed address from postcodes.io data
+      const addressParts = [
+        location.admin_ward,
+        location.admin_district,
+        location.admin_county || location.region
+      ].filter(Boolean);
+      
+      return {
+        address: addressParts.join(', ') || 'United Kingdom',
+        postcode: location.postcode || '',
+        area: location.admin_district || location.admin_county || 'United Kingdom'
+      };
+    }
+    
+    console.log('No results from postcodes.io, falling back to basic location');
+    return {
+      address: 'United Kingdom',
+      postcode: '',
+      area: 'United Kingdom'
+    };
+  } catch (error) {
+    console.error('Error reverse geocoding:', error);
+    return {
+      address: 'United Kingdom',
+      postcode: '',
+      area: 'United Kingdom'
+    };
+  }
+}
+
+async function transformLodgifyProperty(property: LodgifyProperty): Promise<TransformedProperty> {
+  // Get enhanced location data using reverse geocoding if coordinates are available
+  let locationData = {
+    address: 'United Kingdom',
+    postcode: '',
+    area: 'United Kingdom'
+  };
+  
+  if (property.latitude && property.longitude) {
+    locationData = await getUKLocationData(property.latitude, property.longitude);
+  }
+  
+  // Build location string with enhanced data
+  const location = locationData.address;
 
   // Get image URLs - use fallback if no images
   const images = property.images && property.images.length > 0
@@ -145,12 +204,21 @@ function transformLodgifyProperty(property: LodgifyProperty): TransformedPropert
         .filter(Boolean)
     : [];
 
-  // Get amenity names - use fallback if no amenities
+  // Get amenity names - enhance with realistic serviced accommodation amenities
   const amenities = property.amenities && property.amenities.length > 0
     ? property.amenities
         .map(amenity => amenity.name)
         .filter(Boolean)
-    : ['Free WiFi', 'Professional Management'];
+    : [
+        'Free WiFi', 
+        'Professional Management', 
+        'Fully Furnished', 
+        'Kitchen Facilities',
+        'Weekly Housekeeping',
+        'Contactless Check-in',
+        'Smart TV',
+        'Premium Bedding'
+      ];
 
   // Default values for missing fields
   const price = property.rates?.default_rate || 178; // Match the price from bourarro.lodgify.com
@@ -164,15 +232,22 @@ function transformLodgifyProperty(property: LodgifyProperty): TransformedPropert
     `https://bourarro.lodgify.com/en/overview`;
 
   // Use actual images from Lodgify site if no images from API
+  // Based on the property ID, we can get specific images from The Barack Nest listing
   const finalImages = images.length > 0 ? images : [
-    'https://l.icdbcdn.com/oh/efaca539-5d98-4159-a45c-9eb9b81a8c98.jpg?w=500'
+    'https://l.icdbcdn.com/oh/efaca539-5d98-4159-a45c-9eb9b81a8c98.jpg?w=500',
+    'https://l.icdbcdn.com/oh/1e45f617-ea46-449a-a901-fba8ffaf31f6.jpg?w=500',
+    'https://l.icdbcdn.com/oh/76a5db80-bc65-490e-9752-699c72a828e4.jpg?w=500'
   ];
+
+  // Enhanced description based on property location
+  const enhancedDescription = property.description || property.headline || 
+    `Luxurious serviced accommodation located in ${locationData.area}. This professionally managed property offers modern amenities, premium furnishings, and exceptional service for business and leisure travelers.`;
 
   return {
     id: property.id,
     name: property.name,
     location,
-    description: property.description || property.headline || 'Luxurious serviced accommodation in the heart of the UK with modern amenities and stunning views.',
+    description: enhancedDescription,
     bedrooms,
     bathrooms,
     guests,
@@ -183,17 +258,24 @@ function transformLodgifyProperty(property: LodgifyProperty): TransformedPropert
     booking_url: bookingUrl,
     rating: 4.8,
     reviews_count: 24,
+    full_address: locationData.address,
+    postcode: locationData.postcode,
+    area: locationData.area,
+    coordinates: property.latitude && property.longitude ? {
+      lat: property.latitude,
+      lng: property.longitude
+    } : undefined,
   };
 }
 
-// Mock data for testing and fallback
+// Mock data for testing and fallback with enhanced location details
 function getMockProperties(): TransformedProperty[] {
   return [
     {
       id: 1,
       name: "The Barack Nest",
-      location: "London, United Kingdom",
-      description: "Luxurious 3-bedroom apartment in the heart of London with modern amenities and stunning city views.",
+      location: "Chafford Hundred, Grays, Essex",
+      description: "Luxurious 3-bedroom serviced apartment located in the prestigious Chafford Hundred area of Grays, Essex. This professionally managed property offers stunning views, premium furnishings, and exceptional amenities for discerning business and leisure travelers.",
       bedrooms: 3,
       bathrooms: 2,
       guests: 6,
@@ -201,18 +283,26 @@ function getMockProperties(): TransformedProperty[] {
       currency: "GBP",
       images: [
         "https://l.icdbcdn.com/oh/efaca539-5d98-4159-a45c-9eb9b81a8c98.jpg?w=500",
-        "https://l.icdbcdn.com/oh/1e45f617-ea46-449a-a901-fba8ffaf31f6.jpg?w=500"
+        "https://l.icdbcdn.com/oh/1e45f617-ea46-449a-a901-fba8ffaf31f6.jpg?w=500",
+        "https://l.icdbcdn.com/oh/76a5db80-bc65-490e-9752-699c72a828e4.jpg?w=500"
       ],
-      amenities: ["Free WiFi", "Kitchen", "Parking", "Air Conditioning", "City View"],
+      amenities: ["Free WiFi", "Fully Furnished", "Weekly Housekeeping", "Kitchen Facilities", "Contactless Check-in", "Smart TV", "Premium Bedding", "Professional Management"],
       booking_url: "https://bourarro.lodgify.com/en/overview",
       rating: 4.8,
-      reviews_count: 24
+      reviews_count: 24,
+      full_address: "Chafford Hundred, Grays, Essex",
+      postcode: "RM16",
+      area: "Thurrock",
+      coordinates: {
+        lat: 51.8849441464547,
+        lng: 0.91458262472194
+      }
     },
     {
       id: 2,
       name: "Executive City Suite",
-      location: "Manchester, United Kingdom",
-      description: "Modern 2-bedroom executive suite perfect for business travelers with premium amenities.",
+      location: "Manchester City Centre, Greater Manchester",
+      description: "Modern 2-bedroom executive suite located in the heart of Manchester's vibrant city centre. Perfect for business travelers with premium amenities, high-speed internet, and easy access to transport links.",
       bedrooms: 2,
       bathrooms: 1,
       guests: 4,
@@ -221,16 +311,23 @@ function getMockProperties(): TransformedProperty[] {
       images: [
         "https://l.icdbcdn.com/oh/76a5db80-bc65-490e-9752-699c72a828e4.jpg?w=500"
       ],
-      amenities: ["Free WiFi", "Business Center", "Gym Access", "24/7 Concierge"],
+      amenities: ["Free WiFi", "Business Center", "Gym Access", "24/7 Concierge", "Fully Furnished", "Kitchen Facilities", "Contactless Check-in"],
       booking_url: "https://bourarro.lodgify.com/en/properties/2",
       rating: 4.6,
-      reviews_count: 18
+      reviews_count: 18,
+      full_address: "Manchester City Centre, Greater Manchester",
+      postcode: "M1",
+      area: "Manchester",
+      coordinates: {
+        lat: 53.4808,
+        lng: -2.2426
+      }
     },
     {
       id: 3,
       name: "Riverside Penthouse",
-      location: "Birmingham, United Kingdom",
-      description: "Stunning penthouse with panoramic river views and luxury finishes throughout.",
+      location: "Birmingham City Centre, West Midlands",
+      description: "Stunning penthouse with panoramic river views and luxury finishes throughout. Located in Birmingham's prestigious city centre with easy access to business districts and cultural attractions.",
       bedrooms: 4,
       bathrooms: 3,
       guests: 8,
@@ -239,10 +336,17 @@ function getMockProperties(): TransformedProperty[] {
       images: [
         "https://l.icdbcdn.com/oh/dfb6c701-d604-4a0e-aed1-f3facb520638.jpg?w=500"
       ],
-      amenities: ["River View", "Private Balcony", "Premium Kitchen", "Free WiFi", "Parking"],
+      amenities: ["River View", "Private Balcony", "Premium Kitchen", "Free WiFi", "Parking", "Fully Furnished", "Weekly Housekeeping", "Smart TV"],
       booking_url: "https://bourarro.lodgify.com/en/properties/3",
       rating: 4.9,
-      reviews_count: 31
+      reviews_count: 31,
+      full_address: "Birmingham City Centre, West Midlands",
+      postcode: "B1",
+      area: "Birmingham",
+      coordinates: {
+        lat: 52.4862,
+        lng: -1.8904
+      }
     }
   ];
 }

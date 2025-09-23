@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Bed, Wifi, Car, Star, ExternalLink } from "lucide-react";
+import { MapPin, Bed, Bath, Users, Star, ExternalLink, Shield, Wifi } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 interface Property {
@@ -21,6 +21,13 @@ interface Property {
   booking_url: string;
   rating?: number;
   reviews_count?: number;
+  full_address?: string;
+  postcode?: string;
+  area?: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
 }
 
 export default function ServicedAccommodationSection() {
@@ -36,7 +43,10 @@ export default function ServicedAccommodationSection() {
 
   // Filter properties based on selected filters
   const filteredProperties = (properties as Property[]).filter((property: Property) => {
-    const locationMatch = selectedLocation === "all" || property.location.toLowerCase().includes(selectedLocation.toLowerCase());
+    const locationMatch = selectedLocation === "all" || 
+      property.location.toLowerCase().includes(selectedLocation.toLowerCase()) ||
+      property.area?.toLowerCase().includes(selectedLocation.toLowerCase()) ||
+      property.postcode?.toLowerCase().includes(selectedLocation.toLowerCase());
     
     const priceMatch = selectedPriceRange === "all" || 
       (selectedPriceRange === "budget" && property.price_per_night <= 150) ||
@@ -51,8 +61,16 @@ export default function ServicedAccommodationSection() {
     return locationMatch && priceMatch && sizeMatch;
   });
 
-  // Get unique locations for filter
-  const locations = Array.from(new Set((properties as Property[]).map((p: Property) => p.location)));
+  // Get unique locations for filter (include both location and area)
+  const allLocations = (properties as Property[]).flatMap((p: Property) => {
+    const locationOptions = [
+      p.location,
+      p.area,
+      p.postcode?.split(' ')[0] // Get postcode area (e.g., "RM16" from "RM16 4XY")
+    ];
+    return locationOptions.filter((loc): loc is string => Boolean(loc));
+  });
+  const locations = Array.from(new Set(allLocations));
 
   return (
     <section id="accommodations" className="py-24 bg-gradient-to-b from-muted/20 to-background">
@@ -161,9 +179,14 @@ export default function ServicedAccommodationSection() {
                     <h3 className="text-xl font-bold font-serif text-foreground mb-2" data-testid={`property-name-${property.id}`}>
                       {property.name}
                     </h3>
-                    <div className="flex items-center text-muted-foreground mb-3">
-                      <MapPin className="w-4 h-4 mr-1" />
-                      <span className="text-sm">{property.location}</span>
+                    <div className="flex items-start text-muted-foreground mb-3">
+                      <MapPin className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
+                      <div className="text-sm">
+                        <div className="font-medium">{property.location}</div>
+                        {property.postcode && (
+                          <div className="text-xs text-muted-foreground/80 mt-0.5">{property.postcode}</div>
+                        )}
+                      </div>
                     </div>
                     <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3">
                       {property.description}
@@ -171,28 +194,37 @@ export default function ServicedAccommodationSection() {
                   </div>
 
                   {/* Property Features */}
-                  <div className="flex flex-wrap gap-3 mb-4">
+                  <div className="grid grid-cols-3 gap-3 mb-4">
                     <div className="flex items-center text-muted-foreground text-sm">
-                      <Bed className="w-4 h-4 mr-1" />
+                      <Bed className="w-4 h-4 mr-1.5" />
                       <span>{property.bedrooms} bed{property.bedrooms !== 1 ? 's' : ''}</span>
                     </div>
                     <div className="flex items-center text-muted-foreground text-sm">
-                      <span>👥 {property.guests} guests</span>
+                      <Bath className="w-4 h-4 mr-1.5" />
+                      <span>{property.bathrooms} bath{property.bathrooms !== 1 ? 's' : ''}</span>
+                    </div>
+                    <div className="flex items-center text-muted-foreground text-sm">
+                      <Users className="w-4 h-4 mr-1.5" />
+                      <span>{property.guests} guests</span>
                     </div>
                   </div>
 
-                  {/* Amenities */}
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {property.amenities?.slice(0, 3).map((amenity, index) => (
-                      <Badge key={index} variant="outline" className="text-xs">
-                        {amenity}
-                      </Badge>
-                    ))}
-                    {property.amenities?.length > 3 && (
-                      <Badge variant="outline" className="text-xs">
-                        +{property.amenities.length - 3} more
-                      </Badge>
-                    )}
+                  {/* Key Amenities */}
+                  <div className="mb-4">
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {property.amenities?.slice(0, 4).map((amenity, index) => (
+                        <Badge key={index} variant="outline" className="text-xs">
+                          {amenity.includes('WiFi') && <Wifi className="w-3 h-3 mr-1" />}
+                          {amenity.includes('Management') && <Shield className="w-3 h-3 mr-1" />}
+                          {amenity}
+                        </Badge>
+                      ))}
+                      {property.amenities?.length > 4 && (
+                        <Badge variant="outline" className="text-xs">
+                          +{property.amenities.length - 4} more
+                        </Badge>
+                      )}
+                    </div>
                   </div>
 
                   {/* Book Button */}
