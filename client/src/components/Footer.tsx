@@ -37,10 +37,26 @@ export default function Footer() {
           document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
         }, 100);
         break;
+      case 'faq':
+        setLocation('/');
+        setTimeout(() => {
+          document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+        break;
       case 'contact':
         setLocation('/');
         setTimeout(() => {
           document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+        break;
+      case 'guaranteed-rent':
+      case 'property-management':
+      case 'maintenance':
+      case 'legal-compliance':
+      case 'portfolio-advice':
+        setLocation('/');
+        setTimeout(() => {
+          document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
         }, 100);
         break;
       case 'privacy':
