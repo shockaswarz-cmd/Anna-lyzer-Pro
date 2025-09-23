@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 import { ArrowLeft } from "lucide-react";
 import { useLocation } from "wouter";
 
@@ -10,6 +11,12 @@ export default function CookiePolicy() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="Cookie Policy - Bourarro Properties | Website Cookies & Tracking"
+        description="Learn about Bourarro Properties' cookie policy. Understand how we use cookies to improve our property investment website and protect your privacy."
+        keywords="cookie policy, website cookies, tracking cookies, privacy, web analytics, Bourarro Properties, property investment cookies"
+        canonicalUrl="https://bourarroproperties.co.uk/cookie-policy"
+      />
       <Header />
       
       <main className="pt-20">

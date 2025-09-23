@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 import { ArrowLeft } from "lucide-react";
 import { useLocation } from "wouter";
 
@@ -10,6 +11,12 @@ export default function PrivacyPolicy() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="Privacy Policy - Bourarro Properties | Data Protection & GDPR Compliance"
+        description="Read Bourarro Properties' comprehensive privacy policy. Learn how we protect your personal data, comply with GDPR, and handle information for our guaranteed rent services."
+        keywords="privacy policy, data protection, GDPR compliance, personal data, Bourarro Properties, property investment privacy"
+        canonicalUrl="https://bourarroproperties.co.uk/privacy-policy"
+      />
       <Header />
       
       <main className="pt-20">

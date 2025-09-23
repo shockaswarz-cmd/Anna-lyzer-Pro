@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 import { ArrowLeft } from "lucide-react";
 import { useLocation } from "wouter";
 
@@ -10,6 +11,12 @@ export default function TermsConditions() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="Terms & Conditions - Bourarro Properties | Guaranteed Rent Service Terms"
+        description="Read Bourarro Properties' terms and conditions for our guaranteed rent services. Understand our service agreements, property management terms, and legal obligations."
+        keywords="terms conditions, guaranteed rent terms, property management agreement, service terms, Bourarro Properties, rental guarantee conditions"
+        canonicalUrl="https://bourarroproperties.co.uk/terms-conditions"
+      />
       <Header />
       
       <main className="pt-20">
