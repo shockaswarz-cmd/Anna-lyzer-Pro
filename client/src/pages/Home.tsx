@@ -83,7 +83,7 @@ export default function Home() {
       ]
     },
     "sameAs": [
-      "https://www.linkedin.com/company/23675412/admin/dashboard/",
+      "https://www.linkedin.com/company/bourarro-properties/",
       "https://www.instagram.com/Bourarropropertiesltd/"
     ],
     "aggregateRating": {

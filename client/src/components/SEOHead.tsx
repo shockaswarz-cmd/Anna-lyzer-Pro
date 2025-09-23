@@ -90,8 +90,11 @@ function updateCanonicalUrl(url: string) {
 }
 
 function updateStructuredData(data: object) {
-  // Remove existing structured data
-  const existingScript = document.querySelector('script[type="application/ld+json"]');
+  // Generate a unique ID for this structured data
+  const dataId = 'structured-data-' + JSON.stringify(data).slice(0, 50).replace(/[^a-z0-9]/gi, '');
+  
+  // Remove existing structured data with same ID
+  const existingScript = document.querySelector(`script[data-schema-id="${dataId}"]`);
   if (existingScript) {
     existingScript.remove();
   }
@@ -99,6 +102,7 @@ function updateStructuredData(data: object) {
   // Add new structured data
   const script = document.createElement('script');
   script.type = 'application/ld+json';
+  script.setAttribute('data-schema-id', dataId);
   script.textContent = JSON.stringify(data);
   document.head.appendChild(script);
 }

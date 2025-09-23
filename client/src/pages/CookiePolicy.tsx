@@ -16,6 +16,7 @@ export default function CookiePolicy() {
         description="Learn about Bourarro Properties' cookie policy. Understand how we use cookies to improve our property investment website and protect your privacy."
         keywords="cookie policy, website cookies, tracking cookies, privacy, web analytics, Bourarro Properties, property investment cookies"
         canonicalUrl="https://bourarroproperties.co.uk/cookie-policy"
+        ogUrl="https://bourarroproperties.co.uk/cookie-policy"
       />
       <Header />
       
