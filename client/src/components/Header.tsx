@@ -14,7 +14,6 @@ export default function Header() {
   const handleNavClick = (section: string) => {
     let sectionId = section;
     if (section === 'home') sectionId = '';
-    if (section === 'about') sectionId = 'testimonials'; // Link About to testimonials section
     
     const element = sectionId ? document.getElementById(sectionId) : document.body;
     if (element) {
