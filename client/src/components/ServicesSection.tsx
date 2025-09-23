@@ -104,7 +104,7 @@ export default function ServicesSection() {
               <div className="text-muted-foreground">Avg Monthly Revenue Managed</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary mb-2">20+</div>
+              <div className="text-3xl font-bold text-primary mb-2">75+</div>
               <div className="text-muted-foreground">Properties</div>
             </div>
             <div className="text-center">

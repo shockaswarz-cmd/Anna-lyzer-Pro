@@ -93,7 +93,7 @@ export default function Hero() {
             <div className="flex justify-center items-center gap-8 text-white/40">
               <div className="text-xs">£150k+ Avg Monthly Revenue Managed</div>
               <div className="w-1 h-1 bg-white/40 rounded-full"></div>
-              <div className="text-xs">20+ Properties</div>
+              <div className="text-xs">75+ Properties</div>
               <div className="w-1 h-1 bg-white/40 rounded-full"></div>
               <div className="text-xs">99.8% Satisfaction</div>
             </div>
