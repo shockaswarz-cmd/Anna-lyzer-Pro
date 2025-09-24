@@ -98,7 +98,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
-        title="Bourarro Properties - Guaranteed Rent & Property Management Services UK"
+        title="Guaranteed Rent Scheme UK | Property Management | Bourarro Properties"
         description="Get guaranteed rent for 3-5 years at market value with 0% commission. Professional property management, maintenance, and tenant sourcing across the UK. Contact us for a free quote."
         keywords="guaranteed rent UK, property management London, landlord services, rental guarantee, property investment, serviced accommodation, property maintenance, tenant sourcing, property compliance, rental income guarantee"
         ogTitle="Bourarro Properties - Guaranteed Rent & Zero Hassle Property Management"
