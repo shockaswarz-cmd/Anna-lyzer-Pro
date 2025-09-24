@@ -89,7 +89,6 @@ export default function Hero() {
           
           {/* Trust Indicator */}
           <div className="mt-16 text-center">
-            <p className="text-white/60 text-sm font-light mb-3">Trusted by high-net-worth investors across the UK</p>
             <div className="flex justify-center items-center gap-8 text-white/40">
               <div className="text-xs">£150k+ Avg Monthly Revenue Managed</div>
               <div className="w-1 h-1 bg-white/40 rounded-full"></div>
@@ -104,7 +103,6 @@ export default function Hero() {
       {/* Luxury Scroll Indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
         <div className="flex flex-col items-center gap-2 text-white/60">
-          <span className="text-xs font-light tracking-widest uppercase">Scroll to Explore</span>
           <div className="w-px h-8 bg-gradient-to-b from-white/60 to-transparent"></div>
         </div>
       </div>
