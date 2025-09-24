@@ -108,7 +108,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // SEO Sitemap endpoint
   app.get("/sitemap.xml", (req, res) => {
-    const baseUrl = "https://bourarroproperties.co.uk";
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
     const currentDate = new Date().toISOString();
     
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
