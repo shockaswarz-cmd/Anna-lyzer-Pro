@@ -384,7 +384,7 @@ function calculateDemandIndicators(allSales: Array<{ price: number; date: string
 async function fetchLandRegistryData(postcode: string): Promise<Array<{ price: number; date: string; propertyType: string }>> {
   try {
     const response = await fetch(
-      `https://landregistry.data.gov.uk/data/ppi/transaction-record.json?propertyAddress.postcode=${encodeURIComponent(postcode)}&_limit=50`
+      `https://landregistry.data.gov.uk/data/ppi/transaction-record.json?propertyAddress.postcode=${encodeURIComponent(postcode)}`
     );
     
     if (!response.ok) {
