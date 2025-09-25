@@ -51,6 +51,11 @@ export const PropertyDataSchema = z.object({
   rentalYield: z.number(),
   transactionCount: z.number(),
   lastUpdated: z.string(),
+  demandIndicators: z.object({
+    salesVolume: z.string(),
+    priceGrowth: z.string(),
+    marketActivity: z.string(),
+  }),
   dataLimitations: z.object({
     coverageArea: z.string(),
     rentalDataSource: z.string(),
