@@ -31,14 +31,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const { subject, html, text } = formatQuoteEmail(emailData);
         
         await sendEmail({
-          to: 'Info@bourarroproperties.uk',
+          to: 'info@bourarroproperties.co.uk',
           from: 'info@bourarroproperties.co.uk',
           subject,
           html,
           text,
         });
         
-        console.log('Quote notification email sent to Info@bourarroproperties.uk');
+        console.log('Quote notification email sent to info@bourarroproperties.co.uk');
       } catch (emailError) {
         // Don't fail the quote request if email fails
         console.error('Failed to send admin email notification:', emailError);
