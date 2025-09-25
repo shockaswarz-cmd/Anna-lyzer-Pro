@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { useLocation } from "wouter";
 import bourrarroLogo from "@assets/Properties (1)_1758478693104.png";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [, setLocation] = useLocation();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -12,10 +14,13 @@ export default function Header() {
   };
 
   const handleNavClick = (section: string) => {
-    let sectionId = section;
-    if (section === 'home') sectionId = '';
+    if (section === 'home') {
+      setLocation('/');
+      setIsMenuOpen(false);
+      return;
+    }
     
-    const element = sectionId ? document.getElementById(sectionId) : document.body;
+    const element = document.getElementById(section);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
