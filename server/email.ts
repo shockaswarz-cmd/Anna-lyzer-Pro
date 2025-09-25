@@ -273,3 +273,91 @@ Admin Dashboard: https://bourarroproperties.uk/admin/quotes/${quoteData.quoteId}
 
   return { subject, html, text };
 }
+
+// Format user confirmation email
+export function formatUserConfirmationEmail(userData: any): { subject: string; html: string; text: string } {
+  const firstName = userData.name ? userData.name.split(' ')[0] : 'there';
+  const subject = `Thank You for Requesting Your Quote!`;
+  
+  const html = `
+    <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
+      <div style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); padding: 30px; border-radius: 12px; color: white; margin-bottom: 20px; text-align: center;">
+        <h1 style="color: #f4d03f; margin: 0 0 10px 0; font-size: 28px;">Bourarro Properties</h1>
+        <h2 style="color: white; margin: 0; font-size: 18px;">Quote Request Received</h2>
+      </div>
+      
+      <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <h3 style="color: #1a1a1a; margin-top: 0; font-size: 24px;">Hi ${firstName},</h3>
+        
+        <p style="color: #1a1a1a; font-size: 16px; line-height: 1.6; margin: 20px 0;">
+          Thank you for requesting a property quote with <strong>Bourarro Properties</strong>.
+        </p>
+        
+        <p style="color: #1a1a1a; font-size: 16px; line-height: 1.6; margin: 20px 0;">
+          We've received your details and one of our team members will review your request and get in touch shortly to discuss next steps.
+        </p>
+        
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #f4d03f;">
+          <p style="color: #1a1a1a; font-size: 16px; line-height: 1.6; margin: 0;">
+            In the meantime, feel free to explore our current serviced accommodation listings:
+          </p>
+          <div style="text-align: center; margin: 20px 0;">
+            <a href="https://bourarro.lodgify.com/" 
+               style="background: linear-gradient(135deg, #f4d03f 0%, #e6c34a 100%); 
+                      color: #1a1a1a; 
+                      padding: 12px 30px; 
+                      text-decoration: none; 
+                      border-radius: 6px; 
+                      font-weight: bold; 
+                      display: inline-block;
+                      font-size: 16px;">
+              View Our Properties
+            </a>
+          </div>
+        </div>
+        
+        <p style="color: #1a1a1a; font-size: 16px; line-height: 1.6; margin: 20px 0;">
+          We look forward to helping you achieve a <strong>hassle-free, guaranteed rental experience</strong>.
+        </p>
+        
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e9ecef;">
+          <p style="color: #1a1a1a; font-size: 16px; line-height: 1.6; margin: 0 0 10px 0;">
+            Best regards,<br>
+            <strong>The Bourarro Properties Team</strong>
+          </p>
+          <p style="color: #6c757d; font-size: 14px; margin: 10px 0 0 0;">
+            Email: info@bourarroproperties.co.uk<br>
+            Website: <a href="https://bourarroproperties.uk" style="color: #f4d03f; text-decoration: none;">www.bourarroproperties.uk</a>
+          </p>
+        </div>
+      </div>
+      
+      <div style="text-align: center; margin-top: 20px; color: #6c757d; font-size: 12px;">
+        <p style="margin: 0;">This is an automated confirmation email. Feel free to reply directly to this email if you have any questions.</p>
+      </div>
+    </div>
+  `;
+
+  const text = `
+Hi ${firstName},
+
+Thank you for requesting a property quote with Bourarro Properties.
+
+We've received your details and one of our team members will review your request and get in touch shortly to discuss next steps.
+
+In the meantime, feel free to explore our current serviced accommodation listings here:
+https://bourarro.lodgify.com/
+
+We look forward to helping you achieve a hassle-free, guaranteed rental experience.
+
+Best regards,
+The Bourarro Properties Team
+info@bourarroproperties.co.uk
+www.bourarroproperties.uk
+
+---
+This is an automated confirmation email. Feel free to reply directly to this email if you have any questions.
+  `;
+
+  return { subject, html, text };
+}

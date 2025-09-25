@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertQuoteRequestSchema, PropertyDataSchema } from "../shared/schema";
-import { sendEmail, formatQuoteEmail } from "./email";
+import { sendEmail, formatQuoteEmail, formatUserConfirmationEmail } from "./email";
 import { fetchLodgifyProperties } from "./lodgify";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -44,7 +44,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const quoteId = await storage.insertQuoteRequest(validatedData);
       
-      // Send email notification to Marcus
+      // Send admin email notification
       try {
         const emailData = {
           ...validatedData,
@@ -57,17 +57,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const { subject, html, text } = formatQuoteEmail(emailData);
         
         await sendEmail({
-          to: 'Info@Bourarroproperties.uk',
-          from: 'noreply@bourarroproperties.uk', // This should be a verified sender in SendGrid
+          to: 'Info@bourarroproperties.uk',
+          from: 'info@bourarroproperties.co.uk',
           subject,
           html,
           text,
         });
         
-        console.log('Quote notification email sent to Info@Bourarroproperties.uk');
+        console.log('Quote notification email sent to Info@bourarroproperties.uk');
       } catch (emailError) {
         // Don't fail the quote request if email fails
-        console.error('Failed to send email notification:', emailError);
+        console.error('Failed to send admin email notification:', emailError);
+      }
+
+      // Send user confirmation email
+      try {
+        const confirmationData = {
+          name: validatedData.name,
+          email: validatedData.email,
+        };
+        const { subject: userSubject, html: userHtml, text: userText } = formatUserConfirmationEmail(confirmationData);
+        
+        await sendEmail({
+          to: validatedData.email,
+          from: 'info@bourarroproperties.co.uk',
+          subject: userSubject,
+          html: userHtml,
+          text: userText,
+        });
+        
+        console.log('Confirmation email sent to user:', validatedData.email);
+      } catch (userEmailError) {
+        // Don't fail the quote request if confirmation email fails
+        console.error('Failed to send user confirmation email:', userEmailError);
       }
       
       res.json({
