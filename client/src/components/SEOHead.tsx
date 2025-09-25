@@ -18,7 +18,7 @@ export default function SEOHead({
   keywords = "guaranteed rent, property management, landlord services, rental guarantee, property investment, UK property, serviced accommodation, property maintenance",
   ogTitle,
   ogDescription,
-  ogImage = "https://bourarroproperties.co.uk/og-image.jpg",
+  ogImage = "https://bourarroproperties.uk/og-image.jpg",
   ogUrl,
   structuredData,
   canonicalUrl

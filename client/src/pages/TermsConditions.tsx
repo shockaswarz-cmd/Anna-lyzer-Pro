@@ -15,8 +15,8 @@ export default function TermsConditions() {
         title="Terms & Conditions - Bourarro Properties | Guaranteed Rent Service Terms"
         description="Read Bourarro Properties' terms and conditions for our guaranteed rent services. Understand our service agreements, property management terms, and legal obligations."
         keywords="terms conditions, guaranteed rent terms, property management agreement, service terms, Bourarro Properties, rental guarantee conditions"
-        canonicalUrl="https://bourarroproperties.co.uk/terms-conditions"
-        ogUrl="https://bourarroproperties.co.uk/terms-conditions"
+        canonicalUrl="https://bourarroproperties.uk/terms-conditions"
+        ogUrl="https://bourarroproperties.uk/terms-conditions"
       />
       <Header />
       

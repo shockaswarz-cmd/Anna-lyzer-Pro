@@ -15,8 +15,8 @@ export default function PrivacyPolicy() {
         title="Privacy Policy - Bourarro Properties | Data Protection & GDPR Compliance"
         description="Read Bourarro Properties' comprehensive privacy policy. Learn how we protect your personal data, comply with GDPR, and handle information for our guaranteed rent services."
         keywords="privacy policy, data protection, GDPR compliance, personal data, Bourarro Properties, property investment privacy"
-        canonicalUrl="https://bourarroproperties.co.uk/privacy-policy"
-        ogUrl="https://bourarroproperties.co.uk/privacy-policy"
+        canonicalUrl="https://bourarroproperties.uk/privacy-policy"
+        ogUrl="https://bourarroproperties.uk/privacy-policy"
       />
       <Header />
       

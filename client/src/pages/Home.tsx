@@ -14,15 +14,15 @@ export default function Home() {
   const businessStructuredData = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": "https://bourarroproperties.co.uk/#business",
+    "@id": "https://bourarroproperties.uk/#business",
     "name": "Bourarro Properties",
     "alternateName": "Bourarro Properties Ltd",
     "description": "Professional property management company offering guaranteed rent services, property maintenance, and comprehensive landlord solutions across the UK.",
-    "url": "https://bourarroproperties.co.uk",
-    "logo": "https://bourarroproperties.co.uk/logo.png",
-    "image": "https://bourarroproperties.co.uk/og-image.jpg",
+    "url": "https://bourarroproperties.uk",
+    "logo": "https://bourarroproperties.uk/logo.png",
+    "image": "https://bourarroproperties.uk/og-image.jpg",
     "telephone": "07435549937",
-    "email": "Info@Bourarroproperties.co.uk",
+    "email": "Info@Bourarroproperties.uk",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Unit 4536, 182-184 High Street North",
@@ -103,9 +103,9 @@ export default function Home() {
         keywords="guaranteed rent UK, property management London, landlord services, rental guarantee, property investment, serviced accommodation, property maintenance, tenant sourcing, property compliance, rental income guarantee"
         ogTitle="Bourarro Properties - Guaranteed Rent & Zero Hassle Property Management"
         ogDescription="Professional property management with guaranteed rent services. Get market value rent with 0% commission and full management for 3-5 years. Free quote available."
-        ogUrl="https://bourarroproperties.co.uk"
+        ogUrl="https://bourarroproperties.uk"
         structuredData={businessStructuredData}
-        canonicalUrl="https://bourarroproperties.co.uk"
+        canonicalUrl="https://bourarroproperties.uk"
       />
       <Header />
       <Hero />
