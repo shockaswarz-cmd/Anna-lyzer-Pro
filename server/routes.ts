@@ -11,19 +11,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       console.log('Quote request received from:', req.body.email ? '[REDACTED]' : 'anonymous');
       
-      // Validate request body
-      const validatedData = insertQuoteRequestSchema.parse(req.body);
+      // Extract postcode for property data lookup  
+      const postcode = extractPostcode(req.body.propertyAddress || '');
+      const requestData = { ...req.body, postcode: postcode || 'UNKNOWN' };
       
-      // Extract postcode for property data lookup
-      const postcode = extractPostcode(validatedData.propertyAddress);
-      validatedData.postcode = postcode;
+      // Validate request body with postcode included
+      const validatedData = insertQuoteRequestSchema.parse(requestData);
       
       // Get property market data
       const propertyData = await getPropertyMarketData(postcode);
       
-      // Calculate guaranteed rent (typically 80-90% of market rent)
-      const guaranteedRentRate = 0.85;
-      const guaranteedRent = Math.round(propertyData.averageRent * guaranteedRentRate);
+      // Calculate serviced accommodation profitability
+      const servicedAccommodationAnalysis = calculateServicedAccommodationProfitability(
+        propertyData, 
+        validatedData.propertyType,
+        validatedData.postcode
+      );
+      
+      // Calculate guaranteed rent range based on market analysis
+      const guaranteedRentRange = calculateGuaranteedRentRange(
+        propertyData.averageRent,
+        servicedAccommodationAnalysis
+      );
+      
+      const guaranteedRent = guaranteedRentRange.recommended;
       
       // Store the quote request with calculated data
       validatedData.estimatedValue = propertyData.averagePrice;
@@ -39,6 +50,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           ...validatedData,
           quoteId,
           postcode,
+          propertyData,
+          servicedAccommodationAnalysis,
+          guaranteedRentRange,
         };
         const { subject, html, text } = formatQuoteEmail(emailData);
         
@@ -380,4 +394,201 @@ async function fetchLandRegistryData(postcode: string): Promise<Array<{ price: n
     console.error('Land Registry API error:', error);
     return [];
   }
+}
+
+// Calculate serviced accommodation profitability analysis
+function calculateServicedAccommodationProfitability(
+  propertyData: any,
+  propertyType: string,
+  postcode: string
+): {
+  nightlyRate: number;
+  weeklyRate: number;
+  monthlyRevenue: number;
+  annualRevenue: number;
+  occupancyRate: number;
+  operatingCosts: {
+    monthly: number;
+    annual: number;
+    breakdown: {
+      cleaning: number;
+      utilities: number;
+      maintenance: number;
+      insurance: number;
+      management: number;
+      supplies: number;
+    };
+  };
+  netRevenue: {
+    monthly: number;
+    annual: number;
+  };
+  suitability: 'Excellent' | 'Good' | 'Fair' | 'Poor';
+  suitabilityReason: string;
+} {
+  const region = getRegionFromPostcode(postcode);
+  const isLondon = region === 'London';
+  const isMajorCity = ['London', 'North West', 'West Midlands', 'Yorkshire and The Humber'].includes(region);
+  
+  // Base nightly rates by property type and location
+  const baseRates = {
+    'Studio': isLondon ? 85 : isMajorCity ? 65 : 45,
+    '1 Bedroom': isLondon ? 120 : isMajorCity ? 90 : 65,
+    '2 Bedroom': isLondon ? 180 : isMajorCity ? 130 : 95,
+    '3 Bedroom': isLondon ? 250 : isMajorCity ? 180 : 130,
+    '4+ Bedroom': isLondon ? 350 : isMajorCity ? 250 : 180,
+    'House': isLondon ? 200 : isMajorCity ? 150 : 110,
+    'Flat': isLondon ? 140 : isMajorCity ? 100 : 75,
+    'Apartment': isLondon ? 140 : isMajorCity ? 100 : 75,
+  };
+  
+  const nightlyRate = baseRates[propertyType as keyof typeof baseRates] || baseRates['2 Bedroom'];
+  const weeklyRate = Math.round(nightlyRate * 6.5); // Weekly discount
+  
+  // Occupancy rates by location and demand indicators
+  let baseOccupancy = isLondon ? 0.75 : isMajorCity ? 0.65 : 0.55;
+  
+  // Adjust based on market activity
+  if (propertyData.demandIndicators?.marketActivity === 'Active') {
+    baseOccupancy += 0.1;
+  } else if (propertyData.demandIndicators?.marketActivity === 'Limited') {
+    baseOccupancy -= 0.1;
+  }
+  
+  const occupancyRate = Math.min(0.85, Math.max(0.45, baseOccupancy));
+  
+  // Calculate gross revenue
+  const monthlyRevenue = Math.round(nightlyRate * 30.44 * occupancyRate); // Average days per month
+  const annualRevenue = monthlyRevenue * 12;
+  
+  // Operating costs breakdown
+  const cleaningCost = Math.round(nightlyRate * 0.15 * 30.44 * occupancyRate); // 15% of revenue for cleaning
+  const utilitiesCost = isLondon ? 200 : isMajorCity ? 150 : 120;
+  const maintenanceCost = Math.round(propertyData.averagePrice * 0.01 / 12); // 1% of property value annually
+  const insuranceCost = isLondon ? 100 : isMajorCity ? 80 : 60;
+  const managementCost = Math.round(monthlyRevenue * 0.15); // 15% management fee
+  const suppliesCost = Math.round(monthlyRevenue * 0.05); // 5% for supplies/amenities
+  
+  const totalMonthlyCosts = cleaningCost + utilitiesCost + maintenanceCost + insuranceCost + managementCost + suppliesCost;
+  
+  const operatingCosts = {
+    monthly: totalMonthlyCosts,
+    annual: totalMonthlyCosts * 12,
+    breakdown: {
+      cleaning: cleaningCost,
+      utilities: utilitiesCost,
+      maintenance: maintenanceCost,
+      insurance: insuranceCost,
+      management: managementCost,
+      supplies: suppliesCost,
+    }
+  };
+  
+  // Net revenue calculations
+  const netMonthlyRevenue = monthlyRevenue - totalMonthlyCosts;
+  const netAnnualRevenue = netMonthlyRevenue * 12;
+  
+  // Suitability assessment
+  const netYield = (netAnnualRevenue / propertyData.averagePrice) * 100;
+  let suitability: 'Excellent' | 'Good' | 'Fair' | 'Poor';
+  let suitabilityReason: string;
+  
+  if (netYield > 8 && occupancyRate > 0.7) {
+    suitability = 'Excellent';
+    suitabilityReason = `High net yield (${netYield.toFixed(1)}%) and strong demand in ${region}. Ideal for serviced accommodation.`;
+  } else if (netYield > 6 && occupancyRate > 0.6) {
+    suitability = 'Good';
+    suitabilityReason = `Good net yield (${netYield.toFixed(1)}%) with decent occupancy rates. Suitable for serviced accommodation.`;
+  } else if (netYield > 4 && occupancyRate > 0.5) {
+    suitability = 'Fair';
+    suitabilityReason = `Moderate net yield (${netYield.toFixed(1)}%). May work with excellent management and marketing.`;
+  } else {
+    suitability = 'Poor';
+    suitabilityReason = `Low net yield (${netYield.toFixed(1)}%) and limited demand. Not recommended for serviced accommodation.`;
+  }
+  
+  return {
+    nightlyRate,
+    weeklyRate,
+    monthlyRevenue,
+    annualRevenue,
+    occupancyRate: Math.round(occupancyRate * 100) / 100,
+    operatingCosts,
+    netRevenue: {
+      monthly: netMonthlyRevenue,
+      annual: netAnnualRevenue,
+    },
+    suitability,
+    suitabilityReason,
+  };
+}
+
+// Calculate guaranteed rent range based on market analysis
+function calculateGuaranteedRentRange(
+  marketRent: number,
+  servicedAccommodationAnalysis: any
+): {
+  minimum: number;
+  maximum: number;
+  recommended: number;
+  reasoning: string;
+} {
+  const marketRentMonthly = marketRent;
+  const servicedNetRevenue = servicedAccommodationAnalysis.netRevenue.monthly;
+  
+  // Base range: 75-90% of market rent
+  let minRate = 0.75;
+  let maxRate = 0.90;
+  
+  // Adjust based on serviced accommodation potential
+  if (servicedAccommodationAnalysis.suitability === 'Excellent') {
+    minRate = 0.80;
+    maxRate = 0.95;
+  } else if (servicedAccommodationAnalysis.suitability === 'Good') {
+    minRate = 0.78;
+    maxRate = 0.92;
+  } else if (servicedAccommodationAnalysis.suitability === 'Poor') {
+    minRate = 0.70;
+    maxRate = 0.85;
+  }
+  
+  // Factor in serviced accommodation net revenue vs market rent
+  const revenueMultiplier = servicedNetRevenue / marketRentMonthly;
+  if (revenueMultiplier > 2.0) {
+    maxRate = Math.min(0.95, maxRate + 0.05);
+  } else if (revenueMultiplier < 1.0) {
+    maxRate = Math.max(0.80, maxRate - 0.05);
+  }
+  
+  const minimum = Math.round(marketRentMonthly * minRate);
+  const maximum = Math.round(marketRentMonthly * maxRate);
+  const recommended = Math.round(marketRentMonthly * ((minRate + maxRate) / 2));
+  
+  const reasoning = `Based on market rent of £${marketRentMonthly.toLocaleString()}/month and serviced accommodation potential (${servicedAccommodationAnalysis.suitability.toLowerCase()} suitability, £${servicedNetRevenue.toLocaleString()}/month net revenue), we recommend a guaranteed rent range of £${minimum.toLocaleString()} - £${maximum.toLocaleString()}.`;
+  
+  return {
+    minimum,
+    maximum,
+    recommended,
+    reasoning,
+  };
+}
+
+// Helper function to get region from postcode (simplified)
+function getRegionFromPostcode(postcode: string): string {
+  if (!postcode) return 'Unknown';
+  
+  const area = postcode.substring(0, 2).toUpperCase();
+  const londonAreas = ['SW', 'SE', 'NW', 'NE', 'W1', 'WC', 'EC', 'E1', 'N1', 'CR', 'BR', 'DA', 'EN', 'HA', 'IG', 'KT', 'RM', 'SM', 'TW', 'UB'];
+  
+  if (londonAreas.some(la => area.startsWith(la))) {
+    return 'London';
+  }
+  
+  const majorCityAreas = ['M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'B1', 'B2', 'B3', 'B4', 'B5', 'LS', 'BD', 'HD'];
+  if (majorCityAreas.some(ca => area.startsWith(ca))) {
+    return 'North West';
+  }
+  
+  return 'Other';
 }
