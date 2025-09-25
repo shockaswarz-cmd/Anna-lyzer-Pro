@@ -279,7 +279,7 @@ async function getPropertyMarketData(postcode: string): Promise<{
       dataLimitations: {
         coverageArea: 'England and Wales (Land Registry) + UK regional rent data (ONS)',
         rentalDataSource: 'ONS regional statistics mapped to postcode area',
-        fallbackUsed: filteredSales.length === 0 && !regionData
+        fallbackUsed: filteredSales.length === 0
       }
     };
   } catch (error) {
@@ -377,6 +377,7 @@ function calculateDemandIndicators(allSales: Array<{ price: number; date: string
   salesVolume: string;
   priceGrowth: string;
   marketActivity: string;
+  salesCount: number;
 } {
   // Sales Volume Analysis
   let salesVolume = 'Low';
@@ -409,7 +410,8 @@ function calculateDemandIndicators(allSales: Array<{ price: number; date: string
   return {
     salesVolume,
     priceGrowth,
-    marketActivity
+    marketActivity,
+    salesCount: recentSales.length
   };
 }
 

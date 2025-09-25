@@ -106,6 +106,14 @@ export function formatQuoteEmail(quoteData: any): { subject: string; html: strin
             </tr>
             ${quoteData.propertyData?.demandIndicators ? `
             <tr>
+              <td style="padding: 8px 0; font-weight: bold; color: #555;">Land Registry Sales:</td>
+              <td style="padding: 8px 0; color: #1a1a1a; ${quoteData.propertyData.demandIndicators.salesCount === 0 ? 'font-weight: bold; color: #e74c3c;' : 'color: #27ae60;'}">${quoteData.propertyData.demandIndicators.salesCount} recent transactions</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; font-weight: bold; color: #555;">Data Source:</td>
+              <td style="padding: 8px 0; color: #1a1a1a;">${quoteData.propertyData.dataLimitations?.fallbackUsed ? 'Regional estimate (ONS)' : 'Land Registry data'}</td>
+            </tr>
+            <tr>
               <td style="padding: 8px 0; font-weight: bold; color: #555;">Market Activity:</td>
               <td style="padding: 8px 0; color: #1a1a1a;">${quoteData.propertyData.demandIndicators.marketActivity}</td>
             </tr>
@@ -230,7 +238,9 @@ MARKET ANALYSIS:
 Estimated Property Value: £${quoteData.estimatedValue.toLocaleString()}
 Market Rent (Monthly): £${quoteData.marketRent.toLocaleString()}
 Annual Rental Yield: ${quoteData.rentalYield}%
-${quoteData.propertyData?.demandIndicators ? `Market Activity: ${quoteData.propertyData.demandIndicators.marketActivity}
+${quoteData.propertyData?.demandIndicators ? `Land Registry Sales: ${quoteData.propertyData.demandIndicators.salesCount} recent transactions
+Data Source: ${quoteData.propertyData.dataLimitations?.fallbackUsed ? 'Regional estimate (ONS)' : 'Land Registry data'}
+Market Activity: ${quoteData.propertyData.demandIndicators.marketActivity}
 Price Growth: ${quoteData.propertyData.demandIndicators.priceGrowth}` : ''}
 ` : ''}
 

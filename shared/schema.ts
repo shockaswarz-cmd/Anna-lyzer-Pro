@@ -55,6 +55,7 @@ export const PropertyDataSchema = z.object({
     salesVolume: z.string(),
     priceGrowth: z.string(),
     marketActivity: z.string(),
+    salesCount: z.number(),
   }),
   dataLimitations: z.object({
     coverageArea: z.string(),
