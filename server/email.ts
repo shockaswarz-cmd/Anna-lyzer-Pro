@@ -279,7 +279,7 @@ export function formatUserConfirmationEmail(userData: any): { subject: string; h
       
       <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e9ecef; color: #6c757d; font-size: 12px;">
         <p style="margin: 0 0 10px 0;"><strong>Bourarro Properties Ltd</strong></p>
-        <p style="margin: 0 0 10px 0;">123 Business Park, London, UK, SW1A 1AA</p>
+        <p style="margin: 0 0 10px 0;">Unit 4536, 182-184 High Street North<br>London, England, E6 2JA, United Kingdom</p>
         <p style="margin: 0 0 10px 0;">This is a transactional email confirming your quote request.</p>
         <p style="margin: 0;">You received this email because you requested a quote on our website.</p>
       </div>
@@ -309,7 +309,8 @@ www.bourarroproperties.uk
 
 ---
 Bourarro Properties Ltd
-123 Business Park, London, UK, SW1A 1AA
+Unit 4536, 182-184 High Street North
+London, England, E6 2JA, United Kingdom
 
 This is a transactional email confirming your quote request.
 You received this email because you requested a quote on our website.
