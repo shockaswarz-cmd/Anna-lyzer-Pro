@@ -146,76 +146,133 @@ export function formatUserConfirmationEmail(userData: any): { subject: string; h
   const subject = `Quote Request Confirmed - Bourarro Properties`;
   
   const html = `
-    <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
-      <div style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); padding: 30px; border-radius: 12px; color: white; margin-bottom: 20px; text-align: center;">
-        <h1 style="color: #FFD700; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); margin: 0 0 15px 0; font-size: 32px; letter-spacing: 1px;">Bourarro Properties</h1>
-        <h2 style="color: #00FF7F; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); margin: 0; font-size: 22px; letter-spacing: 0.5px;">Quote Request Received</h2>
+    <div style="font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; max-width: 650px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+      <!-- Header Section with Logo -->
+      <div style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); padding: 40px 30px; text-align: center; position: relative;">
+        <div style="margin-bottom: 20px;">
+          <img src="https://bourarroproperties.uk/logo.png" alt="Bourarro Properties Logo" style="height: 60px; width: auto; filter: brightness(1.2);" />
+        </div>
+        <h1 style="color: #FFD700; font-weight: 700; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); margin: 0 0 15px 0; font-size: 32px; letter-spacing: 1px;">Bourarro Properties</h1>
+        <h2 style="color: #00FF7F; font-weight: 600; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); margin: 0; font-size: 22px; letter-spacing: 0.5px;">Quote Request Received</h2>
+        <!-- Decorative line -->
+        <div style="height: 3px; width: 100px; background: linear-gradient(90deg, #FFD700, #00FF7F); margin: 20px auto 0; border-radius: 2px;"></div>
       </div>
       
-      <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <h3 style="color: #1a1a1a; margin-top: 0; font-size: 24px;">Hi ${firstName},</h3>
+      <!-- Main Content Section -->
+      <div style="padding: 40px 35px; background: #ffffff;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <h3 style="color: #1a1a1a; margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.5px;">Hi ${firstName},</h3>
+          <div style="height: 2px; width: 60px; background: linear-gradient(90deg, #FFD700, #00FF7F); margin: 15px auto; border-radius: 1px;"></div>
+        </div>
         
-        <p style="color: #1a1a1a; font-size: 16px; line-height: 1.6; margin: 20px 0;">
-          Thank you for requesting a property quote with <strong>Bourarro Properties</strong>.
-        </p>
-        
-        <p style="color: #1a1a1a; font-size: 16px; line-height: 1.6; margin: 20px 0;">
-          We've received your details and one of our team members will review your request and get in touch shortly to discuss next steps.
-        </p>
-        
-        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #f4d03f;">
-          <p style="color: #1a1a1a; font-size: 16px; line-height: 1.6; margin: 0;">
-            In the meantime, feel free to explore our current serviced accommodation listings:
+        <div style="text-align: center; margin-bottom: 35px;">
+          <p style="color: #333333; font-size: 18px; line-height: 1.7; margin: 0 0 20px 0; font-weight: 400;">
+            Thank you for requesting a property quote with <strong style="color: #1a1a1a;">Bourarro Properties</strong>.
           </p>
-          <div style="text-align: center; margin: 20px 0;">
-            <a href="https://bourarro.lodgify.com/" 
-               style="background: linear-gradient(135deg, #f4d03f 0%, #e6c34a 100%); 
-                      color: #1a1a1a; 
-                      padding: 12px 30px; 
-                      text-decoration: none; 
-                      border-radius: 6px; 
-                      font-weight: bold; 
-                      display: inline-block;
-                      font-size: 16px;">
-              View Our Properties
-            </a>
+          
+          <p style="color: #555555; font-size: 16px; line-height: 1.6; margin: 0;">
+            We've received your details and one of our experienced team members will review your request and get in touch shortly to discuss next steps.
+          </p>
+        </div>
+        
+        <!-- Properties CTA Section -->
+        <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 30px; border-radius: 12px; margin: 35px 0; border: 1px solid #dee2e6; text-align: center;">
+          <h4 style="color: #1a1a1a; font-size: 20px; font-weight: 600; margin: 0 0 15px 0;">Explore Our Premium Properties</h4>
+          <p style="color: #555555; font-size: 16px; line-height: 1.6; margin: 0 0 25px 0;">
+            While we prepare your custom quote, discover our current luxury serviced accommodation listings.
+          </p>
+          <a href="https://bourarro.lodgify.com/" 
+             style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); 
+                    color: #1a1a1a; 
+                    padding: 14px 35px; 
+                    text-decoration: none; 
+                    border-radius: 8px; 
+                    font-weight: 600; 
+                    display: inline-block;
+                    font-size: 16px;
+                    box-shadow: 0 4px 15px rgba(255,215,0,0.3);
+                    transition: all 0.3s ease;">
+            View Our Properties
+          </a>
+        </div>
+        
+        <!-- Investment CTA Section -->
+        <div style="background: linear-gradient(135deg, #e8f5e8 0%, #d4edda 100%); padding: 30px; border-radius: 12px; margin: 35px 0; border: 1px solid #c3e6cb; text-align: center;">
+          <h4 style="color: #1a1a1a; font-size: 20px; font-weight: 600; margin: 0 0 15px 0;">Join Our Investment Community</h4>
+          <p style="color: #555555; font-size: 16px; line-height: 1.6; margin: 0 0 25px 0;">
+            Connect with fellow property investors and get exclusive access to market insights and opportunities.
+          </p>
+          <a href="https://chat.whatsapp.com/DR10Vs1zkXO07s7C0VMymb?mode=ems_copy_t" 
+             style="background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); 
+                    color: white; 
+                    padding: 14px 35px; 
+                    text-decoration: none; 
+                    border-radius: 8px; 
+                    font-weight: 600; 
+                    display: inline-block;
+                    font-size: 16px;
+                    box-shadow: 0 4px 15px rgba(37,211,102,0.3);">
+            Join WhatsApp Community
+          </a>
+        </div>
+        
+        <div style="text-align: center; margin: 35px 0;">
+          <p style="color: #333333; font-size: 18px; line-height: 1.6; margin: 0; font-weight: 500;">
+            We look forward to helping you achieve a <strong style="color: #1a1a1a;">hassle-free, guaranteed rental experience</strong>.
+          </p>
+        </div>
+      </div>
+      
+      <!-- Professional Signature Section -->
+      <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 35px 30px; border-top: 3px solid #FFD700;">
+        <div style="text-align: center; margin-bottom: 25px;">
+          <div style="display: inline-block; padding: 0 20px;">
+            <img src="https://bourarroproperties.uk/logo.png" alt="Bourarro Properties" style="height: 45px; width: auto; opacity: 0.9;" />
           </div>
         </div>
         
-        <div style="background: #e8f5e8; padding: 20px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #28a745;">
-          <p style="color: #1a1a1a; font-size: 16px; line-height: 1.6; margin: 0 0 15px 0; font-weight: bold;">
-            🏢 Interested in Property Investment?
+        <div style="text-align: center; margin-bottom: 20px;">
+          <p style="color: #1a1a1a; font-size: 18px; line-height: 1.4; margin: 0 0 5px 0; font-weight: 600;">
+            Best regards,
           </p>
-          <p style="color: #1a1a1a; font-size: 16px; line-height: 1.6; margin: 0 0 15px 0;">
-            Join our exclusive <strong>Investors WhatsApp Group</strong> for market insights, investment opportunities, and networking with fellow property investors.
+          <p style="color: #333333; font-size: 20px; line-height: 1.4; margin: 0; font-weight: 700; letter-spacing: 0.5px;">
+            The Bourarro Properties Team
           </p>
-          <div style="text-align: center; margin: 20px 0;">
-            <a href="https://chat.whatsapp.com/DR10Vs1zkXO07s7C0VMymb?mode=ems_copy_t" 
-               style="background: #25D366; 
-                      color: white; 
-                      padding: 12px 30px; 
-                      text-decoration: none; 
-                      border-radius: 6px; 
-                      font-weight: bold; 
-                      display: inline-block;
-                      font-size: 16px;">
-              Join Investors WhatsApp Group
-            </a>
-          </div>
         </div>
         
-        <p style="color: #1a1a1a; font-size: 16px; line-height: 1.6; margin: 20px 0;">
-          We look forward to helping you achieve a <strong>hassle-free, guaranteed rental experience</strong>.
-        </p>
+        <div style="text-align: center; margin-bottom: 25px;">
+          <div style="height: 2px; width: 80px; background: linear-gradient(90deg, #FFD700, #00FF7F); margin: 0 auto; border-radius: 1px;"></div>
+        </div>
         
-        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e9ecef;">
-          <p style="color: #1a1a1a; font-size: 16px; line-height: 1.6; margin: 0 0 10px 0;">
-            Best regards,<br>
-            <strong>The Bourarro Properties Team</strong>
-          </p>
-          <p style="color: #6c757d; font-size: 14px; margin: 10px 0 0 0;">
-            Email: info@bourarroproperties.co.uk<br>
-            Website: <a href="https://bourarroproperties.uk" style="color: #f4d03f; text-decoration: none;">www.bourarroproperties.uk</a>
+        <div style="text-align: center;">
+          <table style="margin: 0 auto; border-collapse: collapse;">
+            <tr>
+              <td style="padding: 8px 15px; text-align: center;">
+                <p style="color: #555555; font-size: 14px; margin: 0; font-weight: 500;">
+                  📧 <a href="mailto:info@bourarroproperties.co.uk" style="color: #1a1a1a; text-decoration: none; font-weight: 600;">info@bourarroproperties.co.uk</a>
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 15px; text-align: center;">
+                <p style="color: #555555; font-size: 14px; margin: 0; font-weight: 500;">
+                  🌐 <a href="https://bourarroproperties.uk" style="color: #FFD700; text-decoration: none; font-weight: 600;">www.bourarroproperties.uk</a>
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 15px; text-align: center;">
+                <p style="color: #555555; font-size: 14px; margin: 0; font-weight: 500;">
+                  🏢 Premium Property Investment Solutions
+                </p>
+              </td>
+            </tr>
+          </table>
+        </div>
+        
+        <div style="text-align: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid #dee2e6;">
+          <p style="color: #6c757d; font-size: 12px; margin: 0 0 5px 0; font-style: italic;">
+            "Your trusted partner in hassle-free, guaranteed rental experiences"
           </p>
         </div>
       </div>
