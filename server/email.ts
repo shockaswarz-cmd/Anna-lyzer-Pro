@@ -177,7 +177,7 @@ export function formatUserConfirmationEmail(userData: any): { subject: string; h
             Join our exclusive <strong>Investors WhatsApp Group</strong> for market insights, investment opportunities, and networking with fellow property investors.
           </p>
           <div style="text-align: center; margin: 20px 0;">
-            <a href="https://chat.whatsapp.com/YOUR_WHATSAPP_GROUP_LINK" 
+            <a href="https://chat.whatsapp.com/DR10Vs1zkXO07s7C0VMymb?mode=ems_copy_t" 
                style="background: #25D366; 
                       color: white; 
                       padding: 12px 30px; 
@@ -225,7 +225,7 @@ https://bourarro.lodgify.com/
 
 🏢 INTERESTED IN PROPERTY INVESTMENT?
 Join our exclusive Investors WhatsApp Group for market insights, investment opportunities, and networking with fellow property investors.
-Join here: https://chat.whatsapp.com/YOUR_WHATSAPP_GROUP_LINK
+Join here: https://chat.whatsapp.com/DR10Vs1zkXO07s7C0VMymb?mode=ems_copy_t
 
 We look forward to helping you achieve a hassle-free, guaranteed rental experience.
 
