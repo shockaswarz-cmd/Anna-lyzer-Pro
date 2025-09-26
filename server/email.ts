@@ -169,6 +169,28 @@ export function formatUserConfirmationEmail(userData: any): { subject: string; h
           </div>
         </div>
         
+        <div style="background: #e8f5e8; padding: 20px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #28a745;">
+          <p style="color: #1a1a1a; font-size: 16px; line-height: 1.6; margin: 0 0 15px 0; font-weight: bold;">
+            🏢 Interested in Property Investment?
+          </p>
+          <p style="color: #1a1a1a; font-size: 16px; line-height: 1.6; margin: 0 0 15px 0;">
+            Join our exclusive <strong>Investors WhatsApp Group</strong> for market insights, investment opportunities, and networking with fellow property investors.
+          </p>
+          <div style="text-align: center; margin: 20px 0;">
+            <a href="https://chat.whatsapp.com/YOUR_WHATSAPP_GROUP_LINK" 
+               style="background: #25D366; 
+                      color: white; 
+                      padding: 12px 30px; 
+                      text-decoration: none; 
+                      border-radius: 6px; 
+                      font-weight: bold; 
+                      display: inline-block;
+                      font-size: 16px;">
+              Join Investors WhatsApp Group
+            </a>
+          </div>
+        </div>
+        
         <p style="color: #1a1a1a; font-size: 16px; line-height: 1.6; margin: 20px 0;">
           We look forward to helping you achieve a <strong>hassle-free, guaranteed rental experience</strong>.
         </p>
@@ -200,6 +222,10 @@ We've received your details and one of our team members will review your request
 
 In the meantime, feel free to explore our current serviced accommodation listings here:
 https://bourarro.lodgify.com/
+
+🏢 INTERESTED IN PROPERTY INVESTMENT?
+Join our exclusive Investors WhatsApp Group for market insights, investment opportunities, and networking with fellow property investors.
+Join here: https://chat.whatsapp.com/YOUR_WHATSAPP_GROUP_LINK
 
 We look forward to helping you achieve a hassle-free, guaranteed rental experience.
 
