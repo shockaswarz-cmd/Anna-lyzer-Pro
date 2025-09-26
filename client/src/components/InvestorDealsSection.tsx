@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Globe2, Key, LineChart, Wrench, ShieldCheck, Target, ArrowRight, MessageCircle } from "lucide-react";
+import { Globe2, Key, LineChart, Wrench, ShieldCheck, Target, ArrowRight, MessageCircle, Play } from "lucide-react";
+import showcaseVideo from "@assets/WhatsApp Video 2025-09-26 at 18.46.39_1758909016567.mp4";
 
 export default function InvestorDealsSection() {
   const features = [
@@ -168,6 +169,57 @@ export default function InvestorDealsSection() {
                     <span>Access to guaranteed rent programs on completed purchases</span>
                   </li>
                 </ul>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Property Showcase Video Section */}
+        <Card className="bg-gradient-to-br from-card/80 to-card/60 backdrop-blur-sm border-2 border-primary/20 mb-12 max-w-5xl mx-auto overflow-hidden">
+          <CardContent className="p-0">
+            <div className="grid lg:grid-cols-2 gap-0">
+              {/* Video Content */}
+              <div className="relative bg-background/5">
+                <video 
+                  controls 
+                  className="w-full h-full min-h-[300px] lg:min-h-[400px] object-cover"
+                  data-testid="property-showcase-video"
+                >
+                  <source src={showcaseVideo} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                <div className="absolute inset-0 bg-gradient-to-t from-background/20 via-transparent to-transparent pointer-events-none"></div>
+              </div>
+              
+              {/* Content Panel */}
+              <div className="p-8 lg:p-12 flex flex-col justify-center">
+                <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-4 py-2 mb-6 w-fit">
+                  <Play className="w-4 h-4 text-primary" />
+                  <span className="text-primary font-semibold text-sm tracking-wide uppercase">Property Showcase</span>
+                </div>
+                
+                <h3 className="text-3xl lg:text-4xl font-bold font-serif text-foreground mb-6">
+                  This Year's <span className="text-primary italic">Sourced Properties</span>
+                </h3>
+                
+                <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+                  Discover the stunning properties we've successfully sourced for our clients this year. Each property has been carefully selected and negotiated to meet our clients' specific investment criteria and requirements.
+                </p>
+                
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                    <span className="text-muted-foreground">Bespoke sourcing based on client specifications</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                    <span className="text-muted-foreground">Stunning properties across prime UK locations</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                    <span className="text-muted-foreground">Delivered exceptional value and investment potential</span>
+                  </div>
+                </div>
               </div>
             </div>
           </CardContent>
