@@ -179,16 +179,15 @@ export default function InvestorDealsSection() {
           <CardContent className="p-0">
             <div className="grid lg:grid-cols-2 gap-0">
               {/* Video Content */}
-              <div className="relative bg-background/5">
+              <div className="relative bg-background/5 flex items-center justify-center">
                 <video 
                   controls 
-                  className="w-full h-full min-h-[300px] lg:min-h-[400px] object-cover"
+                  className="w-full max-h-[400px] lg:max-h-[500px] object-contain"
                   data-testid="property-showcase-video"
                 >
                   <source src={showcaseVideo} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
-                <div className="absolute inset-0 bg-gradient-to-t from-background/20 via-transparent to-transparent pointer-events-none"></div>
               </div>
               
               {/* Content Panel */}
