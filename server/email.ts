@@ -148,8 +148,8 @@ export function formatUserConfirmationEmail(userData: any): { subject: string; h
   const html = `
     <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
       <div style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); padding: 30px; border-radius: 12px; color: white; margin-bottom: 20px; text-align: center;">
-        <h1 style="color: #f4d03f; margin: 0 0 10px 0; font-size: 28px;">Bourarro Properties</h1>
-        <h2 style="color: white; margin: 0; font-size: 18px;">Quote Request Received</h2>
+        <h1 style="color: #FFD700; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); margin: 0 0 15px 0; font-size: 32px; letter-spacing: 1px;">Bourarro Properties</h1>
+        <h2 style="color: #00FF7F; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); margin: 0; font-size: 22px; letter-spacing: 0.5px;">Quote Request Received</h2>
       </div>
       
       <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
