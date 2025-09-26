@@ -33,6 +33,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await sendEmail({
           to: 'info@bourarroproperties.co.uk',
           from: 'info@bourarroproperties.co.uk',
+          replyTo: 'info@bourarroproperties.co.uk',
           subject,
           html,
           text,
@@ -55,6 +56,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await sendEmail({
           to: validatedData.email,
           from: 'info@bourarroproperties.co.uk',
+          replyTo: 'info@bourarroproperties.co.uk',
           subject: userSubject,
           html: userHtml,
           text: userText,

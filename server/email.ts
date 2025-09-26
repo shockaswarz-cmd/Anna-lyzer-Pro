@@ -16,6 +16,7 @@ interface EmailParams {
   subject: string;
   text?: string;
   html?: string;
+  replyTo?: string;
 }
 
 export async function sendEmail(params: EmailParams): Promise<boolean> {
@@ -28,9 +29,21 @@ export async function sendEmail(params: EmailParams): Promise<boolean> {
     await mailService.send({
       to: params.to,
       from: params.from,
+      replyTo: params.replyTo || params.from,
       subject: params.subject,
       text: params.text || '',
       html: params.html || '',
+      headers: {
+        'X-Entity-ID': 'BourarroProperties',
+        'X-Mailer': 'Bourarro Properties System v1.0',
+        'List-Unsubscribe': '<mailto:unsubscribe@bourarroproperties.co.uk>',
+        'Precedence': 'bulk',
+      },
+      categories: ['transactional', 'quote-confirmation'],
+      customArgs: {
+        email_type: 'quote_confirmation',
+        business: 'bourarro_properties'
+      }
     });
     console.log(`Email sent successfully to ${params.to}`);
     return true;
@@ -130,7 +143,7 @@ ${quoteData.message}
 // Format user confirmation email
 export function formatUserConfirmationEmail(userData: any): { subject: string; html: string; text: string } {
   const firstName = userData.name ? userData.name.split(' ')[0] : 'there';
-  const subject = `Thank You for Requesting Your Quote!`;
+  const subject = `Quote Request Confirmed - Bourarro Properties`;
   
   const html = `
     <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
@@ -207,8 +220,11 @@ export function formatUserConfirmationEmail(userData: any): { subject: string; h
         </div>
       </div>
       
-      <div style="text-align: center; margin-top: 20px; color: #6c757d; font-size: 12px;">
-        <p style="margin: 0;">This is an automated confirmation email. Feel free to reply directly to this email if you have any questions.</p>
+      <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e9ecef; color: #6c757d; font-size: 12px;">
+        <p style="margin: 0 0 10px 0;"><strong>Bourarro Properties Ltd</strong></p>
+        <p style="margin: 0 0 10px 0;">123 Business Park, London, UK, SW1A 1AA</p>
+        <p style="margin: 0 0 10px 0;">This is a transactional email confirming your quote request.</p>
+        <p style="margin: 0;">You received this email because you requested a quote on our website.</p>
       </div>
     </div>
   `;
@@ -235,7 +251,11 @@ info@bourarroproperties.co.uk
 www.bourarroproperties.uk
 
 ---
-This is an automated confirmation email. Feel free to reply directly to this email if you have any questions.
+Bourarro Properties Ltd
+123 Business Park, London, UK, SW1A 1AA
+
+This is a transactional email confirming your quote request.
+You received this email because you requested a quote on our website.
   `;
 
   return { subject, html, text };
