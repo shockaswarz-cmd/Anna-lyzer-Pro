@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Globe2, Key, LineChart, Wrench, ShieldCheck, Target, ArrowRight, MessageCircle, Play } from "lucide-react";
-import showcaseVideo from "@assets/WhatsApp Video 2025-09-26 at 18.46.39_1758909016567.mp4";
+import showcaseVideo from "@assets/F14D916A-D3F1-49D1-9142-12DF9B247E72_1758971472319.mov";
 
 export default function InvestorDealsSection() {
   const features = [
@@ -185,6 +185,7 @@ export default function InvestorDealsSection() {
                   className="w-full max-h-[400px] lg:max-h-[500px] object-contain"
                   data-testid="property-showcase-video"
                 >
+                  <source src={showcaseVideo} type="video/quicktime" />
                   <source src={showcaseVideo} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
