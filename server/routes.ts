@@ -21,6 +21,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Generate quote ID
       const quoteId = crypto.randomUUID();
       
+      // Send admin email notification with user's full quote data
+      try {
+        const emailData = {
+          ...validatedData,
+          quoteId,
+          bedrooms: validatedData.propertyType,
+        };
+        const { subject, html, text } = formatQuoteEmail(emailData);
+        
+        await sendEmail({
+          to: 'info@bourarroproperties.co.uk',
+          from: 'info@bourarroproperties.co.uk',
+          replyTo: 'info@bourarroproperties.co.uk',
+          subject,
+          html,
+          text,
+        });
+        
+        console.log('Full quote notification email sent to info@bourarroproperties.co.uk');
+      } catch (emailError) {
+        // Don't fail the quote request if email fails
+        console.error('Failed to send admin email notification:', emailError);
+      }
+      
       // Send user confirmation email with admin BCC'd
       try {
         const confirmationData = {
