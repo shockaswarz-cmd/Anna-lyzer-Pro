@@ -17,6 +17,7 @@ interface EmailParams {
   text?: string;
   html?: string;
   replyTo?: string;
+  bcc?: string;
 }
 
 export async function sendEmail(params: EmailParams): Promise<boolean> {
@@ -26,7 +27,7 @@ export async function sendEmail(params: EmailParams): Promise<boolean> {
   }
 
   try {
-    await mailService.send({
+    const emailData: any = {
       to: params.to,
       from: params.from,
       replyTo: params.replyTo || params.from,
@@ -44,7 +45,14 @@ export async function sendEmail(params: EmailParams): Promise<boolean> {
         email_type: 'quote_confirmation',
         business: 'bourarro_properties'
       }
-    });
+    };
+    
+    // Add BCC if provided
+    if (params.bcc) {
+      emailData.bcc = params.bcc;
+    }
+    
+    await mailService.send(emailData);
     console.log(`Email sent successfully to ${params.to}`);
     return true;
   } catch (error) {
