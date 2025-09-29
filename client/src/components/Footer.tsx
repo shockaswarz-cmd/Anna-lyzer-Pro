@@ -78,7 +78,7 @@ export default function Footer() {
     
     switch(platform) {
       case 'linkedin':
-        window.open('https://www.linkedin.com/company/23675412/admin/dashboard/', '_blank');
+        window.open('https://www.linkedin.com/company/23675412/', '_blank');
         break;
       case 'instagram':
         window.open('https://www.instagram.com/Bourarropropertiesltd/', '_blank');
