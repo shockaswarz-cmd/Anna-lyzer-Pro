@@ -57,13 +57,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           to: validatedData.email,
           from: 'info@bourarroproperties.co.uk',
           replyTo: 'info@bourarroproperties.co.uk',
-          bcc: 'info@bourarroproperties.co.uk',
           subject: userSubject,
           html: userHtml,
           text: userText,
         });
         
-        console.log('Confirmation email sent to user with admin BCC:', validatedData.email);
+        console.log('Confirmation email sent to user:', validatedData.email);
       } catch (userEmailError) {
         // Don't fail the quote request if confirmation email fails
         console.error('Failed to send user confirmation email:', userEmailError);
