@@ -1,0 +1,78 @@
+Prompt: Seamless All-in-One Travel Booking with Search + Itinerary Checkout
+
+Objective: Build a seamless all-in-one booking system where users can type a destination into the search bar, instantly generate a complete trip (flights, hotels, activities), and pay for everything directly from the itinerary sidebar.
+
+User Flow:
+
+Search Bar Input
+
+User types in where they want to go (city, landmark, event, hotel, restaurant, or excursion).
+
+Prompt the user to select travel dates (departure & return).
+
+Dates must be required to ensure accurate pricing for flights and hotels.
+
+AI Trip Generation
+
+AI automatically finds and displays:
+
+Flights (best routes, times, and prices)
+
+Hotels/Accommodation (quality, ratings, and price range)
+
+Activities/Excursions (tours, events, restaurants, festivals, attractions)
+
+All elements are pre-loaded into the Itinerary Sidebar.
+
+Itinerary Sidebar Features
+
+Daily itinerary view shows flights, accommodation, and planned activities.
+
+User can:
+
+Add or remove activities
+
+Edit details (change hotel, swap flight, replace excursion)
+
+View cost breakdown per item (flights, hotel nights, activities)
+
+A visible Checkout button at the bottom lets the user book the entire trip in one transaction.
+
+A secondary Save Itinerary button allows saving for later.
+
+Checkout & Payment
+
+The entire trip is bookable in one seamless payment.
+
+System displays a transparent cost summary:
+
+Flights cost
+
+Hotel cost
+
+Activities cost
+
++ 2.2% booking fee added to the total trip cost
+
+Payment processed securely through integrated gateway (Stripe/PayPal etc.).
+
+User Experience Goals:
+
+Entire booking journey should feel seamless: from search → itinerary → checkout.
+
+No need to visit multiple booking pages.
+
+All components (flights, hotels, activities) are integrated and editable in one itinerary.
+
+Technical Requirements:
+
+Integrate APIs for flights, hotels, events, tours, and restaurants.
+
+AI engine should optimise results based on: price, quality, ratings, and user preferences.
+
+Sidebar must be responsive across desktop, tablet, and mobile.
+
+Ensure booking data syncs automatically between the search results, itinerary, and checkout.
+
+Outcome:
+A frictionless all-in-one travel booking platform where the user enters a destination + dates, receives a complete pre-built trip, edits if needed, and books everything at once directly from the itinerary sidebar.
