@@ -20,56 +20,26 @@ export default function Footer() {
   const handleLinkClick = (link: string) => {
     console.log(`Footer link clicked: ${link}`);
     
-    // Navigate to appropriate sections or pages
-    switch(link) {
-      case 'home':
-        setLocation('/');
-        break;
-      case 'services':
-        setLocation('/');
-        setTimeout(() => {
-          document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-        break;
-      case 'about':
-        setLocation('/');
-        setTimeout(() => {
-          document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-        break;
-      case 'faq':
-        setLocation('/');
-        setTimeout(() => {
-          document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-        break;
-      case 'contact':
-        setLocation('/');
-        setTimeout(() => {
-          document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-        break;
-      case 'guaranteed-rent':
-      case 'property-management':
-      case 'maintenance':
-      case 'legal-compliance':
-      case 'portfolio-advice':
-        setLocation('/');
-        setTimeout(() => {
-          document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-        break;
-      case 'privacy':
-        setLocation('/privacy-policy');
-        break;
-      case 'terms':
-        setLocation('/terms-conditions');
-        break;
-      case 'cookies':
-        setLocation('/cookie-policy');
-        break;
-      default:
-        break;
+    const routes: Record<string, string> = {
+      'home': '/',
+      'services': '/services',
+      'about': '/about',
+      'faq': '/faq',
+      'contact': '/contact',
+      'guaranteed-rent': '/services',
+      'property-management': '/services',
+      'maintenance': '/services',
+      'legal-compliance': '/services',
+      'portfolio-advice': '/services',
+      'privacy': '/privacy-policy',
+      'terms': '/terms-conditions',
+      'cookies': '/cookie-policy'
+    };
+    
+    const route = routes[link];
+    if (route) {
+      setLocation(route);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
