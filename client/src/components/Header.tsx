@@ -14,24 +14,28 @@ export default function Header() {
   };
 
   const handleNavClick = (section: string) => {
-    if (section === 'home') {
-      setLocation('/');
-      setIsMenuOpen(false);
-      return;
-    }
-    
-    const element = document.getElementById(section);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
     setIsMenuOpen(false);
+    
+    const routes: Record<string, string> = {
+      'home': '/',
+      'services': '/services',
+      'accommodations': '/properties',
+      'about': '/about',
+      'investors': '/investors',
+      'faq': '/faq',
+      'contact': '/contact'
+    };
+    
+    const route = routes[section];
+    if (route) {
+      setLocation(route);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleGetQuote = () => {
-    const element = document.getElementById('contact');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    setLocation('/contact');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
