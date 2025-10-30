@@ -1,12 +1,6 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import ServicesSection from "@/components/ServicesSection";
-import ServicedAccommodationSection from "@/components/ServicedAccommodationSection";
-import AboutSection from "@/components/AboutSection";
-import InvestorDealsSection from "@/components/InvestorDealsSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
-import FAQSection from "@/components/FAQSection";
-import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 
@@ -109,13 +103,7 @@ export default function Home() {
       />
       <Header />
       <Hero />
-      <ServicesSection />
-      <ServicedAccommodationSection />
-      <AboutSection />
-      <InvestorDealsSection />
       <TestimonialsSection />
-      <FAQSection />
-      <ContactSection />
       <Footer />
     </div>
   );
