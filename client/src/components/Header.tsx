@@ -42,17 +42,21 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-primary/20 bg-background/98 backdrop-blur-xl supports-[backdrop-filter]:bg-background/95">
       <div className="container flex h-20 items-center justify-between px-6">
         {/* Luxury Logo */}
-        <div className="flex items-center space-x-4">
+        <button 
+          onClick={() => handleNavClick('home')}
+          className="flex items-center space-x-4 cursor-pointer group"
+          data-testid="logo-home-link"
+        >
           <img 
             src={bourrarroLogo} 
             alt="Bourarro Properties - Property Investment" 
-            className="h-10 w-auto opacity-90 transition-opacity hover:opacity-100 filter drop-shadow-sm"
+            className="h-10 w-auto opacity-90 transition-opacity group-hover:opacity-100 filter drop-shadow-sm"
           />
           <div className="hidden lg:block w-px h-8 bg-primary/30"></div>
           <div className="hidden lg:block">
             <span className="text-primary text-sm font-semibold tracking-wider uppercase">Bourarro Properties</span>
           </div>
-        </div>
+        </button>
 
         {/* Luxury Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-10">
