@@ -100,7 +100,7 @@ export default function Home() {
         structuredData={businessStructuredData}
         canonicalUrl="https://bourarroproperties.uk"
       />
-      <div className="relative min-h-screen lg:h-screen lg:overflow-hidden">
+      <div className="relative">
         <Header />
         <Hero />
       </div>
