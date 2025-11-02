@@ -59,52 +59,52 @@ export default function Header() {
         </button>
 
         {/* Luxury Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-10">
+        <nav className="hidden lg:flex items-center space-x-6 xl:space-x-10">
           <button 
             onClick={() => handleNavClick('home')}
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground hover:text-foreground transition-colors text-sm xl:text-base"
             data-testid="nav-home"
           >
             Home
           </button>
           <button 
             onClick={() => handleNavClick('services')}
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground hover:text-foreground transition-colors text-sm xl:text-base"
             data-testid="nav-services"
           >
             Services
           </button>
           <button 
             onClick={() => handleNavClick('accommodations')}
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground hover:text-foreground transition-colors text-sm xl:text-base"
             data-testid="nav-accommodations"
           >
             Properties
           </button>
           <button 
             onClick={() => handleNavClick('about')}
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground hover:text-foreground transition-colors text-sm xl:text-base"
             data-testid="nav-about"
           >
             About
           </button>
           <button 
             onClick={() => handleNavClick('investors')}
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground hover:text-foreground transition-colors text-sm xl:text-base"
             data-testid="nav-investors"
           >
             Investors
           </button>
           <button 
             onClick={() => handleNavClick('faq')}
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground hover:text-foreground transition-colors text-sm xl:text-base"
             data-testid="nav-faq"
           >
             FAQ
           </button>
           <button 
             onClick={() => handleNavClick('contact')}
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground hover:text-foreground transition-colors text-sm xl:text-base"
             data-testid="nav-contact"
           >
             Contact
@@ -114,7 +114,7 @@ export default function Header() {
         {/* Luxury CTA Button - Desktop */}
         <Button 
           onClick={handleGetQuote}
-          className="hidden md:flex px-8 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full transition-all duration-300 hover:scale-105 shadow-lg"
+          className="hidden lg:flex px-6 xl:px-8 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full transition-all duration-300 hover:scale-105 shadow-lg text-sm xl:text-base"
           data-testid="button-get-quote"
         >
           Request Quote
@@ -125,7 +125,7 @@ export default function Header() {
           variant="ghost"
           size="icon"
           onClick={toggleMenu}
-          className="md:hidden"
+          className="lg:hidden"
           data-testid="button-mobile-menu"
         >
           {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -134,7 +134,7 @@ export default function Header() {
 
       {/* Luxury Mobile Navigation */}
       {isMenuOpen && (
-        <div className="md:hidden border-t border-primary/20 bg-background/98 backdrop-blur-xl">
+        <div className="lg:hidden border-t border-primary/20 bg-background/98 backdrop-blur-xl">
           <div className="container py-6 space-y-4 px-6">
             <button 
               onClick={() => handleNavClick('home')}

@@ -42,7 +42,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative h-[calc(100vh-5rem)] md:h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative h-[calc(100vh-5rem)] lg:h-screen flex items-center justify-center overflow-hidden">
       {/* Background Carousel with Luxury Overlay */}
       <div className="absolute inset-0 z-0">
         <div className="embla overflow-hidden h-full" ref={emblaRef}>
@@ -65,46 +65,47 @@ export default function Hero() {
       {/* Luxury Content */}
       <div className="relative z-10 container mx-auto px-4 md:px-6 text-center">
         <div className="max-w-5xl mx-auto">
-          <div className="mb-1 md:mb-4">
-            <div className="inline-flex items-center gap-1.5 md:gap-2 bg-primary/10 border border-primary/30 rounded-full px-2.5 py-0.5 md:px-5 md:py-2">
+          <div className="mb-1 md:mb-2 lg:mb-4">
+            <div className="inline-flex items-center gap-1.5 md:gap-2 bg-primary/10 border border-primary/30 rounded-full px-2.5 py-0.5 md:px-4 lg:px-5 md:py-1.5 lg:py-2">
               <div className="w-1.5 md:w-2 h-1.5 md:h-2 bg-primary rounded-full animate-pulse"></div>
               <span className="text-primary font-semibold text-xs md:text-sm tracking-wide uppercase">Property Investment</span>
             </div>
           </div>
           
-          <h1 className="text-2xl md:text-5xl lg:text-6xl font-bold text-white mb-1 md:mb-4 leading-tight tracking-tight">
+          <h1 className="text-2xl md:text-4xl lg:text-6xl font-bold text-white mb-1 md:mb-3 lg:mb-4 leading-tight tracking-tight">
             Guaranteed <span className="text-primary italic">Rental</span> Returns
           </h1>
           
-          <p className="text-xs md:text-xl text-white/90 mb-2 md:mb-8 max-w-3xl mx-auto leading-snug md:leading-relaxed font-light px-2">
-            Guaranteed income, zero fees, full management.
+          <p className="text-xs md:text-base lg:text-xl text-white/90 mb-2 md:mb-6 lg:mb-8 max-w-3xl mx-auto leading-snug md:leading-relaxed font-light px-2">
+            <span className="md:hidden">Guaranteed income, zero fees, full management.</span>
+            <span className="hidden md:inline">Professional property investment with guaranteed rental income, zero fees, and comprehensive property management services.</span>
           </p>
 
           {/* Premium Benefits */}
-          <div className="grid grid-cols-3 md:grid-cols-3 gap-1.5 md:gap-4 mb-2 md:mb-8 max-w-4xl mx-auto">
-            <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-lg md:rounded-2xl p-1.5 md:p-4 text-center" data-testid="benefit-commission">
-              <div className="w-1.5 md:w-3 h-1.5 md:h-3 bg-primary rounded-full mx-auto mb-0.5 md:mb-2"></div>
-              <h3 className="text-xs md:text-lg font-semibold text-white mb-0 md:mb-1">Zero Fees</h3>
-              <p className="text-white/80 text-xs md:text-sm hidden md:block">No commission, no hidden costs</p>
+          <div className="grid grid-cols-3 gap-1.5 md:gap-3 lg:gap-4 mb-2 md:mb-6 lg:mb-8 max-w-4xl mx-auto">
+            <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-lg md:rounded-xl lg:rounded-2xl p-1.5 md:p-3 lg:p-4 text-center" data-testid="benefit-commission">
+              <div className="w-1.5 md:w-2.5 lg:w-3 h-1.5 md:h-2.5 lg:h-3 bg-primary rounded-full mx-auto mb-0.5 md:mb-1.5 lg:mb-2"></div>
+              <h3 className="text-xs md:text-base lg:text-lg font-semibold text-white mb-0 md:mb-1">Zero Fees</h3>
+              <p className="text-white/80 text-xs md:text-sm hidden lg:block">No commission, no hidden costs</p>
             </div>
-            <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-lg md:rounded-2xl p-1.5 md:p-4 text-center" data-testid="benefit-lease">
-              <div className="w-1.5 md:w-3 h-1.5 md:h-3 bg-primary rounded-full mx-auto mb-0.5 md:mb-2"></div>
-              <h3 className="text-xs md:text-lg font-semibold text-white mb-0 md:mb-1">3-5 Years</h3>
-              <p className="text-white/80 text-xs md:text-sm hidden md:block">3-5 year guaranteed lease</p>
+            <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-lg md:rounded-xl lg:rounded-2xl p-1.5 md:p-3 lg:p-4 text-center" data-testid="benefit-lease">
+              <div className="w-1.5 md:w-2.5 lg:w-3 h-1.5 md:h-2.5 lg:h-3 bg-primary rounded-full mx-auto mb-0.5 md:mb-1.5 lg:mb-2"></div>
+              <h3 className="text-xs md:text-base lg:text-lg font-semibold text-white mb-0 md:mb-1"><span className="md:hidden">3-5 Years</span><span className="hidden md:inline">Flexible Terms</span></h3>
+              <p className="text-white/80 text-xs md:text-sm hidden lg:block">3-5 year guaranteed lease</p>
             </div>
-            <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-lg md:rounded-2xl p-1.5 md:p-4 text-center" data-testid="benefit-management">
-              <div className="w-1.5 md:w-3 h-1.5 md:h-3 bg-primary rounded-full mx-auto mb-0.5 md:mb-2"></div>
-              <h3 className="text-xs md:text-lg font-semibold text-white mb-0 md:mb-1">Managed</h3>
-              <p className="text-white/80 text-xs md:text-sm hidden md:block">Complete property management</p>
+            <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-lg md:rounded-xl lg:rounded-2xl p-1.5 md:p-3 lg:p-4 text-center" data-testid="benefit-management">
+              <div className="w-1.5 md:w-2.5 lg:w-3 h-1.5 md:h-2.5 lg:h-3 bg-primary rounded-full mx-auto mb-0.5 md:mb-1.5 lg:mb-2"></div>
+              <h3 className="text-xs md:text-base lg:text-lg font-semibold text-white mb-0 md:mb-1"><span className="md:hidden">Managed</span><span className="hidden md:inline">Full Management</span></h3>
+              <p className="text-white/80 text-xs md:text-sm hidden lg:block">Complete property management</p>
             </div>
           </div>
 
           {/* Luxury CTAs */}
-          <div className="flex flex-col sm:flex-row gap-2 md:gap-4 justify-center items-center mb-1 md:mb-6">
+          <div className="flex flex-col sm:flex-row gap-2 md:gap-3 lg:gap-4 justify-center items-center mb-1 md:mb-4 lg:mb-6">
             <Button 
               size="lg" 
               onClick={handleGetQuote}
-              className="px-8 md:px-10 py-2 md:py-3 text-sm md:text-base font-semibold bg-primary hover:bg-primary/90 text-primary-foreground border-2 border-primary rounded-full transition-all duration-300 hover:scale-105 shadow-2xl"
+              className="px-8 md:px-10 py-2 md:py-2.5 lg:py-3 text-sm md:text-base font-semibold bg-primary hover:bg-primary/90 text-primary-foreground border-2 border-primary rounded-full transition-all duration-300 hover:scale-105 shadow-2xl"
               data-testid="button-hero-quote"
             >
               Request Quote
@@ -112,7 +113,7 @@ export default function Hero() {
           </div>
           
           {/* Trust Indicator */}
-          <div className="text-center hidden md:block">
+          <div className="text-center hidden lg:block">
             <div className="flex flex-wrap justify-center items-center gap-1.5 md:gap-4 text-white/40">
               <div className="text-xs">£150k+ Monthly Revenue</div>
               <div className="w-1 h-1 bg-white/40 rounded-full hidden sm:block"></div>
