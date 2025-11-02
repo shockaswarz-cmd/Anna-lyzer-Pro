@@ -7,23 +7,13 @@ import propertyImage2 from "@assets/stock_images/luxury_modern_apartm_88414ea8.j
 import propertyImage3 from "@assets/stock_images/luxury_modern_apartm_996c69ef.jpg";
 import propertyImage4 from "@assets/stock_images/luxury_modern_apartm_0479402f.jpg";
 import propertyImage5 from "@assets/stock_images/luxury_modern_apartm_5c08da58.jpg";
-import interiorImage1 from "@assets/stock_images/luxury_dark_modern_a_ae4722a8.jpg";
-import interiorImage2 from "@assets/stock_images/luxury_dark_modern_a_bddbffe7.jpg";
-import interiorImage3 from "@assets/stock_images/luxury_dark_modern_a_3d104e59.jpg";
-import interiorImage4 from "@assets/stock_images/luxury_dark_modern_a_f25275ec.jpg";
-import interiorImage5 from "@assets/stock_images/luxury_dark_modern_a_43957165.jpg";
 
 const propertyImages = [
   propertyImage1,
-  interiorImage1,
   propertyImage2,
-  interiorImage2,
   propertyImage3,
-  interiorImage3,
   propertyImage4,
-  interiorImage4,
   propertyImage5,
-  interiorImage5,
 ];
 
 export default function Hero() {
