@@ -10,7 +10,7 @@ export default function Home() {
     "@id": "https://bourarroproperties.uk/#business",
     "name": "Bourarro Properties",
     "alternateName": "Bourarro Properties Ltd",
-    "description": "Professional property management company offering guaranteed rent services, property maintenance, and comprehensive landlord solutions across the UK.",
+    "description": "Luxury property investment specialists offering guaranteed rental returns for high-net-worth investors. Professional property management with 3-5 year guaranteed income, zero commission, and comprehensive service across the UK.",
     "url": "https://bourarroproperties.uk",
     "logo": "https://bourarroproperties.uk/logo.png",
     "image": "https://bourarroproperties.uk/og-image.jpg",
@@ -91,11 +91,11 @@ export default function Home() {
   return (
     <div className="bg-background">
       <SEOHead
-        title="Guaranteed Rent Scheme UK | Property Management | Bourarro Properties"
-        description="Get guaranteed rent at market value for 3-5 years with 0% commission. Professional UK property management and maintenance. Free quote available."
-        keywords="guaranteed rent UK, property management London, landlord services, rental guarantee, property investment, serviced accommodation, property maintenance, tenant sourcing, property compliance, rental income guarantee"
-        ogTitle="Bourarro Properties - Guaranteed Rent & Zero Hassle Property Management"
-        ogDescription="Professional property management with guaranteed rent services. Get market value rent with 0% commission and full management for 3-5 years. Free quote available."
+        title="Luxury Property Investment | Guaranteed Rental Returns | Bourarro Properties"
+        description="Luxury property investment with guaranteed rental income for 3-5 years. Zero commission, comprehensive management for high-net-worth investors in London."
+        keywords="luxury property investment UK, guaranteed rental returns, high net worth property investment, premium property management London, guaranteed rental income, zero commission property investment, luxury real estate investment, property investment guaranteed returns, exclusive property opportunities, luxury landlord services"
+        ogTitle="Bourarro Properties - Luxury Property Investment with Guaranteed Returns"
+        ogDescription="Exclusive property investment for discerning investors. Guaranteed rental income, zero fees, and premium property management across London's luxury real estate market."
         ogUrl="https://bourarroproperties.uk"
         structuredData={businessStructuredData}
         canonicalUrl="https://bourarroproperties.uk"
