@@ -52,7 +52,7 @@ export default function Hero() {
                 <img 
                   src={image} 
                   alt={`Luxury property investment ${index + 1}`} 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover object-center"
                 />
               </div>
             ))}
