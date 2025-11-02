@@ -41,6 +41,11 @@ export default function Hero() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleViewServices = () => {
+    setLocation('/services');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <section className="relative h-[calc(100vh-5rem)] lg:h-screen flex items-center justify-center overflow-hidden">
       {/* Background Carousel with Luxury Overlay */}
@@ -109,6 +114,15 @@ export default function Hero() {
               data-testid="button-hero-quote"
             >
               Request Quote
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline"
+              onClick={handleViewServices}
+              className="px-8 md:px-10 py-2 md:py-2.5 lg:py-3 text-sm md:text-base font-semibold bg-background/10 backdrop-blur-sm hover:bg-background/20 text-white border-2 border-white/30 hover:border-white/50 rounded-full transition-all duration-300 hover:scale-105"
+              data-testid="button-hero-services"
+            >
+              Our Services
             </Button>
           </div>
           
