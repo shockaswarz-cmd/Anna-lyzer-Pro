@@ -1,30 +1,60 @@
 import { Button } from "@/components/ui/button";
-import heroImage from "@assets/generated_images/luxury_apartment_building_hero_7b1df623.png";
+import { useLocation } from "wouter";
+import { useEffect } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import propertyImage1 from "@assets/stock_images/luxury_modern_apartm_c41eb706.jpg";
+import propertyImage2 from "@assets/stock_images/luxury_modern_apartm_88414ea8.jpg";
+import propertyImage3 from "@assets/stock_images/luxury_modern_apartm_996c69ef.jpg";
+import propertyImage4 from "@assets/stock_images/luxury_modern_apartm_0479402f.jpg";
+import propertyImage5 from "@assets/stock_images/luxury_modern_apartm_5c08da58.jpg";
+
+const propertyImages = [
+  propertyImage1,
+  propertyImage2,
+  propertyImage3,
+  propertyImage4,
+  propertyImage5,
+];
 
 export default function Hero() {
-  const handleGetQuote = () => {
-    const element = document.getElementById('contact');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  const [, setLocation] = useLocation();
+  const [emblaRef, emblaApi] = useEmblaCarousel({ 
+    loop: true,
+    duration: 30
+  });
 
-  const handleLearnMore = () => {
-    const element = document.getElementById('services');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  useEffect(() => {
+    if (emblaApi) {
+      const intervalId = setInterval(() => {
+        emblaApi.scrollNext();
+      }, 5000); // Change image every 5 seconds
+
+      return () => clearInterval(intervalId);
     }
+  }, [emblaApi]);
+
+  const handleGetQuote = () => {
+    setLocation('/contact');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image with Luxury Overlay */}
+      {/* Background Carousel with Luxury Overlay */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src={heroImage} 
-          alt="Professional property investment opportunity" 
-          className="w-full h-full object-cover scale-110"
-        />
+        <div className="embla overflow-hidden h-full" ref={emblaRef}>
+          <div className="embla__container flex h-full">
+            {propertyImages.map((image, index) => (
+              <div key={index} className="embla__slide flex-[0_0_100%] min-w-0 relative">
+                <img 
+                  src={image} 
+                  alt={`Luxury property investment ${index + 1}`} 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/40" />
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/20 to-transparent" />
       </div>
@@ -75,15 +105,6 @@ export default function Hero() {
               data-testid="button-hero-quote"
             >
               Request Quote
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              onClick={handleLearnMore}
-              className="px-12 py-4 text-lg font-semibold bg-white/5 border-2 border-white/40 text-white hover:bg-white/10 backdrop-blur-lg rounded-full transition-all duration-300 hover:scale-105"
-              data-testid="button-hero-learn"
-            >
-              Discover More
             </Button>
           </div>
           
