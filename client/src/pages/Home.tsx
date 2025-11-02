@@ -89,7 +89,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background">
       <SEOHead
         title="Guaranteed Rent Scheme UK | Property Management | Bourarro Properties"
         description="Get guaranteed rent at market value for 3-5 years with 0% commission. Professional UK property management and maintenance. Free quote available."
@@ -100,9 +100,10 @@ export default function Home() {
         structuredData={businessStructuredData}
         canonicalUrl="https://bourarroproperties.uk"
       />
-      <Header />
-      <Hero />
-      <Footer />
+      <div className="relative min-h-screen lg:h-screen lg:overflow-hidden">
+        <Header />
+        <Hero />
+      </div>
     </div>
   );
 }

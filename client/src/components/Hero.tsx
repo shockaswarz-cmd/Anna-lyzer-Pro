@@ -42,7 +42,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative h-screen flex items-center justify-center overflow-hidden">
       {/* Background Carousel with Luxury Overlay */}
       <div className="absolute inset-0 z-0">
         <div className="embla overflow-hidden h-full" ref={emblaRef}>
@@ -65,46 +65,46 @@ export default function Hero() {
       {/* Luxury Content */}
       <div className="relative z-10 container mx-auto px-6 text-center">
         <div className="max-w-5xl mx-auto">
-          <div className="mb-8">
-            <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-6 py-3 mb-8">
+          <div className="mb-4">
+            <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-5 py-2">
               <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
               <span className="text-primary font-semibold text-sm tracking-wide uppercase">Property Investment Opportunity</span>
             </div>
           </div>
           
-          <h1 className="text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight tracking-tight">
+          <h1 className="text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight tracking-tight">
             Guaranteed <span className="text-primary italic">Rental</span> Returns
           </h1>
           
-          <p className="text-2xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
+          <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed font-light">
             Professional property investment with guaranteed rental income, zero fees, and comprehensive property management services.
           </p>
 
           {/* Premium Benefits */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 max-w-4xl mx-auto">
-            <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-2xl p-6 text-center" data-testid="benefit-commission">
-              <div className="w-4 h-4 bg-primary rounded-full mx-auto mb-3"></div>
-              <h3 className="text-xl font-semibold text-white mb-2">Zero Fees</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 max-w-4xl mx-auto">
+            <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-2xl p-4 text-center" data-testid="benefit-commission">
+              <div className="w-3 h-3 bg-primary rounded-full mx-auto mb-2"></div>
+              <h3 className="text-lg font-semibold text-white mb-1">Zero Fees</h3>
               <p className="text-white/80 text-sm">No commission, no hidden costs</p>
             </div>
-            <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-2xl p-6 text-center" data-testid="benefit-lease">
-              <div className="w-4 h-4 bg-primary rounded-full mx-auto mb-3"></div>
-              <h3 className="text-xl font-semibold text-white mb-2">Flexible Terms</h3>
+            <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-2xl p-4 text-center" data-testid="benefit-lease">
+              <div className="w-3 h-3 bg-primary rounded-full mx-auto mb-2"></div>
+              <h3 className="text-lg font-semibold text-white mb-1">Flexible Terms</h3>
               <p className="text-white/80 text-sm">3-5 year guaranteed lease options</p>
             </div>
-            <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-2xl p-6 text-center" data-testid="benefit-management">
-              <div className="w-4 h-4 bg-primary rounded-full mx-auto mb-3"></div>
-              <h3 className="text-xl font-semibold text-white mb-2">Comprehensive Management</h3>
+            <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-2xl p-4 text-center" data-testid="benefit-management">
+              <div className="w-3 h-3 bg-primary rounded-full mx-auto mb-2"></div>
+              <h3 className="text-lg font-semibold text-white mb-1">Comprehensive Management</h3>
               <p className="text-white/80 text-sm">Complete property management</p>
             </div>
           </div>
 
           {/* Luxury CTAs */}
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
             <Button 
               size="lg" 
               onClick={handleGetQuote}
-              className="px-12 py-4 text-lg font-semibold bg-primary hover:bg-primary/90 text-primary-foreground border-2 border-primary rounded-full transition-all duration-300 hover:scale-105 shadow-2xl"
+              className="px-10 py-3 text-base font-semibold bg-primary hover:bg-primary/90 text-primary-foreground border-2 border-primary rounded-full transition-all duration-300 hover:scale-105 shadow-2xl"
               data-testid="button-hero-quote"
             >
               Request Quote
@@ -112,22 +112,15 @@ export default function Hero() {
           </div>
           
           {/* Trust Indicator */}
-          <div className="mt-16 text-center">
-            <div className="flex justify-center items-center gap-8 text-white/40">
+          <div className="text-center">
+            <div className="flex flex-wrap justify-center items-center gap-4 text-white/40">
               <div className="text-xs">£150k+ Avg Monthly Revenue Managed</div>
-              <div className="w-1 h-1 bg-white/40 rounded-full"></div>
+              <div className="w-1 h-1 bg-white/40 rounded-full hidden sm:block"></div>
               <div className="text-xs">75+ Properties</div>
-              <div className="w-1 h-1 bg-white/40 rounded-full"></div>
+              <div className="w-1 h-1 bg-white/40 rounded-full hidden sm:block"></div>
               <div className="text-xs">99.8% Satisfaction</div>
             </div>
           </div>
-        </div>
-      </div>
-      
-      {/* Luxury Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
-        <div className="flex flex-col items-center gap-2 text-white/60">
-          <div className="w-px h-8 bg-gradient-to-b from-white/60 to-transparent"></div>
         </div>
       </div>
     </section>
