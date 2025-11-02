@@ -1,37 +1,40 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
-import { useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 import propertyImage1 from "@assets/stock_images/luxury_modern_apartm_c41eb706.jpg";
 import propertyImage2 from "@assets/stock_images/luxury_modern_apartm_88414ea8.jpg";
 import propertyImage3 from "@assets/stock_images/luxury_modern_apartm_996c69ef.jpg";
 import propertyImage4 from "@assets/stock_images/luxury_modern_apartm_0479402f.jpg";
 import propertyImage5 from "@assets/stock_images/luxury_modern_apartm_5c08da58.jpg";
+import interiorImage1 from "@assets/stock_images/luxury_modern_apartm_d706247e.jpg";
+import interiorImage2 from "@assets/stock_images/luxury_modern_apartm_070881a7.jpg";
+import interiorImage3 from "@assets/stock_images/luxury_modern_apartm_b4570d4b.jpg";
+import interiorImage4 from "@assets/stock_images/luxury_modern_apartm_f1bdbeb5.jpg";
+import interiorImage5 from "@assets/stock_images/luxury_modern_apartm_64decb56.jpg";
 
 const propertyImages = [
   propertyImage1,
+  interiorImage1,
   propertyImage2,
+  interiorImage2,
   propertyImage3,
+  interiorImage3,
   propertyImage4,
+  interiorImage4,
   propertyImage5,
+  interiorImage5,
 ];
 
 export default function Hero() {
   const [, setLocation] = useLocation();
-  const [emblaRef, emblaApi] = useEmblaCarousel({ 
-    loop: true,
-    duration: 30
-  });
-
-  useEffect(() => {
-    if (emblaApi) {
-      const intervalId = setInterval(() => {
-        emblaApi.scrollNext();
-      }, 5000); // Change image every 5 seconds
-
-      return () => clearInterval(intervalId);
-    }
-  }, [emblaApi]);
+  const [emblaRef] = useEmblaCarousel(
+    { 
+      loop: true,
+      duration: 30
+    },
+    [Autoplay({ delay: 5000, stopOnInteraction: false })]
+  );
 
   const handleGetQuote = () => {
     setLocation('/contact');
