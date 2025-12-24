@@ -52,7 +52,7 @@ export default function PrivacyPolicy() {
                 
                 <p className="text-muted-foreground mb-6">
                   We are located at Unit 4536, 182-184 High Street North, London, England, E6 2JA, United Kingdom. 
-                  You can contact us at Info@Bourarroproperties.co.uk or 07435549937.
+                  You can contact us at Info@Bourarroproperties.co.uk or +44 7435 549937.
                 </p>
 
                 <h2 className="text-2xl font-semibold text-foreground mb-4">2. Information We Collect</h2>
@@ -172,7 +172,7 @@ export default function PrivacyPolicy() {
                   <p className="text-muted-foreground mb-2">Unit 4536, 182-184 High Street North</p>
                   <p className="text-muted-foreground mb-2">London, England, E6 2JA, United Kingdom</p>
                   <p className="text-muted-foreground mb-2">Email: Info@Bourarroproperties.co.uk</p>
-                  <p className="text-muted-foreground">Phone: 07435549937</p>
+                  <p className="text-muted-foreground">Phone: +44 7435 549937</p>
                 </div>
 
                 <p className="text-muted-foreground mt-6">

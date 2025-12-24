@@ -15,7 +15,7 @@ export default function Home() {
     "url": "https://bourarroproperties.uk",
     "logo": "https://bourarroproperties.uk/logo.png",
     "image": "https://bourarroproperties.uk/og-image.jpg",
-    "telephone": "07435549937",
+    "telephone": "+447435549937",
     "email": "Info@Bourarroproperties.uk",
     "address": {
       "@type": "PostalAddress",

@@ -212,7 +212,7 @@ export default function CookiePolicy() {
                   <p className="text-muted-foreground mb-2">Unit 4536, 182-184 High Street North</p>
                   <p className="text-muted-foreground mb-2">London, England, E6 2JA, United Kingdom</p>
                   <p className="text-muted-foreground mb-2">Email: Info@Bourarroproperties.co.uk</p>
-                  <p className="text-muted-foreground">Phone: 07435549937</p>
+                  <p className="text-muted-foreground">Phone: +44 7435 549937</p>
                 </div>
 
                 <p className="text-muted-foreground mt-6">

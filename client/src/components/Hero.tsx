@@ -11,7 +11,7 @@ export default function Hero() {
   };
 
   const handleCallNow = () => {
-    window.location.href = 'tel:07435549937';
+    window.location.href = 'tel:+447435549937';
   };
 
   return (

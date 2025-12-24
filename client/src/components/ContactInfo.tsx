@@ -28,7 +28,7 @@ export default function ContactInfo() {
             </div>
             <div>
               <div className="font-semibold text-sm sm:text-base">Call Us</div>
-              <div className="text-muted-foreground text-xs sm:text-sm">07435549937</div>
+              <div className="text-muted-foreground text-xs sm:text-sm">+44 7435 549937</div>
             </div>
           </div>
 
