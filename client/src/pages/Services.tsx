@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import ServicesSection from "@/components/ServicesSection";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import NextSectionButton from "@/components/NextSectionButton";
 
 export default function Services() {
   return (
@@ -17,6 +18,7 @@ export default function Services() {
       />
       <Header />
       <ServicesSection />
+      <NextSectionButton href="/properties" label="View Our Properties" />
       <Footer />
     </div>
   );

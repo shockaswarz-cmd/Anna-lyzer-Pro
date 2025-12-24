@@ -3,6 +3,7 @@ import AboutSection from "@/components/AboutSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import NextSectionButton from "@/components/NextSectionButton";
 
 export default function About() {
   return (
@@ -19,6 +20,7 @@ export default function About() {
       <Header />
       <AboutSection />
       <TestimonialsSection />
+      <NextSectionButton href="/faq" label="Common Questions" />
       <Footer />
     </div>
   );

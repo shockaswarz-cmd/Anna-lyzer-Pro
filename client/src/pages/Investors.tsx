@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import InvestorDealsSection from "@/components/InvestorDealsSection";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import NextSectionButton from "@/components/NextSectionButton";
 
 export default function Investors() {
   return (
@@ -17,6 +18,7 @@ export default function Investors() {
       />
       <Header />
       <InvestorDealsSection />
+      <NextSectionButton href="/about" label="Learn About Us" />
       <Footer />
     </div>
   );

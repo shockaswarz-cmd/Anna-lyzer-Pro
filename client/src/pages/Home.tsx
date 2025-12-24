@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import NextSectionButton from "@/components/NextSectionButton";
 
 export default function Home() {
   const businessStructuredData = {
@@ -104,6 +105,8 @@ export default function Home() {
         <Header />
         <Hero />
       </div>
+      <NextSectionButton href="/services" label="Explore Our Services" />
+      <Footer />
     </div>
   );
 }

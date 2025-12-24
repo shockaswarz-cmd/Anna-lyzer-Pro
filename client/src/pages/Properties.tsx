@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import ServicedAccommodationSection from "@/components/ServicedAccommodationSection";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import NextSectionButton from "@/components/NextSectionButton";
 
 export default function Properties() {
   return (
@@ -17,6 +18,7 @@ export default function Properties() {
       />
       <Header />
       <ServicedAccommodationSection />
+      <NextSectionButton href="/investors" label="Investment Opportunities" />
       <Footer />
     </div>
   );

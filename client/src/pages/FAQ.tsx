@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
+import NextSectionButton from "@/components/NextSectionButton";
 
 export default function FAQ() {
   return (
@@ -17,6 +18,7 @@ export default function FAQ() {
       />
       <Header />
       <FAQSection />
+      <NextSectionButton href="/contact" label="Get Your Free Quote" />
       <Footer />
     </div>
   );
