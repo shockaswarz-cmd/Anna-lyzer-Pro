@@ -25,6 +25,12 @@ export default function ContactSection() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!formData.propertyType) {
+      toast({ title: "Missing Information", description: "Please select a property type", variant: "destructive" });
+      return;
+    }
+    
     setIsSubmitting(true);
     
     try {
@@ -92,8 +98,8 @@ export default function ContactSection() {
                 </div>
 
                 <div>
-                  <Label htmlFor="propertyType">Property Type</Label>
-                  <Select onValueChange={(value) => handleInputChange("propertyType", value)}>
+                  <Label htmlFor="propertyType">Property Type <span className="text-destructive">*</span></Label>
+                  <Select value={formData.propertyType} onValueChange={(value) => handleInputChange("propertyType", value)}>
                     <SelectTrigger data-testid="select-property-type">
                       <SelectValue placeholder="Select property type" />
                     </SelectTrigger>

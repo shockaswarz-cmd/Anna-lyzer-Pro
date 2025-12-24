@@ -1,15 +1,20 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import crypto from "crypto";
 import { insertQuoteRequestSchema } from "../shared/schema";
 import { sendEmail, formatQuoteEmail, formatUserConfirmationEmail } from "./email";
 import { fetchLodgifyProperties } from "./lodgify";
+import { storage } from "./storage";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Quote request endpoints
   app.post("/api/quote", async (req, res) => {
     try {
       console.log('Quote request received from:', req.body.email ? '[REDACTED]' : 'anonymous');
+      
+      // Validate property type is provided
+      if (!req.body.propertyType) {
+        return res.status(400).json({ success: false, error: 'Property type is required' });
+      }
       
       // Extract postcode from address
       const postcode = extractPostcode(req.body.propertyAddress || '');
@@ -18,8 +23,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Validate basic request data
       const validatedData = insertQuoteRequestSchema.parse(requestData);
       
-      // Generate quote ID
-      const quoteId = crypto.randomUUID();
+      // Persist quote to storage first (ensures data is saved even if email fails)
+      const quoteId = await storage.insertQuoteRequest(validatedData);
+      console.log('Quote saved to storage with ID:', quoteId);
       
       // Send admin email notification with user's full quote data
       try {
