@@ -74,25 +74,25 @@ export default function ServicedAccommodationSection() {
 
   return (
     <section id="accommodations" className="py-24 bg-gradient-to-b from-muted/20 to-background">
-      <div className="container mx-auto px-6 max-w-7xl">
+      <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold font-serif text-foreground mb-6">
+        <div className="text-center mb-10 sm:mb-16">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold font-serif text-foreground mb-4 sm:mb-6">
             Book Your Stay in Our Serviced Properties
           </h2>
-          <div className="w-24 h-1 bg-primary mx-auto mb-6"></div>
-          <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+          <div className="w-16 sm:w-24 h-1 bg-primary mx-auto mb-4 sm:mb-6"></div>
+          <p className="text-base sm:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed px-2">
             Discover Bourarro's professional serviced apartments, updated live from our booking platform. 
             Each property is professionally managed and ready to welcome you with modern amenities and exceptional service.
           </p>
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap gap-4 mb-12 justify-center">
-          <div className="min-w-[200px]">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-8 sm:mb-12 max-w-2xl mx-auto px-2">
+          <div className="w-full">
             <Select value={selectedLocation} onValueChange={setSelectedLocation}>
               <SelectTrigger data-testid="select-location">
-                <SelectValue placeholder="Filter by Location" />
+                <SelectValue placeholder="Location" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Locations</SelectItem>
@@ -103,10 +103,10 @@ export default function ServicedAccommodationSection() {
             </Select>
           </div>
 
-          <div className="min-w-[200px]">
+          <div className="w-full">
             <Select value={selectedPriceRange} onValueChange={setSelectedPriceRange}>
               <SelectTrigger data-testid="select-price">
-                <SelectValue placeholder="Filter by Price" />
+                <SelectValue placeholder="Price" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Prices</SelectItem>
@@ -117,10 +117,10 @@ export default function ServicedAccommodationSection() {
             </Select>
           </div>
 
-          <div className="min-w-[200px]">
+          <div className="w-full">
             <Select value={selectedSize} onValueChange={setSelectedSize}>
               <SelectTrigger data-testid="select-size">
-                <SelectValue placeholder="Filter by Size" />
+                <SelectValue placeholder="Size" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Sizes</SelectItem>

@@ -64,22 +64,22 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="py-20 bg-muted/30">
+    <section id="contact" className="py-12 sm:py-20 bg-muted/30">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-foreground mb-4">Get Your Guaranteed Rent Quote</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-4xl font-bold text-foreground mb-3 sm:mb-4">Get Your Guaranteed Rent Quote</h2>
+          <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
             Start your journey to stress-free property investment with guaranteed monthly rent.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-12 max-w-6xl mx-auto">
           <Card>
-            <CardHeader>
-              <CardTitle className="text-xl">Request Your Quote</CardTitle>
-              <CardDescription>Fill in your details for a guaranteed rent estimate.</CardDescription>
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="text-lg sm:text-xl">Request Your Quote</CardTitle>
+              <CardDescription className="text-sm">Fill in your details for a guaranteed rent estimate.</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 sm:p-6 pt-0">
               <form onSubmit={handleSubmit} className="space-y-4" data-testid="contact-form">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -150,8 +150,8 @@ export default function ContactSection() {
                   <Textarea id="message" value={formData.message} onChange={(e) => handleInputChange("message", e.target.value)} placeholder="Tell us about your property, investment goals, or any specific requirements..." rows={4} data-testid="input-message" />
                 </div>
 
-                <Button type="submit" disabled={isSubmitting} className="w-full text-lg py-6" data-testid="button-submit">
-                  {isSubmitting ? (<><Loader2 className="w-5 h-5 mr-2 animate-spin" />Submitting...</>) : 'Get My Guaranteed Rent Quote'}
+                <Button type="submit" disabled={isSubmitting} className="w-full text-sm sm:text-lg py-4 sm:py-6" data-testid="button-submit">
+                  {isSubmitting ? (<><Loader2 className="w-4 sm:w-5 h-4 sm:h-5 mr-2 animate-spin" />Submitting...</>) : 'Get My Guaranteed Rent Quote'}
                 </Button>
               </form>
             </CardContent>

@@ -42,34 +42,34 @@ const faqs = [
 
 export default function FAQSection() {
   return (
-    <section id="faq" className="py-20 bg-background">
+    <section id="faq" className="py-12 sm:py-20 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-foreground mb-4">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-4xl font-bold text-foreground mb-3 sm:mb-4">
             Frequently Asked Questions
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
             Get answers to common questions about our guaranteed rent services.
           </p>
         </div>
 
         <div className="max-w-4xl mx-auto">
-          <Accordion type="single" collapsible className="space-y-4" data-testid="faq-accordion">
+          <Accordion type="single" collapsible className="space-y-3 sm:space-y-4" data-testid="faq-accordion">
             {faqs.map((faq, index) => (
               <AccordionItem 
                 key={index} 
                 value={`item-${index}`}
-                className="bg-background border rounded-lg px-6"
+                className="bg-background border rounded-lg px-4 sm:px-6"
                 data-testid={`faq-item-${index}`}
               >
                 <AccordionTrigger 
-                  className="text-left font-semibold text-lg hover:no-underline py-6"
+                  className="text-left font-semibold text-sm sm:text-lg hover:no-underline py-4 sm:py-6"
                   data-testid={`faq-trigger-${index}`}
                 >
                   {faq.question}
                 </AccordionTrigger>
                 <AccordionContent 
-                  className="text-muted-foreground leading-relaxed pb-6"
+                  className="text-muted-foreground text-sm sm:text-base leading-relaxed pb-4 sm:pb-6"
                   data-testid={`faq-content-${index}`}
                 >
                   {faq.answer}

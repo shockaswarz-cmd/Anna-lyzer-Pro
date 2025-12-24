@@ -229,31 +229,31 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-border mt-8 pt-6">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="text-sm text-muted-foreground">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="text-xs sm:text-sm text-muted-foreground text-center md:text-left">
               © 2024 Bourarro Properties. All rights reserved.
             </div>
-            <div className="flex space-x-6 text-sm">
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-xs sm:text-sm">
               <button 
                 onClick={() => handleLinkClick('privacy')}
                 className="text-muted-foreground hover:text-foreground transition-colors"
                 data-testid="footer-legal-privacy"
               >
-                Privacy Policy
+                Privacy
               </button>
               <button 
                 onClick={() => handleLinkClick('terms')}
                 className="text-muted-foreground hover:text-foreground transition-colors"
                 data-testid="footer-legal-terms"
               >
-                Terms & Conditions
+                Terms
               </button>
               <button 
                 onClick={() => handleLinkClick('cookies')}
                 className="text-muted-foreground hover:text-foreground transition-colors"
                 data-testid="footer-legal-cookies"
               >
-                Cookie Policy
+                Cookies
               </button>
             </div>
           </div>

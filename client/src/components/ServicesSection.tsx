@@ -54,16 +54,16 @@ export default function ServicesSection() {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl"></div>
       </div>
       
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-6 py-3 mb-8">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        <div className="text-center mb-10 sm:mb-16">
+          <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-4 sm:px-6 py-2 sm:py-3 mb-6 sm:mb-8">
             <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
-            <span className="text-primary font-semibold text-sm tracking-wide uppercase">Our Services</span>
+            <span className="text-primary font-semibold text-xs sm:text-sm tracking-wide uppercase">Our Services</span>
           </div>
-          <h2 className="text-5xl lg:text-6xl font-bold text-foreground mb-6">
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-4 sm:mb-6">
             Comprehensive <span className="text-primary italic">Investment</span> Benefits
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-2">
             Professional property management solutions designed for investors seeking guaranteed returns.
           </p>
         </div>
@@ -97,23 +97,23 @@ export default function ServicesSection() {
         </div>
         
         {/* Luxury Trust Indicators */}
-        <div className="mt-20 text-center">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+        <div className="mt-12 sm:mt-20 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 max-w-4xl mx-auto">
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary mb-2">£150k+</div>
-              <div className="text-muted-foreground">Avg Monthly Revenue Managed</div>
+              <div className="text-xl sm:text-3xl font-bold text-primary mb-1 sm:mb-2">£150k+</div>
+              <div className="text-xs sm:text-base text-muted-foreground">Avg Monthly Revenue</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary mb-2">75+</div>
-              <div className="text-muted-foreground">Properties</div>
+              <div className="text-xl sm:text-3xl font-bold text-primary mb-1 sm:mb-2">75+</div>
+              <div className="text-xs sm:text-base text-muted-foreground">Properties</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary mb-2">99.8%</div>
-              <div className="text-muted-foreground">Satisfaction Rate</div>
+              <div className="text-xl sm:text-3xl font-bold text-primary mb-1 sm:mb-2">99.8%</div>
+              <div className="text-xs sm:text-base text-muted-foreground">Satisfaction Rate</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary mb-2">5+</div>
-              <div className="text-muted-foreground">Year Guarantees</div>
+              <div className="text-xl sm:text-3xl font-bold text-primary mb-1 sm:mb-2">5+</div>
+              <div className="text-xs sm:text-base text-muted-foreground">Year Guarantees</div>
             </div>
           </div>
         </div>
