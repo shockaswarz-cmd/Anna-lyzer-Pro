@@ -103,68 +103,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const baseUrl = `${req.protocol}://${req.get('host')}`;
     const currentDate = new Date().toISOString();
     
+    const pages = [
+      { path: '/', freq: 'weekly', priority: '1.0' },
+      { path: '/services', freq: 'weekly', priority: '0.9' },
+      { path: '/properties', freq: 'daily', priority: '0.9' },
+      { path: '/about', freq: 'monthly', priority: '0.8' },
+      { path: '/investors', freq: 'weekly', priority: '0.9' },
+      { path: '/faq', freq: 'monthly', priority: '0.7' },
+      { path: '/contact', freq: 'monthly', priority: '0.8' },
+      { path: '/privacy-policy', freq: 'monthly', priority: '0.5' },
+      { path: '/terms-conditions', freq: 'monthly', priority: '0.5' },
+      { path: '/cookie-policy', freq: 'monthly', priority: '0.5' },
+    ];
+    
+    const urls = pages.map(p => `  <url>
+    <loc>${baseUrl}${p.path}</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>${p.freq}</changefreq>
+    <priority>${p.priority}</priority>
+  </url>`).join('\n');
+    
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${baseUrl}/</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/services</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/properties</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/about</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/investors</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/faq</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/contact</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/privacy-policy</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/terms-conditions</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/cookie-policy</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
+${urls}
 </urlset>`;
 
     res.set('Content-Type', 'application/xml');
