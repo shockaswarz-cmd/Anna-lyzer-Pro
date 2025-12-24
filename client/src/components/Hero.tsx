@@ -1,139 +1,132 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
-import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
-import propertyImage1 from "@assets/stock_images/luxury_modern_apartm_c41eb706.jpg";
-import propertyImage2 from "@assets/stock_images/luxury_modern_apartm_88414ea8.jpg";
-import propertyImage3 from "@assets/stock_images/luxury_modern_apartm_996c69ef.jpg";
-import propertyImage4 from "@assets/stock_images/luxury_modern_apartm_0479402f.jpg";
-import propertyImage5 from "@assets/stock_images/luxury_modern_apartm_5c08da58.jpg";
-import interiorImage1 from "@assets/stock_images/luxury_apartment_int_82b3a767.jpg";
-import interiorImage2 from "@assets/stock_images/luxury_apartment_int_f5bca62b.jpg";
-import interiorImage3 from "@assets/stock_images/luxury_apartment_int_a341d7fc.jpg";
-import interiorImage4 from "@assets/stock_images/luxury_apartment_int_79ab8c9f.jpg";
-import interiorImage5 from "@assets/stock_images/luxury_apartment_int_bb87c447.jpg";
-
-const propertyImages = [
-  propertyImage1,
-  interiorImage1,
-  propertyImage2,
-  interiorImage2,
-  propertyImage3,
-  interiorImage3,
-  propertyImage4,
-  interiorImage4,
-  propertyImage5,
-  interiorImage5,
-];
+import { Shield, Clock, TrendingUp, Phone, CheckCircle } from "lucide-react";
+import heroImage from "@assets/generated_images/luxury_property_investment_hero.png";
 
 export default function Hero() {
   const [, setLocation] = useLocation();
-  const [emblaRef] = useEmblaCarousel(
-    { 
-      loop: true,
-      duration: 30
-    },
-    [Autoplay({ delay: 5000, stopOnInteraction: false })]
-  );
 
   const handleGetQuote = () => {
     setLocation('/contact');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleViewServices = () => {
-    setLocation('/services');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const handleCallNow = () => {
+    window.location.href = 'tel:07435549937';
   };
 
   return (
-    <section className="relative h-[calc(100vh-5rem)] lg:h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Carousel with Luxury Overlay */}
+    <section className="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0">
-        <div className="embla overflow-hidden h-full" ref={emblaRef}>
-          <div className="embla__container flex h-full">
-            {propertyImages.map((image, index) => (
-              <div key={index} className="embla__slide flex-[0_0_100%] min-w-0 relative">
-                <img 
-                  src={image} 
-                  alt={`Luxury property investment ${index + 1}`} 
-                  className="w-full h-full object-cover object-center"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/40" />
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/20 to-transparent" />
+        <img 
+          src={heroImage} 
+          alt="Luxury property investment" 
+          className="w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
       </div>
 
-      {/* Luxury Content */}
-      <div className="relative z-10 container mx-auto px-4 md:px-6 text-center">
-        <div className="max-w-5xl mx-auto">
-          <div className="mb-1 md:mb-2 lg:mb-4">
-            <div className="inline-flex items-center gap-1.5 md:gap-2 bg-primary/10 border border-primary/30 rounded-full px-2.5 py-0.5 md:px-4 lg:px-5 md:py-1.5 lg:py-2">
-              <div className="w-1.5 md:w-2 h-1.5 md:h-2 bg-primary rounded-full animate-pulse"></div>
-              <span className="text-primary font-semibold text-xs md:text-sm tracking-wide uppercase">Property Investment</span>
+      <div className="relative z-10 container mx-auto px-4 md:px-6 py-12 md:py-0">
+        <div className="max-w-4xl">
+          <div className="mb-4 md:mb-6">
+            <div className="inline-flex items-center gap-2 bg-primary/20 border border-primary/40 rounded-full px-4 py-2">
+              <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+              <span className="text-primary font-semibold text-xs sm:text-sm tracking-wide uppercase">Trusted by 100+ Landlords</span>
             </div>
           </div>
           
-          <h1 className="text-2xl md:text-4xl lg:text-6xl font-bold text-white mb-1 md:mb-3 lg:mb-4 leading-tight tracking-tight">
-            Guaranteed <span className="text-primary italic">Rental</span> Returns
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 md:mb-6 leading-tight">
+            Get <span className="text-primary">Guaranteed Rent</span><br className="hidden sm:block" />
+            <span className="text-white/90">Every Month</span>
           </h1>
           
-          <p className="text-xs md:text-base lg:text-xl text-white/90 mb-2 md:mb-6 lg:mb-8 max-w-3xl mx-auto leading-snug md:leading-relaxed font-light px-2">
-            <span className="md:hidden">Guaranteed income, zero fees, full management.</span>
-            <span className="hidden md:inline">Professional property investment with guaranteed rental income, zero fees, and comprehensive property management services.</span>
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-6 md:mb-8 max-w-2xl leading-relaxed">
+            Stop chasing tenants. We pay your rent on time, every time, for <span className="text-primary font-semibold">3-5 years</span> guaranteed.
           </p>
 
-          {/* Premium Benefits */}
-          <div className="grid grid-cols-3 gap-1.5 md:gap-3 lg:gap-4 mb-2 md:mb-6 lg:mb-8 max-w-4xl mx-auto">
-            <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-lg md:rounded-xl lg:rounded-2xl p-1.5 md:p-3 lg:p-4 text-center" data-testid="benefit-commission">
-              <div className="w-1.5 md:w-2.5 lg:w-3 h-1.5 md:h-2.5 lg:h-3 bg-primary rounded-full mx-auto mb-0.5 md:mb-1.5 lg:mb-2"></div>
-              <h3 className="text-xs md:text-base lg:text-lg font-semibold text-white mb-0 md:mb-1">Zero Fees</h3>
-              <p className="text-white/80 text-xs md:text-sm hidden lg:block">No commission, no hidden costs</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 md:mb-8 max-w-2xl">
+            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
+              <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-primary flex-shrink-0" />
+              <div>
+                <div className="text-white font-semibold text-sm sm:text-base">Zero Fees</div>
+                <div className="text-white/70 text-xs sm:text-sm">No hidden costs</div>
+              </div>
             </div>
-            <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-lg md:rounded-xl lg:rounded-2xl p-1.5 md:p-3 lg:p-4 text-center" data-testid="benefit-lease">
-              <div className="w-1.5 md:w-2.5 lg:w-3 h-1.5 md:h-2.5 lg:h-3 bg-primary rounded-full mx-auto mb-0.5 md:mb-1.5 lg:mb-2"></div>
-              <h3 className="text-xs md:text-base lg:text-lg font-semibold text-white mb-0 md:mb-1"><span className="md:hidden">3-5 Years</span><span className="hidden md:inline">Flexible Terms</span></h3>
-              <p className="text-white/80 text-xs md:text-sm hidden lg:block">3-5 year guaranteed lease</p>
+            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
+              <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-primary flex-shrink-0" />
+              <div>
+                <div className="text-white font-semibold text-sm sm:text-base">24hr Quote</div>
+                <div className="text-white/70 text-xs sm:text-sm">Fast response</div>
+              </div>
             </div>
-            <div className="bg-card/20 backdrop-blur-sm border border-primary/30 rounded-lg md:rounded-xl lg:rounded-2xl p-1.5 md:p-3 lg:p-4 text-center" data-testid="benefit-management">
-              <div className="w-1.5 md:w-2.5 lg:w-3 h-1.5 md:h-2.5 lg:h-3 bg-primary rounded-full mx-auto mb-0.5 md:mb-1.5 lg:mb-2"></div>
-              <h3 className="text-xs md:text-base lg:text-lg font-semibold text-white mb-0 md:mb-1"><span className="md:hidden">Managed</span><span className="hidden md:inline">Full Management</span></h3>
-              <p className="text-white/80 text-xs md:text-sm hidden lg:block">Complete property management</p>
+            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
+              <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-primary flex-shrink-0" />
+              <div>
+                <div className="text-white font-semibold text-sm sm:text-base">85% Market</div>
+                <div className="text-white/70 text-xs sm:text-sm">Rent guaranteed</div>
+              </div>
             </div>
           </div>
 
-          {/* Luxury CTAs */}
-          <div className="flex flex-col sm:flex-row gap-2 md:gap-3 lg:gap-4 justify-center items-center mb-1 md:mb-4 lg:mb-6">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 md:mb-8">
             <Button 
               size="lg" 
               onClick={handleGetQuote}
-              className="px-8 md:px-10 py-2 md:py-2.5 lg:py-3 text-sm md:text-base font-semibold bg-primary hover:bg-primary/90 text-primary-foreground border-2 border-primary rounded-full transition-all duration-300 hover:scale-105 shadow-2xl"
+              className="px-6 sm:px-10 py-5 sm:py-7 text-base sm:text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground rounded-full transition-all duration-300 hover:scale-105 shadow-2xl shadow-primary/30"
               data-testid="button-hero-quote"
             >
-              Request Quote
+              Get Your Free Quote
             </Button>
             <Button 
               size="lg" 
               variant="outline"
-              onClick={handleViewServices}
-              className="px-8 md:px-10 py-2 md:py-2.5 lg:py-3 text-sm md:text-base font-semibold bg-background/10 backdrop-blur-sm hover:bg-background/20 text-white border-2 border-white/30 hover:border-white/50 rounded-full transition-all duration-300 hover:scale-105"
-              data-testid="button-hero-services"
+              onClick={handleCallNow}
+              className="px-6 sm:px-10 py-5 sm:py-7 text-base sm:text-lg font-semibold bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-2 border-white/40 hover:border-white/60 rounded-full transition-all duration-300"
+              data-testid="button-hero-call"
             >
-              Our Services
+              <Phone className="w-5 h-5 mr-2" />
+              Call Now
             </Button>
           </div>
           
-          {/* Trust Indicator */}
-          <div className="text-center hidden lg:block">
-            <div className="flex flex-wrap justify-center items-center gap-1.5 md:gap-4 text-white/40">
-              <div className="text-xs">£150k+ Monthly Revenue</div>
-              <div className="w-1 h-1 bg-white/40 rounded-full hidden sm:block"></div>
-              <div className="text-xs">75+ Properties</div>
-              <div className="w-1 h-1 bg-white/40 rounded-full hidden sm:block"></div>
-              <div className="text-xs">99.8% Satisfaction</div>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-white/80">
+            <div className="flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+              <span className="text-sm sm:text-base">No upfront costs</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+              <span className="text-sm sm:text-base">Full property care</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+              <span className="text-sm sm:text-base">UK-wide coverage</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute bottom-6 sm:bottom-8 left-0 right-0 z-10">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-8 text-white/50 text-xs sm:text-sm">
+            <div className="text-center">
+              <div className="text-xl sm:text-2xl font-bold text-white">£150k+</div>
+              <div>Monthly Revenue</div>
+            </div>
+            <div className="hidden sm:block w-px bg-white/20 h-10"></div>
+            <div className="text-center">
+              <div className="text-xl sm:text-2xl font-bold text-white">75+</div>
+              <div>Properties</div>
+            </div>
+            <div className="hidden sm:block w-px bg-white/20 h-10"></div>
+            <div className="text-center">
+              <div className="text-xl sm:text-2xl font-bold text-white">99.8%</div>
+              <div>Satisfaction</div>
+            </div>
+            <div className="hidden sm:block w-px bg-white/20 h-10"></div>
+            <div className="text-center">
+              <div className="text-xl sm:text-2xl font-bold text-white">5+</div>
+              <div>Years Experience</div>
             </div>
           </div>
         </div>
