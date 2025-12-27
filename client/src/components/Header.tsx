@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Home } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import bourrarroLogo from "@assets/Properties (1)_1758478693104.png";
@@ -53,8 +53,15 @@ export default function Header() {
             className="h-10 w-auto opacity-90 transition-opacity group-hover:opacity-100 filter drop-shadow-sm"
           />
           <div className="hidden lg:block w-px h-8 bg-primary/30"></div>
-          <div className="hidden lg:block">
-            <span className="text-primary text-sm font-semibold tracking-wider uppercase">Bourarro Properties</span>
+          <div className="hidden lg:flex flex-col">
+            <span className="text-xl font-semibold tracking-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
+              <span className="text-[#1e3a5f] dark:text-slate-200">Bour</span>
+              <span className="text-[#4aa3df]">arro</span>
+            </span>
+            <span className="flex items-center gap-1 text-[10px] font-semibold tracking-[0.2em] uppercase text-[#1e3a5f] dark:text-slate-300">
+              <Home className="w-3 h-3" />
+              Properties
+            </span>
           </div>
         </button>
 

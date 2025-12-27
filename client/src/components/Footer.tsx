@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Mail, Phone, MapPin, Linkedin, Instagram } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin, Instagram, Home } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import bourrarroLogo from "@assets/Properties (1)_1758478693104.png";
@@ -65,12 +65,22 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <div className="flex items-center">
+            <div className="flex items-center gap-3">
               <img 
                 src={bourrarroLogo} 
                 alt="Bourarro Properties" 
                 className="h-12 w-auto"
               />
+              <div className="flex flex-col">
+                <span className="text-xl font-semibold tracking-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  <span className="text-[#1e3a5f] dark:text-slate-200">Bour</span>
+                  <span className="text-[#4aa3df]">arro</span>
+                </span>
+                <span className="flex items-center gap-1 text-[10px] font-semibold tracking-[0.2em] uppercase text-[#1e3a5f] dark:text-slate-300">
+                  <Home className="w-3 h-3" />
+                  Properties
+                </span>
+              </div>
             </div>
             <p className="text-muted-foreground leading-relaxed">
               Professional property management with guaranteed rent services. 
