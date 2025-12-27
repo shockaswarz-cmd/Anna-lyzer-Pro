@@ -22,6 +22,13 @@ const serviceLinks = [
   { key: 'portfolio-advice', label: 'Portfolio Advice' }
 ];
 
+const resourceLinks = [
+  { key: 'best-guaranteed-rent', label: 'Best Guaranteed Rent Schemes' },
+  { key: 'best-property-management', label: 'Best Property Management' },
+  { key: 'alt-openrent', label: 'OpenRent Alternatives' },
+  { key: 'alt-letting-agents', label: 'Letting Agent Alternatives' }
+];
+
 const legalLinks = [
   { key: 'privacy', label: 'Privacy' },
   { key: 'terms', label: 'Terms' },
@@ -53,7 +60,7 @@ export default function Footer() {
   return (
     <footer className="bg-background border-t border-border">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           <div className="space-y-4">
             <BrandMark />
             <p className="text-muted-foreground leading-relaxed">
@@ -107,6 +114,22 @@ export default function Footer() {
                   onClick={() => navigate(key)}
                   className="block text-muted-foreground hover:text-foreground transition-colors"
                   data-testid={`footer-service-${key}`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="font-semibold text-lg">Resources</h3>
+            <div className="space-y-2">
+              {resourceLinks.map(({ key, label }) => (
+                <button 
+                  key={key}
+                  onClick={() => navigate(key)}
+                  className="block text-muted-foreground hover:text-foreground transition-colors text-left"
+                  data-testid={`footer-resource-${key}`}
                 >
                   {label}
                 </button>

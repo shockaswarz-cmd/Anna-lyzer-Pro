@@ -14,7 +14,12 @@ export const routes: Record<string, string> = {
   'portfolio-advice': '/services',
   privacy: '/privacy-policy',
   terms: '/terms-conditions',
-  cookies: '/cookie-policy'
+  cookies: '/cookie-policy',
+  'best-guaranteed-rent': '/best/guaranteed-rent-schemes',
+  'best-property-management': '/best/property-management-london',
+  'best-serviced-accommodation': '/best/serviced-accommodation',
+  'alt-openrent': '/alternatives/openrent',
+  'alt-letting-agents': '/alternatives/letting-agents'
 };
 
 export const navItems = [

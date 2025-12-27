@@ -134,6 +134,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       { path: '/privacy-policy', freq: 'monthly', priority: '0.5' },
       { path: '/terms-conditions', freq: 'monthly', priority: '0.5' },
       { path: '/cookie-policy', freq: 'monthly', priority: '0.5' },
+      // SEO Article Pages
+      { path: '/best/guaranteed-rent-schemes', freq: 'monthly', priority: '0.8' },
+      { path: '/best/property-management-london', freq: 'monthly', priority: '0.8' },
+      { path: '/best/serviced-accommodation', freq: 'monthly', priority: '0.8' },
+      { path: '/alternatives/openrent', freq: 'monthly', priority: '0.8' },
+      { path: '/alternatives/letting-agents', freq: 'monthly', priority: '0.8' },
     ];
     
     const urls = pages.map(p => `  <url>

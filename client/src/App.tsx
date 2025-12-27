@@ -19,6 +19,13 @@ const TermsConditions = lazy(() => import("@/pages/TermsConditions"));
 const CookiePolicy = lazy(() => import("@/pages/CookiePolicy"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
+// SEO Article pages - lazy loaded for optimal bundle size
+const BestGuaranteedRentSchemes = lazy(() => import("@/pages/articles/BestGuaranteedRentSchemes"));
+const BestPropertyManagementLondon = lazy(() => import("@/pages/articles/BestPropertyManagementLondon"));
+const BestServicedAccommodation = lazy(() => import("@/pages/articles/BestServicedAccommodation"));
+const OpenRentAlternatives = lazy(() => import("@/pages/articles/OpenRentAlternatives"));
+const LettingAgentAlternatives = lazy(() => import("@/pages/articles/LettingAgentAlternatives"));
+
 function ScrollToTop() {
   const [location] = useLocation();
   
@@ -43,6 +50,12 @@ function Router() {
         <Route path="/privacy-policy" component={PrivacyPolicy} />
         <Route path="/terms-conditions" component={TermsConditions} />
         <Route path="/cookie-policy" component={CookiePolicy} />
+        {/* SEO Article Routes */}
+        <Route path="/best/guaranteed-rent-schemes" component={BestGuaranteedRentSchemes} />
+        <Route path="/best/property-management-london" component={BestPropertyManagementLondon} />
+        <Route path="/best/serviced-accommodation" component={BestServicedAccommodation} />
+        <Route path="/alternatives/openrent" component={OpenRentAlternatives} />
+        <Route path="/alternatives/letting-agents" component={LettingAgentAlternatives} />
         {/* Fallback to 404 */}
         <Route component={NotFound} />
       </Switch>
