@@ -2,17 +2,13 @@ import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Shield, Clock, TrendingUp, Phone, CheckCircle } from "lucide-react";
 import heroImage from "@assets/generated_images/luxury_property_investment_hero.png";
+import { contactInfo } from "@/lib/navigation";
 
 export default function Hero() {
   const [, setLocation] = useLocation();
 
-  const handleGetQuote = () => {
-    setLocation('/contact');
-  };
-
-  const handleCallNow = () => {
-    window.location.href = 'tel:+447435549937';
-  };
+  const handleGetQuote = () => setLocation('/contact');
+  const handleCallNow = () => window.location.href = `tel:${contactInfo.phoneTel}`;
 
   return (
     <section className="relative min-h-[100svh] flex items-center overflow-hidden">

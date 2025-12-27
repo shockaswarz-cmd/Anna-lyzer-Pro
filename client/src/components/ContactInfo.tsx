@@ -1,5 +1,13 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { contactInfo } from "@/lib/navigation";
+
+const benefits = [
+  "Over 5+ years of property management experience",
+  "100+ satisfied landlords in our portfolio",
+  "100% transparent fees and contracts",
+  "24/7 property management support"
+];
 
 export default function ContactInfo() {
   return (
@@ -18,7 +26,7 @@ export default function ContactInfo() {
             </div>
             <div className="min-w-0">
               <div className="font-semibold text-sm sm:text-base">Email Us</div>
-              <div className="text-muted-foreground text-xs sm:text-sm truncate">Info@Bourarroproperties.co.uk</div>
+              <div className="text-muted-foreground text-xs sm:text-sm truncate">{contactInfo.email}</div>
             </div>
           </div>
 
@@ -28,7 +36,7 @@ export default function ContactInfo() {
             </div>
             <div>
               <div className="font-semibold text-sm sm:text-base">Call Us</div>
-              <div className="text-muted-foreground text-xs sm:text-sm">+44 7435 549937</div>
+              <div className="text-muted-foreground text-xs sm:text-sm">{contactInfo.phone}</div>
             </div>
           </div>
 
@@ -39,8 +47,8 @@ export default function ContactInfo() {
             <div>
               <div className="font-semibold text-sm sm:text-base">Visit Us</div>
               <div className="text-muted-foreground text-xs sm:text-sm">
-                Unit 4536, 182-184 High Street North<br />
-                London, E6 2JA
+                {contactInfo.address}<br />
+                {contactInfo.city}
               </div>
             </div>
           </div>
@@ -51,22 +59,12 @@ export default function ContactInfo() {
         <CardContent className="p-4 sm:p-6">
           <h3 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">Why Choose Bourarro Properties?</h3>
           <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base text-muted-foreground">
-            <li className="flex items-start gap-2">
-              <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-              <span>Over 5+ years of property management experience</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-              <span>100+ satisfied landlords in our portfolio</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-              <span>100% transparent fees and contracts</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-              <span>24/7 property management support</span>
-            </li>
+            {benefits.map((benefit, i) => (
+              <li key={i} className="flex items-start gap-2">
+                <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                <span>{benefit}</span>
+              </li>
+            ))}
           </ul>
         </CardContent>
       </Card>

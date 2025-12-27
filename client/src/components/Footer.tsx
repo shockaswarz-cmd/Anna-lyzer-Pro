@@ -1,79 +1,61 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Mail, Phone, MapPin, Linkedin, Instagram, Home } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin, Instagram } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
+import BrandMark from "./BrandMark";
+import { routes, socialLinks, contactInfo } from "@/lib/navigation";
+
+const quickLinks = [
+  { key: 'home', label: 'Home' },
+  { key: 'services', label: 'Services' },
+  { key: 'about', label: 'About Us' },
+  { key: 'faq', label: 'FAQ' },
+  { key: 'contact', label: 'Contact' }
+];
+
+const serviceLinks = [
+  { key: 'guaranteed-rent', label: 'Guaranteed Rent' },
+  { key: 'property-management', label: 'Property Management' },
+  { key: 'maintenance', label: 'Maintenance Services' },
+  { key: 'legal-compliance', label: 'Legal Compliance' },
+  { key: 'portfolio-advice', label: 'Portfolio Advice' }
+];
+
+const legalLinks = [
+  { key: 'privacy', label: 'Privacy' },
+  { key: 'terms', label: 'Terms' },
+  { key: 'cookies', label: 'Cookies' }
+];
 
 export default function Footer() {
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [, setLocation] = useLocation();
 
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Newsletter subscription:', newsletterEmail);
-    // TODO: Remove mock functionality - replace with actual newsletter subscription
-    alert('Thank you for subscribing to our newsletter!');
-    setNewsletterEmail("");
-  };
-
-  const handleLinkClick = (link: string) => {
-    console.log(`Footer link clicked: ${link}`);
-    
-    const routes: Record<string, string> = {
-      'home': '/',
-      'services': '/services',
-      'about': '/about',
-      'faq': '/faq',
-      'contact': '/contact',
-      'guaranteed-rent': '/services',
-      'property-management': '/services',
-      'maintenance': '/services',
-      'legal-compliance': '/services',
-      'portfolio-advice': '/services',
-      'privacy': '/privacy-policy',
-      'terms': '/terms-conditions',
-      'cookies': '/cookie-policy'
-    };
-    
-    const route = routes[link];
+  const navigate = (key: string) => {
+    const route = routes[key];
     if (route) {
       setLocation(route);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
-  const handleSocialClick = (platform: string) => {
-    console.log(`Social media clicked: ${platform}`);
-    
-    switch(platform) {
-      case 'linkedin':
-        window.open('https://www.linkedin.com/company/23675412/', '_blank');
-        break;
-      case 'instagram':
-        window.open('https://www.instagram.com/Bourarropropertiesltd/', '_blank');
-        break;
-      // Add other social media links here as needed
-      default:
-        break;
-    }
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert('Thank you for subscribing to our newsletter!');
+    setNewsletterEmail("");
+  };
+
+  const openSocial = (platform: keyof typeof socialLinks) => {
+    window.open(socialLinks[platform], '_blank');
   };
 
   return (
     <footer className="bg-background border-t border-border">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Info */}
           <div className="space-y-4">
-            <div className="flex flex-col">
-              <span className="text-xl font-semibold tracking-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
-                <span className="text-foreground">Bour</span>
-                <span className="text-primary">arro</span>
-              </span>
-              <span className="flex items-center gap-1 text-[10px] font-semibold tracking-[0.2em] uppercase text-muted-foreground">
-                <Home className="w-3 h-3" />
-                Properties
-              </span>
-            </div>
+            <BrandMark />
             <p className="text-muted-foreground leading-relaxed">
               Professional property management with guaranteed rent services. 
               Transforming property investment for landlords across the UK.
@@ -82,7 +64,7 @@ export default function Footer() {
               <Button 
                 variant="ghost" 
                 size="icon"
-                onClick={() => handleSocialClick('linkedin')}
+                onClick={() => openSocial('linkedin')}
                 className="text-muted-foreground hover:text-foreground"
                 data-testid="social-linkedin"
               >
@@ -91,7 +73,7 @@ export default function Footer() {
               <Button 
                 variant="ghost" 
                 size="icon"
-                onClick={() => handleSocialClick('instagram')}
+                onClick={() => openSocial('instagram')}
                 className="text-muted-foreground hover:text-foreground"
                 data-testid="social-instagram"
               >
@@ -100,110 +82,55 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
           <div className="space-y-4">
             <h3 className="font-semibold text-lg">Quick Links</h3>
             <div className="space-y-2">
-              <button 
-                onClick={() => handleLinkClick('home')}
-                className="block text-muted-foreground hover:text-foreground transition-colors"
-                data-testid="footer-link-home"
-              >
-                Home
-              </button>
-              <button 
-                onClick={() => handleLinkClick('services')}
-                className="block text-muted-foreground hover:text-foreground transition-colors"
-                data-testid="footer-link-services"
-              >
-                Services
-              </button>
-              <button 
-                onClick={() => handleLinkClick('about')}
-                className="block text-muted-foreground hover:text-foreground transition-colors"
-                data-testid="footer-link-about"
-              >
-                About Us
-              </button>
-              <button 
-                onClick={() => handleLinkClick('faq')}
-                className="block text-muted-foreground hover:text-foreground transition-colors"
-                data-testid="footer-link-faq"
-              >
-                FAQ
-              </button>
-              <button 
-                onClick={() => handleLinkClick('contact')}
-                className="block text-muted-foreground hover:text-foreground transition-colors"
-                data-testid="footer-link-contact"
-              >
-                Contact
-              </button>
+              {quickLinks.map(({ key, label }) => (
+                <button 
+                  key={key}
+                  onClick={() => navigate(key)}
+                  className="block text-muted-foreground hover:text-foreground transition-colors"
+                  data-testid={`footer-link-${key}`}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* Services */}
           <div className="space-y-4">
             <h3 className="font-semibold text-lg">Our Services</h3>
             <div className="space-y-2">
-              <button 
-                onClick={() => handleLinkClick('guaranteed-rent')}
-                className="block text-muted-foreground hover:text-foreground transition-colors"
-                data-testid="footer-service-guaranteed-rent"
-              >
-                Guaranteed Rent
-              </button>
-              <button 
-                onClick={() => handleLinkClick('property-management')}
-                className="block text-muted-foreground hover:text-foreground transition-colors"
-                data-testid="footer-service-management"
-              >
-                Property Management
-              </button>
-              <button 
-                onClick={() => handleLinkClick('maintenance')}
-                className="block text-muted-foreground hover:text-foreground transition-colors"
-                data-testid="footer-service-maintenance"
-              >
-                Maintenance Services
-              </button>
-              <button 
-                onClick={() => handleLinkClick('legal-compliance')}
-                className="block text-muted-foreground hover:text-foreground transition-colors"
-                data-testid="footer-service-legal"
-              >
-                Legal Compliance
-              </button>
-              <button 
-                onClick={() => handleLinkClick('portfolio-advice')}
-                className="block text-muted-foreground hover:text-foreground transition-colors"
-                data-testid="footer-service-advice"
-              >
-                Portfolio Advice
-              </button>
+              {serviceLinks.map(({ key, label }) => (
+                <button 
+                  key={key}
+                  onClick={() => navigate(key)}
+                  className="block text-muted-foreground hover:text-foreground transition-colors"
+                  data-testid={`footer-service-${key}`}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* Contact & Newsletter */}
           <div className="space-y-4">
             <h3 className="font-semibold text-lg">Stay Connected</h3>
-            
             <div className="space-y-3">
               <div className="flex items-center gap-3" data-testid="footer-contact-email">
                 <Mail className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">Info@Bourarroproperties.co.uk</span>
+                <span className="text-sm text-muted-foreground">{contactInfo.email}</span>
               </div>
               <div className="flex items-center gap-3" data-testid="footer-contact-phone">
                 <Phone className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">+44 7435 549937</span>
+                <span className="text-sm text-muted-foreground">{contactInfo.phone}</span>
               </div>
               <div className="flex items-center gap-3" data-testid="footer-contact-address">
                 <MapPin className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">Unit 4536, 182-184 High Street North, London, England, E6 2JA, United Kingdom</span>
+                <span className="text-sm text-muted-foreground">{contactInfo.fullAddress}</span>
               </div>
             </div>
 
-            {/* Newsletter Signup */}
             <form onSubmit={handleNewsletterSubmit} className="space-y-2" data-testid="newsletter-form">
               <h4 className="font-medium text-sm">Newsletter</h4>
               <div className="flex gap-2">
@@ -216,12 +143,7 @@ export default function Footer() {
                   required
                   data-testid="input-newsletter"
                 />
-                <Button 
-                  type="submit" 
-                  variant="secondary" 
-                  size="sm"
-                  data-testid="button-newsletter"
-                >
+                <Button type="submit" variant="secondary" size="sm" data-testid="button-newsletter">
                   Subscribe
                 </Button>
               </div>
@@ -229,34 +151,22 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div className="border-t border-border mt-8 pt-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-xs sm:text-sm text-muted-foreground text-center md:text-left">
               © 2024 Bourarro Properties. All rights reserved.
             </div>
             <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-xs sm:text-sm">
-              <button 
-                onClick={() => handleLinkClick('privacy')}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                data-testid="footer-legal-privacy"
-              >
-                Privacy
-              </button>
-              <button 
-                onClick={() => handleLinkClick('terms')}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                data-testid="footer-legal-terms"
-              >
-                Terms
-              </button>
-              <button 
-                onClick={() => handleLinkClick('cookies')}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                data-testid="footer-legal-cookies"
-              >
-                Cookies
-              </button>
+              {legalLinks.map(({ key, label }) => (
+                <button 
+                  key={key}
+                  onClick={() => navigate(key)}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  data-testid={`footer-legal-${key}`}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
           </div>
         </div>
