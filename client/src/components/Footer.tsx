@@ -179,23 +179,23 @@ export default function Footer() {
 
         <div className="border-t border-border mt-8 pt-6">
           <div className="flex flex-col items-center gap-6">
-            <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12">
+            <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-10">
               <img 
                 src={tpoLogo} 
                 alt="The Property Ombudsman - Member" 
-                className="h-16 sm:h-20 w-auto max-w-[140px] sm:max-w-[180px] object-contain opacity-90 hover:opacity-100 transition-opacity"
+                className="h-14 sm:h-16 w-auto max-w-[120px] sm:max-w-[150px] object-cover rounded-md opacity-90 hover:opacity-100 transition-opacity"
                 title="Member of The Property Ombudsman"
               />
               <img 
                 src={prsLogo} 
                 alt="Property Redress Scheme - Registered" 
-                className="h-16 sm:h-20 w-auto max-w-[140px] sm:max-w-[180px] object-contain opacity-90 hover:opacity-100 transition-opacity"
+                className="h-14 sm:h-16 w-auto max-w-[120px] sm:max-w-[150px] object-cover rounded-md opacity-90 hover:opacity-100 transition-opacity"
                 title="Registered with Property Redress Scheme"
               />
               <img 
                 src={cmpLogo} 
                 alt="Client Money Protection - Certified" 
-                className="h-16 sm:h-20 w-auto max-w-[140px] sm:max-w-[180px] object-contain opacity-90 hover:opacity-100 transition-opacity"
+                className="h-14 sm:h-16 w-auto max-w-[120px] sm:max-w-[150px] object-cover rounded-full opacity-90 hover:opacity-100 transition-opacity"
                 title="Client Money Protection Certified"
               />
             </div>
