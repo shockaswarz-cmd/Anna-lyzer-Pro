@@ -89,11 +89,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
 
-  // Lodgify properties endpoint
+  // Lodgify properties endpoint with server-side caching
+  let propertyCache: { data: any, timestamp: number } | null = null;
+  const CACHE_TTL = 1000 * 60 * 60; // 1 hour
+
   app.get("/api/lodgify/properties", async (req, res) => {
     try {
-      console.log('Fetching Lodgify properties...');
+      // Check cache first
+      if (propertyCache && (Date.now() - propertyCache.timestamp < CACHE_TTL)) {
+        console.log('Serving Lodgify properties from cache');
+        return res.json(propertyCache.data);
+      }
+
+      console.log('Fetching Lodgify properties from source...');
       const properties = await fetchLodgifyProperties();
+      
+      // Update cache
+      propertyCache = {
+        data: properties,
+        timestamp: Date.now()
+      };
+
       res.json(properties);
     } catch (error) {
       console.error('Error fetching Lodgify properties:', error);
