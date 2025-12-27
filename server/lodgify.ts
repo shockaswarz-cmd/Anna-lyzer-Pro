@@ -50,11 +50,9 @@ export async function fetchLodgifyProperties(): Promise<TransformedProperty[]> {
   }
 
   try {
-    console.log('Fetching properties from Lodgify API...');
     const response = await lodgifyApi.get('/properties');
     
     if (!response.data || !Array.isArray(response.data)) {
-      console.log('Using mock data as fallback');
       return getMockProperties();
     }
 
@@ -65,7 +63,6 @@ export async function fetchLodgifyProperties(): Promise<TransformedProperty[]> {
 
     return await Promise.all(properties.map(transformLodgifyProperty));
   } catch (error: any) {
-    console.error('Error fetching properties from Lodgify:', error.message);
     return getMockProperties();
   }
 }

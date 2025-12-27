@@ -39,7 +39,6 @@ export function ThemeProvider({
     setTheme: (theme: Theme) => {
       localStorage.setItem("bourarro-theme", theme);
       setTheme(theme);
-      console.log('Theme changed to:', theme);
     },
   };
 

@@ -43,7 +43,7 @@ const services = [
 
 export default function ServicesSection() {
   const handleServiceClick = (serviceTitle: string) => {
-    console.log(`Service clicked: ${serviceTitle}`);
+    // Navigate to contact for quote
   };
 
   return (

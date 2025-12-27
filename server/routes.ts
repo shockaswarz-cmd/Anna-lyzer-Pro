@@ -97,11 +97,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       // Check cache first
       if (propertyCache && (Date.now() - propertyCache.timestamp < CACHE_TTL)) {
-        console.log('Serving Lodgify properties from cache');
         return res.json(propertyCache.data);
       }
 
-      console.log('Fetching Lodgify properties from source...');
       const properties = await fetchLodgifyProperties();
       
       // Update cache
