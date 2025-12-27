@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, Home } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
-import bourrarroLogo from "@assets/Properties (1)_1758478693104.png";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -44,16 +43,10 @@ export default function Header() {
         {/* Luxury Logo */}
         <button 
           onClick={() => handleNavClick('home')}
-          className="flex items-center space-x-4 cursor-pointer group"
+          className="flex items-center cursor-pointer group"
           data-testid="logo-home-link"
         >
-          <img 
-            src={bourrarroLogo} 
-            alt="Bourarro Properties - Property Investment" 
-            className="h-10 w-auto opacity-90 transition-opacity group-hover:opacity-100 filter drop-shadow-sm"
-          />
-          <div className="hidden lg:block w-px h-8 bg-primary/30"></div>
-          <div className="hidden lg:flex flex-col">
+          <div className="flex flex-col">
             <span className="text-xl font-semibold tracking-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
               <span className="text-foreground">Bour</span>
               <span className="text-primary">arro</span>
