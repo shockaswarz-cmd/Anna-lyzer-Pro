@@ -183,19 +183,19 @@ export default function Footer() {
               <img 
                 src={tpoLogo} 
                 alt="The Property Ombudsman - Member" 
-                className="h-14 sm:h-16 object-contain opacity-90 hover:opacity-100 transition-opacity"
+                className="h-14 sm:h-16 object-contain rounded-md opacity-90 hover:opacity-100 transition-opacity mix-blend-multiply dark:mix-blend-screen dark:invert dark:brightness-90"
                 title="Member of The Property Ombudsman"
               />
               <img 
                 src={prsLogo} 
                 alt="Property Redress Scheme - Registered" 
-                className="h-14 sm:h-16 object-contain opacity-90 hover:opacity-100 transition-opacity"
+                className="h-14 sm:h-16 object-contain rounded-md opacity-90 hover:opacity-100 transition-opacity mix-blend-multiply dark:mix-blend-screen dark:invert dark:brightness-90"
                 title="Registered with Property Redress Scheme"
               />
               <img 
                 src={cmpLogo} 
                 alt="Client Money Protection - Certified" 
-                className="h-14 sm:h-16 object-contain opacity-90 hover:opacity-100 transition-opacity"
+                className="h-14 sm:h-16 object-contain rounded-md opacity-90 hover:opacity-100 transition-opacity mix-blend-multiply dark:mix-blend-screen dark:invert dark:brightness-90"
                 title="Client Money Protection Certified"
               />
             </div>
