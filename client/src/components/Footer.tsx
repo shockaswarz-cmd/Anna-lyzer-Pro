@@ -179,23 +179,23 @@ export default function Footer() {
 
         <div className="border-t border-border mt-8 pt-6">
           <div className="flex flex-col items-center gap-6">
-            <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-10">
+            <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12">
               <img 
                 src={tpoLogo} 
                 alt="The Property Ombudsman - Member" 
-                className="h-14 sm:h-16 object-contain rounded-md opacity-90 hover:opacity-100 transition-opacity mix-blend-multiply dark:mix-blend-screen dark:invert dark:brightness-90"
+                className="h-20 sm:h-24 object-contain rounded-md opacity-90 hover:opacity-100 transition-opacity mix-blend-multiply dark:mix-blend-screen dark:invert dark:brightness-90"
                 title="Member of The Property Ombudsman"
               />
               <img 
                 src={prsLogo} 
                 alt="Property Redress Scheme - Registered" 
-                className="h-14 sm:h-16 object-contain rounded-md opacity-90 hover:opacity-100 transition-opacity mix-blend-multiply dark:mix-blend-screen dark:invert dark:brightness-90"
+                className="h-20 sm:h-24 object-contain rounded-md opacity-90 hover:opacity-100 transition-opacity mix-blend-multiply dark:mix-blend-screen dark:invert dark:brightness-90"
                 title="Registered with Property Redress Scheme"
               />
               <img 
                 src={cmpLogo} 
                 alt="Client Money Protection - Certified" 
-                className="h-14 sm:h-16 object-contain rounded-md opacity-90 hover:opacity-100 transition-opacity mix-blend-multiply dark:mix-blend-screen dark:invert dark:brightness-90"
+                className="h-20 sm:h-24 object-contain rounded-md opacity-90 hover:opacity-100 transition-opacity mix-blend-multiply dark:mix-blend-screen dark:invert dark:brightness-90"
                 title="Client Money Protection Certified"
               />
             </div>
