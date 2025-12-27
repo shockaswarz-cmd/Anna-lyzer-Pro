@@ -5,9 +5,9 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import BrandMark from "./BrandMark";
 import { routes, socialLinks, contactInfo } from "@/lib/navigation";
-import tpoLogo from "@assets/generated_images/property_ombudsman_tpo_logo_badge.png";
-import prsLogo from "@assets/generated_images/property_redress_scheme_logo_badge.png";
-import cmpLogo from "@assets/generated_images/client_money_protection_logo_badge.png";
+import tpoLogo from "@assets/tpo_1766874696216.jpg";
+import prsLogo from "@assets/PRS_1766874696215.jpg";
+import cmpLogo from "@assets/CM-protect-Logo_1766874696212.jpg";
 
 const quickLinks = [
   { key: 'home', label: 'Home' },
