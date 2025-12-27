@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Mail, Phone, MapPin, Linkedin, Instagram } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin, Instagram, Shield, Award, CheckCircle } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import BrandMark from "./BrandMark";
@@ -175,21 +175,56 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-border mt-8 pt-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-xs sm:text-sm text-muted-foreground text-center md:text-left">
-              © 2024 Bourarro Properties. All rights reserved.
+          <div className="flex flex-col items-center gap-6">
+            <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6">
+              <div 
+                className="flex items-center gap-2 px-3 py-2 rounded-md bg-muted/30 border border-border/50"
+                title="Member of The Property Ombudsman"
+              >
+                <Shield className="w-4 h-4 text-primary" />
+                <div className="text-xs">
+                  <div className="font-medium text-foreground">The Property Ombudsman</div>
+                  <div className="text-muted-foreground">Member</div>
+                </div>
+              </div>
+              <div 
+                className="flex items-center gap-2 px-3 py-2 rounded-md bg-muted/30 border border-border/50"
+                title="Registered with Property Redress Scheme"
+              >
+                <Award className="w-4 h-4 text-primary" />
+                <div className="text-xs">
+                  <div className="font-medium text-foreground">Property Redress Scheme</div>
+                  <div className="text-muted-foreground">Registered</div>
+                </div>
+              </div>
+              <div 
+                className="flex items-center gap-2 px-3 py-2 rounded-md bg-muted/30 border border-border/50"
+                title="Client Money Protection Certified"
+              >
+                <CheckCircle className="w-4 h-4 text-primary" />
+                <div className="text-xs">
+                  <div className="font-medium text-foreground">Client Money Protection</div>
+                  <div className="text-muted-foreground">Certified</div>
+                </div>
+              </div>
             </div>
-            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-xs sm:text-sm">
-              {legalLinks.map(({ key, label }) => (
-                <button 
-                  key={key}
-                  onClick={() => navigate(key)}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                  data-testid={`footer-legal-${key}`}
-                >
-                  {label}
-                </button>
-              ))}
+            
+            <div className="w-full flex flex-col md:flex-row justify-between items-center gap-4 pt-4 border-t border-border/50">
+              <div className="text-xs sm:text-sm text-muted-foreground text-center md:text-left">
+                © 2024 Bourarro Properties. All rights reserved.
+              </div>
+              <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-xs sm:text-sm">
+                {legalLinks.map(({ key, label }) => (
+                  <button 
+                    key={key}
+                    onClick={() => navigate(key)}
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                    data-testid={`footer-legal-${key}`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
