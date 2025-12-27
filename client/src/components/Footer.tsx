@@ -73,10 +73,10 @@ export default function Footer() {
               />
               <div className="flex flex-col">
                 <span className="text-xl font-semibold tracking-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
-                  <span className="text-[#1e3a5f] dark:text-slate-200">Bour</span>
-                  <span className="text-[#4aa3df]">arro</span>
+                  <span className="text-foreground">Bour</span>
+                  <span className="text-primary">arro</span>
                 </span>
-                <span className="flex items-center gap-1 text-[10px] font-semibold tracking-[0.2em] uppercase text-[#1e3a5f] dark:text-slate-300">
+                <span className="flex items-center gap-1 text-[10px] font-semibold tracking-[0.2em] uppercase text-muted-foreground">
                   <Home className="w-3 h-3" />
                   Properties
                 </span>
