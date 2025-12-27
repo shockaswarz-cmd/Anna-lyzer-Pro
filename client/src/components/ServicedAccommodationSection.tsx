@@ -35,14 +35,14 @@ export default function ServicedAccommodationSection() {
   const [selectedPriceRange, setSelectedPriceRange] = useState<string>("all");
   const [selectedSize, setSelectedSize] = useState<string>("all");
 
-  // Fetch properties from Lodgify API
   const { data: properties = [], isLoading, error } = useQuery<Property[]>({
     queryKey: ['/api/lodgify/properties'],
     enabled: true,
   });
 
-  // Filter properties based on selected filters
-  const filteredProperties = (properties as Property[]).filter((property: Property) => {
+  // Filters are now derived directly from the API response instead of stored in state.
+  // This avoids data duplication and ensures memory efficiency.
+  const filteredProperties = properties.filter((property: Property) => {
     const locationMatch = selectedLocation === "all" || 
       property.location.toLowerCase().includes(selectedLocation.toLowerCase()) ||
       property.area?.toLowerCase().includes(selectedLocation.toLowerCase()) ||
@@ -61,16 +61,11 @@ export default function ServicedAccommodationSection() {
     return locationMatch && priceMatch && sizeMatch;
   });
 
-  // Get unique locations for filter (include both location and area)
-  const allLocations = (properties as Property[]).flatMap((p: Property) => {
-    const locationOptions = [
-      p.location,
-      p.area,
-      p.postcode?.split(' ')[0] // Get postcode area (e.g., "RM16" from "RM16 4XY")
-    ];
-    return locationOptions.filter((loc): loc is string => Boolean(loc));
-  });
-  const locations = Array.from(new Set(allLocations));
+  const locations = Array.from(new Set(properties.flatMap((p: Property) => [
+    p.location,
+    p.area,
+    p.postcode?.split(' ')[0]
+  ].filter((loc): loc is string => Boolean(loc)))));
 
   return (
     <section id="accommodations" className="py-24 bg-gradient-to-b from-muted/20 to-background">
