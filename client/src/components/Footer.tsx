@@ -180,24 +180,27 @@ export default function Footer() {
         <div className="border-t border-border mt-8 pt-6">
           <div className="flex flex-col items-center gap-6">
             <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-10">
-              <img 
-                src={tpoLogo} 
-                alt="The Property Ombudsman - Member" 
-                className="h-14 sm:h-16 object-contain opacity-90 hover:opacity-100 transition-opacity"
-                title="Member of The Property Ombudsman"
-              />
-              <img 
-                src={prsLogo} 
-                alt="Property Redress Scheme - Registered" 
-                className="h-14 sm:h-16 object-contain opacity-90 hover:opacity-100 transition-opacity"
-                title="Registered with Property Redress Scheme"
-              />
-              <img 
-                src={cmpLogo} 
-                alt="Client Money Protection - Certified" 
-                className="h-14 sm:h-16 object-contain opacity-90 hover:opacity-100 transition-opacity"
-                title="Client Money Protection Certified"
-              />
+              <div className="h-16 sm:h-20 w-32 sm:w-40 overflow-hidden rounded" title="Member of The Property Ombudsman">
+                <img 
+                  src={tpoLogo} 
+                  alt="The Property Ombudsman - Member" 
+                  className="w-full h-full object-cover scale-110 opacity-90 hover:opacity-100 transition-opacity"
+                />
+              </div>
+              <div className="h-16 sm:h-20 w-32 sm:w-40 overflow-hidden rounded" title="Registered with Property Redress Scheme">
+                <img 
+                  src={prsLogo} 
+                  alt="Property Redress Scheme - Registered" 
+                  className="w-full h-full object-cover scale-125 opacity-90 hover:opacity-100 transition-opacity"
+                />
+              </div>
+              <div className="h-16 sm:h-20 w-16 sm:w-20 overflow-hidden rounded-full" title="Client Money Protection Certified">
+                <img 
+                  src={cmpLogo} 
+                  alt="Client Money Protection - Certified" 
+                  className="w-full h-full object-cover scale-110 opacity-90 hover:opacity-100 transition-opacity"
+                />
+              </div>
             </div>
             
             <div className="w-full flex flex-col md:flex-row justify-between items-center gap-4 pt-4 border-t border-border/50">
