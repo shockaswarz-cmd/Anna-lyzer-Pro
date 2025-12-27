@@ -68,7 +68,7 @@ export default function Hero() {
             <Button 
               size="lg" 
               onClick={handleGetQuote}
-              className="w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-7 text-sm sm:text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground rounded-full transition-all duration-300 hover:scale-105 shadow-2xl shadow-primary/30"
+              className="w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-7 text-sm sm:text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground rounded-full transition-shadow duration-300 shadow-2xl shadow-primary/30"
               data-testid="button-hero-quote"
             >
               Get Your Free Quote
@@ -77,7 +77,7 @@ export default function Hero() {
               size="lg" 
               variant="outline"
               onClick={handleCallNow}
-              className="w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-7 text-sm sm:text-lg font-semibold bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-2 border-white/40 hover:border-white/60 rounded-full transition-all duration-300"
+              className="w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-7 text-sm sm:text-lg font-semibold bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-2 border-white/40 hover:border-white/60 rounded-full transition-colors duration-300"
               data-testid="button-hero-call"
             >
               <Phone className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
