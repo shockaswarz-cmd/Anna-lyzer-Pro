@@ -1,0 +1,83 @@
+BOURARRO PROPERTIES WEBSITE - DETAILED OVERVIEW
+
+This is a property investment and management platform designed for UK landlords.
+
+================================================================================
+CORE BUSINESS SERVICE: GUARANTEED RENT
+================================================================================
+
+The main offering is a guaranteed rent scheme where Bourarro Properties:
+
+- Leases properties from landlords for 3-5 years
+- Pays the landlord a fixed monthly rent (around 85% of market rate) regardless of whether tenants are in place
+- Takes 0% commission - the landlord gets consistent income with no fees
+- Handles everything - tenant sourcing, property maintenance, legal compliance, and day-to-day management
+
+This eliminates the landlord's risk of void periods, late payments, and tenant issues.
+
+================================================================================
+WEBSITE PAGES & FEATURES
+================================================================================
+
+HOME
+High-converting landing page with hero section, trust indicators, and call-to-action buttons
+
+SERVICES
+Details all services: guaranteed rent, property management, maintenance, legal compliance, portfolio advice
+
+PROPERTIES
+Live listings of serviced accommodation properties (pulled from Lodgify API) with filtering by location, price, and size
+
+INVESTORS
+Investment deal sourcing services for BTL, HMO, and off-market opportunities
+
+ABOUT
+Company story, mission, and team information
+
+FAQ
+Common questions about rent-to-rent schemes
+
+CONTACT
+Quote request form that sends email notifications via SendGrid
+
+================================================================================
+KEY FUNCTIONALITY
+================================================================================
+
+1. QUOTE REQUEST SYSTEM
+   Landlords fill out a form with property details (type, address, current rent) and receive a guaranteed rent quote within 24 hours
+
+2. EMAIL NOTIFICATIONS
+   When someone submits a quote request, an email is automatically sent to the Bourarro team via SendGrid integration
+
+3. LIVE PROPERTY LISTINGS
+   The Properties page fetches real listings from the Lodgify booking platform API
+
+4. MOBILE-OPTIMIZED DESIGN
+   Fully responsive with special mobile optimizations (100svh viewport, touch-friendly CTAs)
+
+5. SEO IMPLEMENTATION
+   Structured data, Open Graph tags, and optimized meta descriptions for search visibility
+
+================================================================================
+TARGET AUDIENCE
+================================================================================
+
+UK landlords who want hassle-free property income without dealing with:
+
+- Tenant management
+- Rent collection
+- Property maintenance
+- Legal compliance paperwork
+- Void periods between tenants
+
+================================================================================
+CONTACT INFORMATION
+================================================================================
+
+Email: Info@Bourarroproperties.co.uk
+Phone: +44 7435 549937
+Address: Unit 4536, 182-184 High Street North, London, England, E6 2JA, United Kingdom
+
+LinkedIn: https://www.linkedin.com/company/23675412/
+Instagram: https://www.instagram.com/Bourarropropertiesltd/
