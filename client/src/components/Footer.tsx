@@ -6,9 +6,9 @@ import { useLocation } from "wouter";
 import { motion, useInView } from "framer-motion";
 import BrandMark from "./BrandMark";
 import { routes, socialLinks, contactInfo } from "@/lib/navigation";
-import tpoLogo from "../assets/tpo_1766874696216.jpg";
-import prsLogo from "../assets/PRS_1766874696215.jpg";
-import cmpLogo from "../assets/CM-protect-Logo_1766874696212.jpg";
+import tpoLogo from "../assets/tpo_1766874696216.webp";
+import prsLogo from "../assets/PRS_1766874696215.webp";
+import cmpLogo from "../assets/CM-protect-Logo_1766874696212.webp";
 
 const quickLinks = [
   { key: 'home', label: 'Home' },
