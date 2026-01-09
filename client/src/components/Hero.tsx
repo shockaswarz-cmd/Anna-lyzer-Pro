@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Shield, Clock, TrendingUp, Phone, CheckCircle, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import heroImage from "@assets/generated_images/luxury_property_investment_hero.png";
+import heroImage from "../assets/generated_images/luxury_property_investment_hero.png";
 import { contactInfo } from "@/lib/navigation";
 
 const fadeInUp = {

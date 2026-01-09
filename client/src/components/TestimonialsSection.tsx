@@ -5,16 +5,16 @@ import { Quote, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import useEmblaCarousel from 'embla-carousel-react';
 import { useCallback, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import testimonialMan from "@assets/generated_images/professional_businessman_testimonial_photo_0e9ca4a4.png";
-import testimonialWoman from "@assets/generated_images/professional_businesswoman_testimonial_photo_705e7be5.png";
-import testimonialWomanGlasses from "@assets/generated_images/professional_woman_glasses_testimonial_64a414e7.png";
-import testimonialYoungMan from "@assets/generated_images/young_professional_man_testimonial_affae0c7.png";
-import testimonialSeniorWoman from "@assets/generated_images/senior_businesswoman_testimonial_023c9063.png";
-import testimonialBeardedMan from "@assets/generated_images/bearded_professional_man_testimonial_95036613.png";
-import testimonialYoungWoman from "@assets/generated_images/young_businesswoman_dark_hair_testimonial_b3a8ed3b.png";
-import testimonialNavySuit from "@assets/generated_images/man_navy_suit_testimonial_c404bd61.png";
-import testimonialOlderMan from "@assets/generated_images/older_professional_man_grey_hair_4be05ae2.png";
-import testimonialBlondeWoman from "@assets/generated_images/young_blonde_woman_professional_ce686a66.png";
+import testimonialMan from "../assets/generated_images/professional_businessman_testimonial_photo_0e9ca4a4.png";
+import testimonialWoman from "../assets/generated_images/professional_businesswoman_testimonial_photo_705e7be5.png";
+import testimonialWomanGlasses from "../assets/generated_images/professional_woman_glasses_testimonial_64a414e7.png";
+import testimonialYoungMan from "../assets/generated_images/young_professional_man_testimonial_affae0c7.png";
+import testimonialSeniorWoman from "../assets/generated_images/senior_businesswoman_testimonial_023c9063.png";
+import testimonialBeardedMan from "../assets/generated_images/bearded_professional_man_testimonial_95036613.png";
+import testimonialYoungWoman from "../assets/generated_images/young_businesswoman_dark_hair_testimonial_b3a8ed3b.png";
+import testimonialNavySuit from "../assets/generated_images/man_navy_suit_testimonial_c404bd61.png";
+import testimonialOlderMan from "../assets/generated_images/older_professional_man_grey_hair_4be05ae2.png";
+import testimonialBlondeWoman from "../assets/generated_images/young_blonde_woman_professional_ce686a66.png";
 
 const testimonials = [
   {

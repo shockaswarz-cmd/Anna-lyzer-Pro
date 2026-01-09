@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Globe2, Key, LineChart, Wrench, ShieldCheck, Target, ArrowRight, MessageCircle, Play } from "lucide-react";
-import showcaseVideo from "@assets/WhatsApp Video 2025-09-27 at 12.09.02_1758972223556.mp4";
+import showcaseVideo from "../assets/WhatsApp Video 2025-09-27 at 12.09.02_1758972223556.mp4";
 
 export default function InvestorDealsSection() {
   const features = [
@@ -44,7 +44,7 @@ export default function InvestorDealsSection() {
       description: "Define your investment criteria and goals"
     },
     {
-      step: "2", 
+      step: "2",
       title: "Source",
       description: "Identify and secure suitable opportunities"
     },
@@ -92,8 +92,8 @@ export default function InvestorDealsSection() {
           {features.map((feature, index) => {
             const IconComponent = feature.icon;
             return (
-              <Card 
-                key={index} 
+              <Card
+                key={index}
                 className="bg-card/80 backdrop-blur-sm border-2 border-primary/20 hover:border-primary/40 hover-elevate cursor-default h-full transition-all duration-500 group overflow-visible"
                 data-testid={`feature-card-${index}`}
               >
@@ -180,8 +180,8 @@ export default function InvestorDealsSection() {
             <div className="grid lg:grid-cols-2 gap-0">
               {/* Video Content */}
               <div className="relative bg-background/5 flex items-center justify-center">
-                <video 
-                  controls 
+                <video
+                  controls
                   className="w-full max-h-[250px] sm:max-h-[400px] lg:max-h-[500px] object-contain"
                   data-testid="property-showcase-video"
                 >
@@ -189,22 +189,22 @@ export default function InvestorDealsSection() {
                   Your browser does not support the video tag.
                 </video>
               </div>
-              
+
               {/* Content Panel */}
               <div className="p-5 sm:p-8 lg:p-12 flex flex-col justify-center">
                 <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-4 sm:mb-6 w-fit">
                   <Play className="w-3 sm:w-4 h-3 sm:h-4 text-primary" />
                   <span className="text-primary font-semibold text-xs sm:text-sm tracking-wide uppercase">Property Showcase</span>
                 </div>
-                
+
                 <h3 className="text-xl sm:text-3xl lg:text-4xl font-bold font-serif text-foreground mb-4 sm:mb-6">
                   This Year's <span className="text-primary italic">Sourced Properties</span>
                 </h3>
-                
+
                 <p className="text-sm sm:text-lg text-muted-foreground leading-relaxed mb-4 sm:mb-6">
                   Discover the stunning properties we've sourced for our clients. Each property meets specific investment criteria.
                 </p>
-                
+
                 <div className="space-y-2 sm:space-y-4 text-sm sm:text-base">
                   <div className="flex items-start gap-2 sm:gap-3">
                     <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
@@ -226,9 +226,9 @@ export default function InvestorDealsSection() {
 
         {/* CTA Section */}
         <div className="text-center">
-          <Button 
-            variant="secondary" 
-            size="lg" 
+          <Button
+            variant="secondary"
+            size="lg"
             className="text-sm sm:text-lg px-6 sm:px-8 py-4 sm:py-6 mb-4"
             onClick={handleWhatsAppJoin}
             data-testid="button-whatsapp-group"
