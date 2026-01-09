@@ -4,3 +4,16 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
+Thumbs.db
+
+# Environment variables
+.env
+.env.*
+
+# Tooling/Config
+.replit
+.config
+.local
+.claude
+replit.md
+attached_assets/

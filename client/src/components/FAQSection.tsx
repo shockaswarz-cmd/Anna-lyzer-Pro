@@ -4,6 +4,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+import { HelpCircle } from "lucide-react";
 
 const faqs = [
   {
@@ -41,43 +44,81 @@ const faqs = [
 ];
 
 export default function FAQSection() {
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+
   return (
-    <section id="faq" className="py-12 sm:py-20 bg-background">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-2xl sm:text-4xl font-bold text-foreground mb-3 sm:mb-4">
-            Frequently Asked Questions
+    <section id="faq" className="py-24 sm:py-32 bg-background relative overflow-hidden" ref={sectionRef}>
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/3 rounded-full blur-[100px]" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-primary/5 rounded-full blur-[120px]" />
+      </div>
+
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        {/* Section Header */}
+        <motion.div
+          className="text-center mb-12 sm:mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <motion.div
+            className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-5 py-2.5 mb-8"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
+            <HelpCircle className="w-4 h-4 text-primary" />
+            <span className="text-primary font-semibold text-xs sm:text-sm tracking-wide uppercase">FAQ</span>
+          </motion.div>
+
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6">
+            Frequently Asked{" "}
+            <span className="text-primary">Questions</span>
           </h2>
-          <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Get answers to common questions about our guaranteed rent services.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="max-w-4xl mx-auto">
-          <Accordion type="single" collapsible className="space-y-3 sm:space-y-4" data-testid="faq-accordion">
+        {/* FAQ Accordion */}
+        <motion.div
+          className="max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 40 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.3, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Accordion type="single" collapsible className="space-y-4" data-testid="faq-accordion">
             {faqs.map((faq, index) => (
-              <AccordionItem 
-                key={index} 
-                value={`item-${index}`}
-                className="bg-background border rounded-lg px-4 sm:px-6"
-                data-testid={`faq-item-${index}`}
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.4 + index * 0.05, duration: 0.5 }}
               >
-                <AccordionTrigger 
-                  className="text-left font-semibold text-sm sm:text-lg hover:no-underline py-4 sm:py-6"
-                  data-testid={`faq-trigger-${index}`}
+                <AccordionItem
+                  value={`item-${index}`}
+                  className="bg-card/60 backdrop-blur-sm border border-white/10 rounded-xl px-6 data-[state=open]:border-primary/30 transition-all duration-300 overflow-hidden"
+                  data-testid={`faq-item-${index}`}
                 >
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent 
-                  className="text-muted-foreground text-sm sm:text-base leading-relaxed pb-4 sm:pb-6"
-                  data-testid={`faq-content-${index}`}
-                >
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
+                  <AccordionTrigger
+                    className="text-left font-semibold text-base sm:text-lg hover:no-underline py-5 sm:py-6 hover:text-primary transition-colors duration-300 [&[data-state=open]]:text-primary"
+                    data-testid={`faq-trigger-${index}`}
+                  >
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent
+                    className="text-muted-foreground text-sm sm:text-base leading-relaxed pb-6"
+                    data-testid={`faq-content-${index}`}
+                  >
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              </motion.div>
             ))}
           </Accordion>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

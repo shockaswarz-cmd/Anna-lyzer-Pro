@@ -3,7 +3,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Quote, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import useEmblaCarousel from 'embla-carousel-react';
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import testimonialMan from "@assets/generated_images/professional_businessman_testimonial_photo_0e9ca4a4.png";
 import testimonialWoman from "@assets/generated_images/professional_businesswoman_testimonial_photo_705e7be5.png";
 import testimonialWomanGlasses from "@assets/generated_images/professional_woman_glasses_testimonial_64a414e7.png";
@@ -27,7 +28,7 @@ const testimonials = [
   {
     quote: "Unlocking the best opportunities in the property market, Bourarro Properties has been pivotal in guiding me towards profitable investment endeavors.",
     name: "Nora Thomas",
-    title: "Landlord & Investor", 
+    title: "Landlord & Investor",
     image: testimonialWoman,
     initials: "NT",
     rating: 5
@@ -51,7 +52,7 @@ const testimonials = [
   {
     quote: "I was skeptical about guaranteed rent at first, but Bourarro delivered everything they promised. Best decision I've made for my property business.",
     name: "David Kumar",
-    title: "Real Estate Entrepreneur", 
+    title: "Real Estate Entrepreneur",
     image: testimonialYoungMan,
     initials: "DK",
     rating: 4.5
@@ -104,29 +105,29 @@ const StarRating = ({ rating }: { rating: number }) => {
   const emptyStars = 5 - Math.ceil(rating);
 
   return (
-    <div className="flex items-center gap-1" data-testid="star-rating">
-      {/* Full stars */}
+    <div className="flex items-center gap-0.5" data-testid="star-rating">
       {[...Array(fullStars)].map((_, i) => (
-        <Star key={`full-${i}`} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+        <Star key={`full-${i}`} className="w-4 h-4 fill-primary text-primary" />
       ))}
-      {/* Half star */}
       {hasHalfStar && (
         <div className="relative">
-          <Star className="w-3 h-3 text-gray-300" />
+          <Star className="w-4 h-4 text-muted-foreground/30" />
           <div className="absolute inset-0 overflow-hidden w-1/2">
-            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+            <Star className="w-4 h-4 fill-primary text-primary" />
           </div>
         </div>
       )}
-      {/* Empty stars */}
       {[...Array(emptyStars)].map((_, i) => (
-        <Star key={`empty-${i}`} className="w-3 h-3 text-gray-300" />
+        <Star key={`empty-${i}`} className="w-4 h-4 text-muted-foreground/30" />
       ))}
     </div>
   );
 };
 
 export default function TestimonialsSection() {
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: 'start',
     slidesToScroll: 1,
@@ -139,112 +140,150 @@ export default function TestimonialsSection() {
   const scrollPrev = useCallback(() => {
     if (emblaApi) {
       emblaApi.scrollPrev();
-      console.log('Carousel scrolled to previous');
     }
   }, [emblaApi]);
 
   const scrollNext = useCallback(() => {
     if (emblaApi) {
       emblaApi.scrollNext();
-      console.log('Carousel scrolled to next');
     }
   }, [emblaApi]);
 
-  const handleTestimonialClick = (name: string) => {
-    console.log(`Testimonial clicked: ${name}`);
-  };
-
   return (
-    <section id="testimonials" className="py-24 bg-background">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-foreground mb-4">
-            What Our Clients Say
+    <section id="testimonials" className="py-24 sm:py-32 bg-background relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/3 rounded-full blur-[150px]" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[120px]" />
+      </div>
+
+      <div className="container mx-auto px-4 sm:px-6 relative z-10" ref={sectionRef}>
+        {/* Section Header */}
+        <motion.div
+          className="text-center mb-12 sm:mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <motion.div
+            className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-5 py-2.5 mb-8"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </span>
+            <span className="text-primary font-semibold text-xs sm:text-sm tracking-wide uppercase">Testimonials</span>
+          </motion.div>
+
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6">
+            What Our{" "}
+            <span className="text-primary">Clients</span>{" "}
+            Say
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Real experiences from landlords who transformed their investments.
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            Real experiences from landlords who transformed their property investments with us.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="relative">
-          {/* Carousel Navigation */}
-          <div className="flex justify-center gap-4 mb-8">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={scrollPrev}
-              className="h-12 w-12"
-              data-testid="carousel-prev"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={scrollNext}
-              className="h-12 w-12"
-              data-testid="carousel-next"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </Button>
-          </div>
+        {/* Carousel Navigation */}
+        <motion.div
+          className="flex justify-center gap-3 mb-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.3, duration: 0.5 }}
+        >
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={scrollPrev}
+            className="h-12 w-12 rounded-full border-white/10 hover:border-primary/30 hover:bg-primary/10 transition-all duration-300"
+            data-testid="carousel-prev"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={scrollNext}
+            className="h-12 w-12 rounded-full border-white/10 hover:border-primary/30 hover:bg-primary/10 transition-all duration-300"
+            data-testid="carousel-next"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </Button>
+        </motion.div>
 
-          {/* Carousel Container */}
-          <div className="overflow-hidden" ref={emblaRef} data-testid="testimonials-carousel">
-            <div className="flex gap-6">
-              {testimonials.map((testimonial, index) => (
-                <div
-                  key={index}
-                  className="flex-[0_0_100%] md:flex-[0_0_calc(50%-12px)] lg:flex-[0_0_calc(33.333%-16px)] min-w-0"
+        {/* Carousel Container */}
+        <motion.div
+          className="overflow-hidden"
+          ref={emblaRef}
+          data-testid="testimonials-carousel"
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ delay: 0.4, duration: 0.6 }}
+        >
+          <div className="flex gap-6">
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={index}
+                className="flex-[0_0_100%] md:flex-[0_0_calc(50%-12px)] lg:flex-[0_0_calc(33.333%-16px)] min-w-0"
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.5 + index * 0.05, duration: 0.5 }}
+              >
+                <Card
+                  className="group bg-card/60 backdrop-blur-sm border border-white/10 hover:border-primary/20 h-full transition-all duration-500 hover:bg-card/80"
+                  data-testid={`testimonial-card-${index}`}
                 >
-                  <Card 
-                    className="hover-elevate cursor-pointer h-full"
-                    onClick={() => handleTestimonialClick(testimonial.name)}
-                    data-testid={`testimonial-card-${index}`}
-                  >
-                    <CardContent className="p-8 h-full flex flex-col">
-                      <div className="flex items-center justify-between mb-6">
-                        <Quote className="w-8 h-8 text-primary/60" />
-                        <StarRating rating={testimonial.rating} />
+                  <CardContent className="p-8 h-full flex flex-col">
+                    {/* Header */}
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <Quote className="w-5 h-5 text-primary" />
                       </div>
-                      
-                      <blockquote className="text-lg text-muted-foreground leading-relaxed mb-8 flex-grow">
-                        "{testimonial.quote}"
-                      </blockquote>
+                      <StarRating rating={testimonial.rating} />
+                    </div>
 
-                      <div className="flex items-center gap-4">
-                        <Avatar className="w-12 h-12">
-                          <AvatarImage src={testimonial.image} alt={testimonial.name} />
-                          <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                            {testimonial.initials}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <div className="font-semibold text-foreground" data-testid={`testimonial-name-${index}`}>
-                            {testimonial.name}
-                          </div>
-                          <div className="text-sm text-muted-foreground" data-testid={`testimonial-title-${index}`}>
-                            {testimonial.title}
-                          </div>
+                    {/* Quote */}
+                    <blockquote className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-8 flex-grow">
+                      "{testimonial.quote}"
+                    </blockquote>
+
+                    {/* Author */}
+                    <div className="flex items-center gap-4 pt-6 border-t border-white/5">
+                      <Avatar className="w-12 h-12 border-2 border-primary/20">
+                        <AvatarImage src={testimonial.image} alt={testimonial.name} />
+                        <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                          {testimonial.initials}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <div className="font-semibold text-foreground group-hover:text-primary transition-colors duration-300" data-testid={`testimonial-name-${index}`}>
+                          {testimonial.name}
+                        </div>
+                        <div className="text-sm text-muted-foreground" data-testid={`testimonial-title-${index}`}>
+                          {testimonial.title}
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Carousel Indicators - Hidden on Desktop */}
-          <div className="flex justify-center gap-2 mt-8 lg:hidden">
-            {testimonials.map((_, index) => (
-              <div
-                key={index}
-                className="w-2 h-2 rounded-full bg-muted-foreground/30"
-                data-testid={`carousel-indicator-${index}`}
-              />
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
+        </motion.div>
+
+        {/* Mobile Indicators */}
+        <div className="flex justify-center gap-2 mt-8 lg:hidden">
+          {testimonials.slice(0, 5).map((_, index) => (
+            <div
+              key={index}
+              className="w-2 h-2 rounded-full bg-muted-foreground/20 transition-colors duration-300"
+              data-testid={`carousel-indicator-${index}`}
+            />
+          ))}
         </div>
       </div>
     </section>

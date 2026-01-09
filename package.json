@@ -1,6 +1,8 @@
 {
-  "name": "rest-express",
+  "name": "bourarro-properties",
   "version": "1.0.0",
+  "description": "Bourarro Properties - Luxury property management and investment platform.",
+  "author": "Bourarro Properties",
   "type": "module",
   "license": "MIT",
   "scripts": {
