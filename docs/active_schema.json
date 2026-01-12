@@ -1,0 +1,453 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Anna Lyzer - Active Schema Contract",
+    "description": "Strict Contract for UI/Backend Type Enforcement (Antigravity v3.4)",
+    "version": "1.0.0",
+    "lastUpdated": "2026-01-12",
+    "definitions": {
+        "StrategyType": {
+            "type": "string",
+            "enum": [
+                "BTL",
+                "HMO",
+                "BRRR",
+                "SA",
+                "R2R",
+                "FLIP"
+            ]
+        },
+        "Address": {
+            "type": "object",
+            "required": [
+                "line1",
+                "city",
+                "postcode"
+            ],
+            "properties": {
+                "line1": {
+                    "type": "string"
+                },
+                "line2": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "postcode": {
+                    "type": "string"
+                }
+            }
+        },
+        "PropertyDetails": {
+            "type": "object",
+            "required": [
+                "askingPrice",
+                "propertyType",
+                "bedrooms",
+                "bathrooms",
+                "address",
+                "tenure",
+                "images"
+            ],
+            "properties": {
+                "sourceUrl": {
+                    "type": "string"
+                },
+                "askingPrice": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "propertyType": {
+                    "type": "string",
+                    "enum": [
+                        "Flat",
+                        "Terraced",
+                        "Semi-Detached",
+                        "Detached",
+                        "Bungalow",
+                        "Other"
+                    ]
+                },
+                "bedrooms": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "bathrooms": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "address": {
+                    "$ref": "#/definitions/Address"
+                },
+                "tenure": {
+                    "type": "string",
+                    "enum": [
+                        "Freehold",
+                        "Leasehold",
+                        "Share of Freehold"
+                    ]
+                },
+                "leaseYearsRemaining": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "groundRent": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "serviceCharge": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "description": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "agentName": {
+                    "type": "string"
+                }
+            }
+        },
+        "AcquisitionCosts": {
+            "type": "object",
+            "required": [
+                "isR2R",
+                "purchasePrice",
+                "stampDuty",
+                "surveyFees",
+                "legalFees",
+                "sourcingFee",
+                "refurbishmentCost",
+                "furnitureCost",
+                "otherCosts"
+            ],
+            "properties": {
+                "isR2R": {
+                    "type": "boolean"
+                },
+                "purchasePrice": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "rentToOwner": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "stampDuty": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "surveyFees": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "legalFees": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "sourcingFee": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "refurbishmentCost": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "furnitureCost": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "otherCosts": {
+                    "type": "number",
+                    "minimum": 0
+                }
+            }
+        },
+        "MortgageDetails": {
+            "type": "object",
+            "required": [
+                "ltv",
+                "interestRate",
+                "termYears",
+                "productFee",
+                "monthlyPayment",
+                "isInterestOnly"
+            ],
+            "properties": {
+                "ltv": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100
+                },
+                "interestRate": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "termYears": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "productFee": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "monthlyPayment": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "isInterestOnly": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "IncomeExpenses": {
+            "type": "object",
+            "required": [
+                "grossMonthlyRent",
+                "occupancyRate",
+                "managementFeeRate",
+                "managementFeeMonthly",
+                "utilitiesMonthly",
+                "insuranceMonthly",
+                "councilTaxMonthly",
+                "maintenanceMonthly",
+                "otherMonthlyCosts"
+            ],
+            "properties": {
+                "grossMonthlyRent": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "occupancyRate": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100
+                },
+                "managementFeeRate": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "managementFeeMonthly": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "utilitiesMonthly": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "insuranceMonthly": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "councilTaxMonthly": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "maintenanceMonthly": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "otherMonthlyCosts": {
+                    "type": "number",
+                    "minimum": 0
+                }
+            }
+        },
+        "AnalysisResults": {
+            "type": "object",
+            "required": [
+                "totalCashRequired",
+                "totalInvestment",
+                "grossYield",
+                "netYield",
+                "monthlyCashflow",
+                "annualCashflow",
+                "roi",
+                "paybackMonths"
+            ],
+            "properties": {
+                "totalCashRequired": {
+                    "type": "number"
+                },
+                "totalInvestment": {
+                    "type": "number"
+                },
+                "grossYield": {
+                    "type": "number"
+                },
+                "netYield": {
+                    "type": "number"
+                },
+                "monthlyCashflow": {
+                    "type": "number"
+                },
+                "annualCashflow": {
+                    "type": "number"
+                },
+                "roi": {
+                    "type": "number"
+                },
+                "paybackMonths": {
+                    "type": "number"
+                }
+            }
+        },
+        "RiskSeverity": {
+            "type": "string",
+            "enum": [
+                "info",
+                "warning",
+                "danger"
+            ]
+        },
+        "RiskFlag": {
+            "type": "object",
+            "required": [
+                "id",
+                "category",
+                "severity",
+                "title",
+                "description"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string",
+                    "enum": [
+                        "tenure",
+                        "financial",
+                        "legal",
+                        "location",
+                        "regulatory"
+                    ]
+                },
+                "severity": {
+                    "$ref": "#/definitions/RiskSeverity"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "recommendation": {
+                    "type": "string"
+                }
+            }
+        },
+        "RiskAssessment": {
+            "type": "object",
+            "required": [
+                "overallScore",
+                "flags",
+                "dataConfidence"
+            ],
+            "properties": {
+                "overallScore": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100
+                },
+                "flags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/RiskFlag"
+                    }
+                },
+                "dataConfidence": {
+                    "type": "string",
+                    "enum": [
+                        "high",
+                        "medium",
+                        "low"
+                    ]
+                }
+            }
+        },
+        "StrategyResult": {
+            "type": "object",
+            "required": [
+                "type",
+                "isActive",
+                "assumptions",
+                "results"
+            ],
+            "properties": {
+                "type": {
+                    "$ref": "#/definitions/StrategyType"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "assumptions": {
+                    "type": "object",
+                    "required": [
+                        "acquisition",
+                        "mortgage",
+                        "income",
+                        "params"
+                    ],
+                    "properties": {
+                        "acquisition": {
+                            "$ref": "#/definitions/AcquisitionCosts"
+                        },
+                        "mortgage": {
+                            "$ref": "#/definitions/MortgageDetails"
+                        },
+                        "income": {
+                            "$ref": "#/definitions/IncomeExpenses"
+                        },
+                        "params": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "results": {
+                    "$ref": "#/definitions/AnalysisResults"
+                }
+            }
+        },
+        "Deal": {
+            "type": "object",
+            "required": [
+                "id",
+                "createdAt",
+                "updatedAt",
+                "property",
+                "strategies"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "property": {
+                    "$ref": "#/definitions/PropertyDetails"
+                },
+                "strategies": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/StrategyResult"
+                    }
+                },
+                "notes": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
