@@ -20,6 +20,37 @@ export interface RiskAssessment {
     dataConfidence: 'high' | 'medium' | 'low';
 }
 
+// Known Article 4 Direction areas (major UK cities with HMO restrictions)
+// These postcodes have blanket or partial Article 4 directions requiring planning permission for HMOs
+const ARTICLE_4_AREAS: { [key: string]: string } = {
+    'B': 'Birmingham - Article 4 in multiple wards',
+    'BS': 'Bristol - City-wide Article 4',
+    'BN': 'Brighton - Article 4 in central areas',
+    'CB': 'Cambridge - City-wide Article 4',
+    'CF': 'Cardiff - Multiple Article 4 zones',
+    'CV': 'Coventry - Article 4 in student areas',
+    'EX': 'Exeter - City-wide Article 4',
+    'GL': 'Gloucester - Article 4 zones',
+    'HU': 'Hull - Article 4 in specific wards',
+    'LE': 'Leicester - Article 4 in inner city',
+    'LN': 'Lincoln - Article 4 zones',
+    'LS': 'Leeds - Article 4 in Headingley/Hyde Park',
+    'L': 'Liverpool - Multiple Article 4 zones',
+    'M': 'Manchester - Article 4 in South Manchester',
+    'NE': 'Newcastle - Article 4 in Jesmond',
+    'NG': 'Nottingham - City-wide Article 4',
+    'OX': 'Oxford - City-wide Article 4',
+    'PO': 'Portsmouth - City-wide Article 4',
+    'RG': 'Reading - Article 4 zones',
+    'S': 'Sheffield - Article 4 in specific wards',
+    'SO': 'Southampton - Article 4 in multiple areas',
+    'ST': 'Stoke - Article 4 in Hanley',
+    'YO': 'York - City-wide Article 4'
+};
+
+// Flood risk indicator postcodes (simplified - in production would use EA API)
+const FLOOD_RISK_PREFIXES = ['PE', 'LN', 'DN', 'HU', 'YO', 'CA', 'SR', 'TS', 'DL', 'GL', 'WR', 'HR'];
+
 // Tenure & Leasehold Risk Detection
 function assessTenureRisks(property: PropertyDetails): RiskFlag[] {
     const flags: RiskFlag[] = [];
@@ -69,6 +100,62 @@ function assessTenureRisks(property: PropertyDetails): RiskFlag[] {
             title: 'High Service Charge',
             description: `£${property.serviceCharge}/year significantly impacts cashflow and yield.`,
             recommendation: 'Request breakdown and last 3 years history. Check reserve fund.'
+        });
+    }
+
+    return flags;
+}
+
+// Regulatory Risks - Article 4, Licensing, EPC
+function assessRegulatoryRisks(property: PropertyDetails): RiskFlag[] {
+    const flags: RiskFlag[] = [];
+    const postcode = property.address.postcode?.toUpperCase() || '';
+
+    // Extract postcode area (letters before numbers)
+    const postcodeArea = postcode.match(/^([A-Z]{1,2})/)?.[1] || '';
+
+    // Article 4 Direction Check
+    if (postcodeArea && ARTICLE_4_AREAS[postcodeArea]) {
+        flags.push({
+            id: 'article-4-direction',
+            category: 'regulatory',
+            severity: 'warning',
+            title: 'Potential Article 4 Area',
+            description: `${ARTICLE_4_AREAS[postcodeArea]}. HMO conversion may require planning permission.`,
+            recommendation: 'Check local council planning portal. Apply for prior approval before converting to HMO.'
+        });
+    }
+
+    // HMO Licensing reminder for 5+ bed
+    if (property.bedrooms >= 5) {
+        flags.push({
+            id: 'mandatory-hmo-license',
+            category: 'regulatory',
+            severity: 'info',
+            title: 'Mandatory HMO Licensing',
+            description: `${property.bedrooms} bedroom property requires mandatory HMO license if let to 5+ unrelated tenants.`,
+            recommendation: 'Budget £500-1500 for license application. Ensure fire safety compliance.'
+        });
+    } else if (property.bedrooms >= 3) {
+        flags.push({
+            id: 'possible-additional-licensing',
+            category: 'regulatory',
+            severity: 'info',
+            title: 'Possible Additional Licensing',
+            description: 'Many councils have Additional/Selective Licensing schemes for smaller HMOs.',
+            recommendation: 'Check local council HMO licensing requirements for this area.'
+        });
+    }
+
+    // Flood risk based on postcode
+    if (postcodeArea && FLOOD_RISK_PREFIXES.includes(postcodeArea)) {
+        flags.push({
+            id: 'flood-zone-check',
+            category: 'location',
+            severity: 'warning',
+            title: 'Potential Flood Risk Area',
+            description: 'Postcode is in a region with higher flood risk properties.',
+            recommendation: 'Check gov.uk/check-flooding for exact flood zone. May affect insurance costs.'
         });
     }
 
@@ -167,6 +254,31 @@ function assessPropertyRisks(property: PropertyDetails): RiskFlag[] {
         });
     }
 
+    // EPC rating detection from description
+    const epcMatch = desc.match(/epc[:\s]*([a-g])/i);
+    if (epcMatch) {
+        const rating = epcMatch[1].toUpperCase();
+        if (rating === 'F' || rating === 'G') {
+            flags.push({
+                id: 'low-epc-rating',
+                category: 'regulatory',
+                severity: 'danger',
+                title: `EPC Rating ${rating} - Below Legal Minimum`,
+                description: 'Properties rated F or G cannot legally be let without improvements.',
+                recommendation: 'Budget for EPC improvements (insulation, heating, windows). Typical cost £5-20k.'
+            });
+        } else if (rating === 'E') {
+            flags.push({
+                id: 'epc-borderline',
+                category: 'regulatory',
+                severity: 'warning',
+                title: 'EPC Rating E - Borderline',
+                description: 'Rating may drop below legal minimum after re-assessment. 2028 target is C rating.',
+                recommendation: 'Plan for improvements to future-proof the investment.'
+            });
+        }
+    }
+
     return flags;
 }
 
@@ -209,6 +321,7 @@ export function assessDealRisk(
 ): RiskAssessment {
     const allFlags: RiskFlag[] = [
         ...assessTenureRisks(property),
+        ...assessRegulatoryRisks(property),
         ...assessFinancialRisks(property, costs, income, mortgage),
         ...assessPropertyRisks(property)
     ];
@@ -219,3 +332,4 @@ export function assessDealRisk(
         dataConfidence: assessDataConfidence(property)
     };
 }
+

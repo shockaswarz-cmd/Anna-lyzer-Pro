@@ -1,20 +1,35 @@
 # Anna Lyzer - Progress Tracker
 # Antigravity v3.4 State Bridge
 
-[GIT_HASH]: d8f8628
+[GIT_HASH]: pending commit
 
 [STATUS]:
+## Phase 1 MVP
 - B-001: Project Initialization ✅ Verified
 - B-002: Core Component Structure ✅ Verified
 - B-003: Strategy Engine (BTL, BRRR, HMO, R2R) ✅ Verified
 - B-004: Risk & Intelligence Layer ✅ Verified
-- F-001: Antigravity v3.4 Architecture Setup 🔄 In Progress
+- B-005: PDF Generation (jsPDF + html2canvas) ✅ Verified
+- B-006: Firebase Integration (Auth + Firestore) ✅ Verified
+
+## Phase 2 F-Series
+- F-001: Antigravity v3.4 Architecture Setup ✅ Verified
+- F-002: Dashboard Landing Page ✅ Verified
+- F-003: Sidebar Navigation ✅ Verified
+- F-004: Deal Pipeline (Kanban) ✅ Verified
+- F-005: Investor Pack Generator ✅ Verified
+- F-006: Settings Page ✅ Verified
+- F-007: Layout Polish (Sidebar Collapse Sync) ✅ Verified
 
 [BLOCKERS]:
-- None currently
+- Firebase credentials needed (user to provide .env.local)
 
 ---
 ## Session Log (2026-01-12)
-- Initialized Antigravity v3.4 State Bridge artifacts
-- Created docs/progress.txt, docs/active_schema.json, docs/memory_layer/
-- Updated AGENTS.md with Antigravity operating principles
+- Completed Phase 1 audit
+- Implemented PDF export with jsPDF + html2canvas
+- Added Firebase SDK with conditional initialization
+- Created AuthContext, LoginModal, deals Firestore service
+- Integrated auth state into Sidebar
+- Fixed TypeScript build errors (user-agents types, cheerio callbacks, null checks)
+- Build passing with all pages generated

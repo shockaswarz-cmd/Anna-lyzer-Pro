@@ -87,13 +87,13 @@ export async function POST(request: NextRequest) {
             }
 
             // Features from key features section
-            $('ul[class*="KeyFeatures"] li').each((_, el) => features.push($(el).text().trim()));
+            $('ul[class*="KeyFeatures"] li').each((_, el) => { features.push($(el).text().trim()); });
 
         } else if (source === 'Zoopla') {
             price = parsePrice($('div[data-testid="price"]').text() || $('p[data-testid="price"]').text());
             bedrooms = parseInt($('span[data-testid="beds-label"]').text()) || 0;
             bathrooms = parseInt($('span[data-testid="baths-label"]').text()) || 0;
-            $('ul[data-testid="key-features-list"] li').each((_, el) => features.push($(el).text().trim()));
+            $('ul[data-testid="key-features-list"] li').each((_, el) => { features.push($(el).text().trim()); });
 
         } else if (source === 'OnTheMarket') {
             price = parsePrice($('.price-data').text() || $('span[class*="price"]').text());
