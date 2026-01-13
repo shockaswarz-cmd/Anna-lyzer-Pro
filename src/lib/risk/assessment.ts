@@ -2,6 +2,8 @@
 // Detects red flags based on tenure, lease, flood, and financial ratios
 
 import { PropertyDetails, AcquisitionCosts, IncomeExpenses, MortgageDetails } from '../types/deal';
+import { getFloodRisk, FloodRiskResult } from './floodRisk';
+import { getEPCRating, meetsRentalRequirements, EPCResult } from './epcLookup';
 
 export type RiskSeverity = 'info' | 'warning' | 'danger';
 
@@ -312,7 +314,7 @@ function assessDataConfidence(property: PropertyDetails): 'high' | 'medium' | 'l
     return 'low';
 }
 
-// Main Assessment Function
+// Main Assessment Function (Synchronous - uses heuristics only)
 export function assessDealRisk(
     property: PropertyDetails,
     costs: AcquisitionCosts,
@@ -333,3 +335,142 @@ export function assessDealRisk(
     };
 }
 
+// ============================================================================
+// ENHANCED ASSESSMENT WITH LIVE API DATA
+// ============================================================================
+
+export interface EnhancedRiskAssessment extends RiskAssessment {
+    floodData?: FloodRiskResult;
+    epcData?: EPCResult;
+    apiDataLoaded: boolean;
+}
+
+/**
+ * Enhanced assessment that fetches real-time data from external APIs
+ * Use this when you need accurate flood/EPC data for a property
+ */
+export async function assessDealRiskEnhanced(
+    property: PropertyDetails,
+    costs: AcquisitionCosts,
+    income: IncomeExpenses,
+    mortgage: MortgageDetails
+): Promise<EnhancedRiskAssessment> {
+    // Start with basic synchronous assessment
+    const baseAssessment = assessDealRisk(property, costs, income, mortgage);
+    const additionalFlags: RiskFlag[] = [];
+
+    let floodData: FloodRiskResult | undefined;
+    let epcData: EPCResult | undefined;
+
+    const postcode = property.address.postcode || '';
+
+    try {
+        // Fetch flood risk data
+        if (postcode) {
+            floodData = await getFloodRisk(postcode);
+
+            // Add flood risk flags based on API data
+            if (floodData.hasActiveWarnings) {
+                additionalFlags.push({
+                    id: 'flood-active-warning',
+                    category: 'location',
+                    severity: 'danger',
+                    title: 'Active Flood Warning',
+                    description: `${floodData.warnings.length} active flood warning(s). ${floodData.description}`,
+                    recommendation: 'Check Environment Agency site immediately. Avoid purchase until warnings cleared.'
+                });
+            } else if (floodData.zone === 'zone3') {
+                additionalFlags.push({
+                    id: 'flood-zone-3',
+                    category: 'location',
+                    severity: 'danger',
+                    title: 'High Flood Risk (Zone 3)',
+                    description: floodData.description,
+                    recommendation: 'Specialist insurance required. Many lenders will not lend. Factor in £500+/year insurance.'
+                });
+            } else if (floodData.zone === 'zone2') {
+                additionalFlags.push({
+                    id: 'flood-zone-2',
+                    category: 'location',
+                    severity: 'warning',
+                    title: 'Medium Flood Risk (Zone 2)',
+                    description: floodData.description,
+                    recommendation: 'Check with insurers before purchase. May have higher premiums.'
+                });
+            }
+        }
+
+        // Fetch EPC data
+        if (postcode) {
+            epcData = await getEPCRating(
+                postcode,
+                property.address.line1,
+                property.propertyType
+            );
+
+            const rentalReqs = meetsRentalRequirements(epcData.rating);
+
+            // Add EPC flags
+            if (!rentalReqs.meetsCurrentRequirement) {
+                additionalFlags.push({
+                    id: 'epc-illegal-to-let',
+                    category: 'regulatory',
+                    severity: 'danger',
+                    title: `EPC Rating ${epcData.rating} - Cannot Legally Let`,
+                    description: `Current EPC (${epcData.rating}) is below minimum E rating. Property cannot be let until improved.`,
+                    recommendation: `Estimated upgrade cost: £${estimateUpgradeCost(epcData.rating)}. Factor into acquisition.`
+                });
+            } else if (!rentalReqs.meets2028Requirement) {
+                additionalFlags.push({
+                    id: 'epc-2028-non-compliant',
+                    category: 'regulatory',
+                    severity: 'warning',
+                    title: `EPC Rating ${epcData.rating} - 2028 Upgrade Required`,
+                    description: 'From 2028, minimum C rating may be required. Plan for upgrades.',
+                    recommendation: `Budget £${estimateUpgradeCost(epcData.rating)} for EPC improvements before 2028.`
+                });
+            }
+
+            if (epcData.source === 'estimate') {
+                additionalFlags.push({
+                    id: 'epc-estimated',
+                    category: 'regulatory',
+                    severity: 'info',
+                    title: 'EPC Rating Estimated',
+                    description: `No EPC certificate found. Estimated as ${epcData.rating} based on property type.`,
+                    recommendation: 'Request actual EPC from vendor or order new assessment (£60-120).'
+                });
+            }
+        }
+    } catch (error) {
+        console.error('[EnhancedAssessment] API fetch error:', error);
+    }
+
+    // Merge flags, avoiding duplicates by id
+    const existingIds = new Set(baseAssessment.flags.map(f => f.id));
+    const mergedFlags = [
+        ...baseAssessment.flags,
+        ...additionalFlags.filter(f => !existingIds.has(f.id))
+    ];
+
+    return {
+        overallScore: calculateRiskScore(mergedFlags),
+        flags: mergedFlags,
+        dataConfidence: floodData && epcData ? 'high' : baseAssessment.dataConfidence,
+        floodData,
+        epcData,
+        apiDataLoaded: Boolean(floodData || epcData)
+    };
+}
+
+// Helper to estimate upgrade costs
+function estimateUpgradeCost(rating: string): string {
+    const costs: Record<string, string> = {
+        'G': '15,000 - 25,000',
+        'F': '10,000 - 18,000',
+        'E': '8,000 - 15,000',
+        'D': '5,000 - 10,000',
+        'C': '3,000 - 8,000'
+    };
+    return costs[rating] || '5,000 - 15,000';
+}

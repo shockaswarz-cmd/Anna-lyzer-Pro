@@ -1,20 +1,46 @@
 import { NextRequest, NextResponse } from 'next/server';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import * as cheerio from 'cheerio';
 import UserAgent from 'user-agents';
 
-// Helper to get random user agent
+// ============================================================================
+// SCRAPER CONFIGURATION
+// ============================================================================
+
+const SCRAPER_CONFIG = {
+    maxRetries: 3,
+    baseDelayMs: 1000,
+    timeout: 15000,
+    rateLimitPerMinute: 5
+};
+
+// In-memory rate limiting (resets on server restart)
+const rateLimitStore: Map<string, { count: number; resetAt: number }> = new Map();
+
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+
+// Get random user agent with realistic headers
 const getHeaders = () => {
-    const userAgent = new UserAgent();
+    const userAgent = new UserAgent({ deviceCategory: 'desktop' });
     return {
         'User-Agent': userAgent.toString(),
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.5',
-        'Referer': 'https://www.google.com/'
+        'Accept-Language': 'en-GB,en;q=0.9',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'none',
+        'Sec-Fetch-User': '?1',
+        'Cache-Control': 'max-age=0',
+        'Referer': 'https://www.google.co.uk/'
     };
 };
 
-// Helper to parse price string to number
+// Parse price string to number
 const parsePrice = (str: string): number => {
     if (!str) return 0;
     const match = str.match(/(?:£|€|\$)?\s?([\d,]+)/);
@@ -24,6 +50,76 @@ const parsePrice = (str: string): number => {
     return 0;
 };
 
+// Delay utility
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Check rate limit for a domain
+const checkRateLimit = (domain: string): { allowed: boolean; retryAfterMs?: number } => {
+    const now = Date.now();
+    const entry = rateLimitStore.get(domain);
+    
+    if (!entry || now > entry.resetAt) {
+        rateLimitStore.set(domain, { count: 1, resetAt: now + 60000 });
+        return { allowed: true };
+    }
+    
+    if (entry.count >= SCRAPER_CONFIG.rateLimitPerMinute) {
+        return { allowed: false, retryAfterMs: entry.resetAt - now };
+    }
+    
+    entry.count++;
+    return { allowed: true };
+};
+
+// Extract domain from URL
+const getDomain = (url: string): string => {
+    try {
+        return new URL(url).hostname;
+    } catch {
+        return 'unknown';
+    }
+};
+
+// Exponential backoff fetch with retries
+const fetchWithRetry = async (url: string): Promise<string> => {
+    let lastError: Error | null = null;
+    
+    for (let attempt = 0; attempt < SCRAPER_CONFIG.maxRetries; attempt++) {
+        try {
+            if (attempt > 0) {
+                const backoffMs = SCRAPER_CONFIG.baseDelayMs * Math.pow(2, attempt);
+                console.log(`Retry ${attempt}/${SCRAPER_CONFIG.maxRetries} after ${backoffMs}ms`);
+                await delay(backoffMs);
+            }
+            
+            const { data } = await axios.get(url, {
+                headers: getHeaders(),
+                timeout: SCRAPER_CONFIG.timeout,
+                maxRedirects: 5,
+                validateStatus: (status) => status < 500
+            });
+            
+            return data;
+        } catch (error) {
+            lastError = error as Error;
+            const axiosError = error as AxiosError;
+            
+            // Don't retry on 4xx errors (except 429 rate limit)
+            if (axiosError.response && axiosError.response.status >= 400 && axiosError.response.status !== 429) {
+                throw error;
+            }
+            
+            console.warn(`Attempt ${attempt + 1} failed:`, axiosError.message);
+        }
+    }
+    
+    throw lastError || new Error('All retry attempts exhausted');
+};
+
+// ============================================================================
+// MAIN SCRAPE HANDLER
+// ============================================================================
+
 export async function POST(request: NextRequest) {
     const body = await request.json();
     const { url } = body;
@@ -32,12 +128,20 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: false, error: 'URL is required' }, { status: 400 });
     }
 
+    // Rate limiting check
+    const domain = getDomain(url);
+    const rateCheck = checkRateLimit(domain);
+    if (!rateCheck.allowed) {
+        return NextResponse.json({ 
+            success: false, 
+            error: `Rate limit exceeded for ${domain}. Try again in ${Math.ceil((rateCheck.retryAfterMs || 0) / 1000)}s`,
+            retryAfterMs: rateCheck.retryAfterMs
+        }, { status: 429 });
+    }
+
     try {
-        console.log(`Scraping URL: ${url}`);
-        const { data } = await axios.get(url, {
-            headers: getHeaders(),
-            timeout: 15000
-        });
+        console.log(`[Scraper] Fetching: ${url}`);
+        const data = await fetchWithRetry(url);
         const $ = cheerio.load(data);
 
         let title = $('meta[property="og:title"]').attr('content') || $('title').text();
@@ -157,6 +261,8 @@ export async function POST(request: NextRequest) {
             }
         });
 
+        console.log(`[Scraper] Success: ${source} - ${postcode} - £${price}`);
+
         return NextResponse.json({
             success: true,
             data: {
@@ -175,11 +281,30 @@ export async function POST(request: NextRequest) {
             }
         });
 
-    } catch (error: any) {
-        console.error('Scraping failed:', error.message);
-        if (error.response && error.response.status === 403) {
-            return NextResponse.json({ success: false, error: 'Access Denied by Target Website (Anti-Bot Protection)' }, { status: 403 });
+    } catch (error: unknown) {
+        const axiosError = error as AxiosError;
+        const message = axiosError.message || 'Unknown error';
+        
+        console.error('[Scraper] Failed:', message);
+        
+        if (axiosError.response?.status === 403) {
+            return NextResponse.json({ 
+                success: false, 
+                error: 'Access Denied by Target Website (Anti-Bot Protection). The site may be blocking automated requests.',
+                details: 'Try again later or use manual property entry.'
+            }, { status: 403 });
         }
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+        
+        if (axiosError.code === 'ECONNABORTED' || message.includes('timeout')) {
+            return NextResponse.json({ 
+                success: false, 
+                error: 'Request timed out. The target website may be slow or unresponsive.'
+            }, { status: 504 });
+        }
+        
+        return NextResponse.json({ 
+            success: false, 
+            error: message 
+        }, { status: 500 });
     }
 }
