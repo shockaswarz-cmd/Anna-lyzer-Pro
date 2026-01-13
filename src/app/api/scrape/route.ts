@@ -140,7 +140,7 @@ export async function POST(request: NextRequest) {
 
         console.log(`[Scraper] Attempting Firecrawl: ${url}`);
         const app = new FirecrawlApp({ apiKey: FIRECRAWL_API_KEY });
-        const scrapeResult = await app.scrapeUrl(url, { formats: ['html'] });
+        const scrapeResult = await app.scrape(url, { formats: ['html'] });
 
         if (!scrapeResult.success || !scrapeResult.html) {
             throw new Error(scrapeResult.error || 'No HTML returned');
