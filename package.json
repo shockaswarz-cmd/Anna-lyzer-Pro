@@ -2,6 +2,10 @@
   "name": "anna-lyzer",
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shockaswarz-cmd/Anna-lyzer-Pro.git"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -15,6 +19,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@mendable/firecrawl-js": "^4.10.0",
     "@modelcontextprotocol/server-github": "^2025.4.8",
     "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-select": "^2.2.6",

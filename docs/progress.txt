@@ -41,3 +41,7 @@
   - playwright.config.ts, tests/e2e/app.spec.ts
   - 10 E2E tests for full app coverage
 - All unit tests passing ✅
+
+## Repository Info
+- URL: https://github.com/shockaswarz-cmd/Anna-lyzer-Pro.git
+- Branch: main

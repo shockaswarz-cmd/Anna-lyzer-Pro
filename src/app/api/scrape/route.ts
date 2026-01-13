@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
+import FirecrawlApp from '@mendable/firecrawl-js';
 import axios, { AxiosError } from 'axios';
 import * as cheerio from 'cheerio';
 import UserAgent from 'user-agents';
 
 // ============================================================================
-// SCRAPER CONFIGURATION
+// CONFIGURATION
 // ============================================================================
+
+const FIRECRAWL_API_KEY = process.env.FIRECRAWL_API_KEY;
 
 const SCRAPER_CONFIG = {
     maxRetries: 3,
@@ -18,7 +21,7 @@ const SCRAPER_CONFIG = {
 const rateLimitStore: Map<string, { count: number; resetAt: number }> = new Map();
 
 // ============================================================================
-// HELPER FUNCTIONS
+// HELPER FUNCTIONS (FALLBACK)
 // ============================================================================
 
 // Get random user agent with realistic headers
@@ -31,23 +34,9 @@ const getHeaders = () => {
         'Accept-Encoding': 'gzip, deflate, br',
         'Connection': 'keep-alive',
         'Upgrade-Insecure-Requests': '1',
-        'Sec-Fetch-Dest': 'document',
-        'Sec-Fetch-Mode': 'navigate',
-        'Sec-Fetch-Site': 'none',
-        'Sec-Fetch-User': '?1',
         'Cache-Control': 'max-age=0',
         'Referer': 'https://www.google.co.uk/'
     };
-};
-
-// Parse price string to number
-const parsePrice = (str: string): number => {
-    if (!str) return 0;
-    const match = str.match(/(?:£|€|\$)?\s?([\d,]+)/);
-    if (match) {
-        return parseInt(match[1].replace(/,/g, ''), 10);
-    }
-    return 0;
 };
 
 // Delay utility
@@ -57,16 +46,16 @@ const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 const checkRateLimit = (domain: string): { allowed: boolean; retryAfterMs?: number } => {
     const now = Date.now();
     const entry = rateLimitStore.get(domain);
-    
+
     if (!entry || now > entry.resetAt) {
         rateLimitStore.set(domain, { count: 1, resetAt: now + 60000 });
         return { allowed: true };
     }
-    
+
     if (entry.count >= SCRAPER_CONFIG.rateLimitPerMinute) {
         return { allowed: false, retryAfterMs: entry.resetAt - now };
     }
-    
+
     entry.count++;
     return { allowed: true };
 };
@@ -80,40 +69,44 @@ const getDomain = (url: string): string => {
     }
 };
 
-// Exponential backoff fetch with retries
+// Fallback Fetcher
 const fetchWithRetry = async (url: string): Promise<string> => {
     let lastError: Error | null = null;
-    
+
     for (let attempt = 0; attempt < SCRAPER_CONFIG.maxRetries; attempt++) {
         try {
             if (attempt > 0) {
                 const backoffMs = SCRAPER_CONFIG.baseDelayMs * Math.pow(2, attempt);
-                console.log(`Retry ${attempt}/${SCRAPER_CONFIG.maxRetries} after ${backoffMs}ms`);
                 await delay(backoffMs);
             }
-            
+
             const { data } = await axios.get(url, {
                 headers: getHeaders(),
                 timeout: SCRAPER_CONFIG.timeout,
                 maxRedirects: 5,
                 validateStatus: (status) => status < 500
             });
-            
+
             return data;
         } catch (error) {
             lastError = error as Error;
             const axiosError = error as AxiosError;
-            
-            // Don't retry on 4xx errors (except 429 rate limit)
             if (axiosError.response && axiosError.response.status >= 400 && axiosError.response.status !== 429) {
                 throw error;
             }
-            
-            console.warn(`Attempt ${attempt + 1} failed:`, axiosError.message);
         }
     }
-    
-    throw lastError || new Error('All retry attempts exhausted');
+    throw lastError || new Error('All fallback retry attempts exhausted');
+};
+
+// Parse price string to number
+const parsePrice = (str: string): number => {
+    if (!str) return 0;
+    const match = str.match(/(?:£|€|\$)?\s?([\d,]+)/);
+    if (match) {
+        return parseInt(match[1].replace(/,/g, ''), 10);
+    }
+    return 0;
 };
 
 // ============================================================================
@@ -128,22 +121,55 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: false, error: 'URL is required' }, { status: 400 });
     }
 
-    // Rate limiting check
+    // Rate Limit Check
     const domain = getDomain(url);
     const rateCheck = checkRateLimit(domain);
     if (!rateCheck.allowed) {
-        return NextResponse.json({ 
-            success: false, 
-            error: `Rate limit exceeded for ${domain}. Try again in ${Math.ceil((rateCheck.retryAfterMs || 0) / 1000)}s`,
-            retryAfterMs: rateCheck.retryAfterMs
+        return NextResponse.json({
+            success: false,
+            error: `Rate limit exceeded for ${domain}. Try again in ${Math.ceil((rateCheck.retryAfterMs || 0) / 1000)}s`
         }, { status: 429 });
     }
 
-    try {
-        console.log(`[Scraper] Fetching: ${url}`);
-        const data = await fetchWithRetry(url);
-        const $ = cheerio.load(data);
+    let html = '';
+    let fetchMethod = 'Firecrawl';
 
+    // 1. Try Firecrawl Primary
+    try {
+        if (!FIRECRAWL_API_KEY) throw new Error('Firecrawl API Key missing');
+
+        console.log(`[Scraper] Attempting Firecrawl: ${url}`);
+        const app = new FirecrawlApp({ apiKey: FIRECRAWL_API_KEY });
+        const scrapeResult = await app.scrapeUrl(url, { formats: ['html'] });
+
+        if (!scrapeResult.success || !scrapeResult.html) {
+            throw new Error(scrapeResult.error || 'No HTML returned');
+        }
+
+        html = scrapeResult.html;
+
+    } catch (firecrawlError: any) {
+        console.warn(`[Scraper] Firecrawl failed (${firecrawlError.message}). Switching to fallback.`);
+
+        // 2. Try Legacy Fallback
+        try {
+            fetchMethod = 'Legacy Fallback';
+            console.log(`[Scraper] Attempting Legacy Fetch: ${url}`);
+            html = await fetchWithRetry(url);
+        } catch (fallbackError: any) {
+            console.error('[Scraper] All methods failed.');
+            return NextResponse.json({
+                success: false,
+                error: `Scraping failed. Primary: ${firecrawlError.message}. Fallback: ${fallbackError.message}`
+            }, { status: 500 });
+        }
+    }
+
+    // 3. Common Parsing Logic (Cheerio)
+    try {
+        const $ = cheerio.load(html);
+
+        // Basic Metadata
         let title = $('meta[property="og:title"]').attr('content') || $('title').text();
         let image = $('meta[property="og:image"]').attr('content');
         let description = $('meta[property="og:description"]').attr('content') || $('meta[name="description"]').attr('content');
@@ -154,18 +180,14 @@ export async function POST(request: NextRequest) {
         else if (url.includes('zoopla.co.uk')) source = 'Zoopla';
         else if (url.includes('onthemarket.com')) source = 'OnTheMarket';
 
-        // Detect Transaction Type (Sale vs Rent)
+        // Detect Transaction Type
         let transactionType: 'sale' | 'rent' = 'sale';
         const lowerUrl = url.toLowerCase();
         const lowerTitle = (title || '').toLowerCase();
 
         if (
-            lowerUrl.includes('to-rent') ||
-            lowerUrl.includes('to-let') ||
-            lowerUrl.includes('renting') ||
-            lowerTitle.includes('to rent') ||
-            lowerTitle.includes('to let') ||
-            lowerTitle.includes('for rent')
+            lowerUrl.includes('to-rent') || lowerUrl.includes('to-let') || lowerUrl.includes('renting') ||
+            lowerTitle.includes('to rent') || lowerTitle.includes('to let') || lowerTitle.includes('for rent')
         ) {
             transactionType = 'rent';
         }
@@ -175,22 +197,16 @@ export async function POST(request: NextRequest) {
         let bathrooms = 0;
         let features: string[] = [];
 
-        // Site-Specific Extraction
+        // Parsing Logic
         if (source === 'Rightmove') {
             const priceText = $('article[data-testid="primary-layout"]').find('span').filter((_, el) => $(el).text().includes('£')).first().text() || $('div:contains("£")').first().text();
             price = parsePrice(priceText);
-
-            // Try modern selectors
             bedrooms = parseInt($('div[class*="bedrooms"]').text()) || 0;
             bathrooms = parseInt($('div[class*="bathrooms"]').text()) || 0;
-
-            // Fallback from title
             if (bedrooms === 0) {
                 const bedMatch = (title || '').match(/(\d+)\s*(?:bed|bedroom)/i);
                 if (bedMatch) bedrooms = parseInt(bedMatch[1]);
             }
-
-            // Features from key features section
             $('ul[class*="KeyFeatures"] li').each((_, el) => { features.push($(el).text().trim()); });
 
         } else if (source === 'Zoopla') {
@@ -221,7 +237,7 @@ export async function POST(request: NextRequest) {
             }
         }
 
-        // Fallback bedrooms from title/description
+        // Fallback bedrooms
         if (bedrooms === 0) {
             const bedMatch = ((title || '') + ' ' + (description || '')).match(/(\d+)\s*(?:bed|bedroom)/i);
             if (bedMatch) bedrooms = parseInt(bedMatch[1]);
@@ -232,36 +248,27 @@ export async function POST(request: NextRequest) {
         if (address.includes(' in ')) address = address.split(' in ')[1];
         else if (address.includes(' at ')) address = address.split(' at ')[1];
 
-        address = address.split(' - ')[0]
-            .split(' | ')[0]
-            .replace('Rightmove', '')
-            .replace('Zoopla', '')
-            .replace('OnTheMarket', '')
-            .trim();
+        address = address.split(' - ')[0].split(' | ')[0]
+            .replace('Rightmove', '').replace('Zoopla', '').replace('OnTheMarket', '').trim();
 
-        // Postcode extraction
         const postcodeRegex = /([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})/;
         const postcodeMatch = address.match(postcodeRegex) || $('body').text().match(postcodeRegex);
         const postcode = postcodeMatch ? postcodeMatch[0] : '';
 
-        // Property Type
         const type = (lowerTitle.includes('flat') || lowerTitle.includes('apartment')) ? 'Flat' :
             (lowerTitle.includes('detached') && !lowerTitle.includes('semi')) ? 'Detached' :
                 (lowerTitle.includes('semi-detached') || lowerTitle.includes('semi detached')) ? 'Semi-Detached' :
                     (lowerTitle.includes('terrace')) ? 'Terraced' :
                         (lowerTitle.includes('bungalow')) ? 'Bungalow' : 'Other';
 
-        // Get multiple images if available
         const images: string[] = [];
         if (image) images.push(image);
         $('img[src*="media.rightmove"], img[src*="lc.zoocdn"], img[src*="images.onthemarket"]').each((i, el) => {
             const src = $(el).attr('src');
-            if (src && !images.includes(src) && images.length < 5) {
-                images.push(src);
-            }
+            if (src && !images.includes(src) && images.length < 5) images.push(src);
         });
 
-        console.log(`[Scraper] Success: ${source} - ${postcode} - £${price}`);
+        console.log(`[Scraper] Success (${fetchMethod}): ${source} - ${postcode} - £${price}`);
 
         return NextResponse.json({
             success: true,
@@ -277,34 +284,13 @@ export async function POST(request: NextRequest) {
                 features: features.slice(0, 10),
                 propertyType: type,
                 images: images.length > 0 ? images : [''],
-                description: description || ''
+                description: description || '',
+                fetchMethod
             }
         });
 
-    } catch (error: unknown) {
-        const axiosError = error as AxiosError;
-        const message = axiosError.message || 'Unknown error';
-        
-        console.error('[Scraper] Failed:', message);
-        
-        if (axiosError.response?.status === 403) {
-            return NextResponse.json({ 
-                success: false, 
-                error: 'Access Denied by Target Website (Anti-Bot Protection). The site may be blocking automated requests.',
-                details: 'Try again later or use manual property entry.'
-            }, { status: 403 });
-        }
-        
-        if (axiosError.code === 'ECONNABORTED' || message.includes('timeout')) {
-            return NextResponse.json({ 
-                success: false, 
-                error: 'Request timed out. The target website may be slow or unresponsive.'
-            }, { status: 504 });
-        }
-        
-        return NextResponse.json({ 
-            success: false, 
-            error: message 
-        }, { status: 500 });
+    } catch (parseError: any) {
+        console.error('[Scraper] Parsing Failed:', parseError.message);
+        return NextResponse.json({ success: false, error: 'Parsing failed' }, { status: 500 });
     }
 }
