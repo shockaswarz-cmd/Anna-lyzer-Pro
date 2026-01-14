@@ -1,7 +1,7 @@
 'use client';
 
 import { Deal, StrategyType } from '@/lib/types/deal';
-import { Home, MapPin, TrendingUp } from 'lucide-react';
+import { Home, MapPin, TrendingUp, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface DealCardProps {
@@ -75,7 +75,7 @@ export function DealCard({
                 </div>
             </div>
 
-            {/* Strategy Badge */}
+            {/* Strategy Badge & Actions */}
             <div className="flex items-center justify-between mt-3">
                 <span className={cn(
                     'px-2 py-0.5 rounded text-xs font-medium border',
@@ -83,7 +83,18 @@ export function DealCard({
                 )}>
                     {strategy}
                 </span>
-                <TrendingUp className="w-3 h-3 text-slate-500" />
+
+                <div className="flex items-center gap-2">
+                    <a
+                        href={`/packs?deal=${id}&strategy=${strategy}`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="p-1 rounded hover:bg-slate-700 text-slate-500 hover:text-emerald-400 transition-colors"
+                        title="Generate Investor Pack"
+                    >
+                        <FileText className="w-3.5 h-3.5" />
+                    </a>
+                    <TrendingUp className="w-3 h-3 text-slate-500" />
+                </div>
             </div>
 
             {/* Status Quick Move */}

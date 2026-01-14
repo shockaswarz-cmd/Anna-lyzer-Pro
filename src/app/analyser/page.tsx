@@ -67,8 +67,20 @@ export default function AnalyserPage() {
         try {
             const dealId = await saveDeal(user.uid, deal);
             if (dealId) {
-                // Determine redirect based on action - could go to pipeline or packs
-                if (window.confirm('Deal saved! Go to Pipeline? Click Cancel to stay here.')) {
+                // Update deal with the saved ID for navigation
+                setDeal(prev => prev ? { ...prev, id: dealId } : null);
+
+                // Offer navigation options
+                const choice = window.confirm(
+                    'Deal saved successfully!\n\n' +
+                    'Click OK to generate an Investor Pack for this deal.\n' +
+                    'Click Cancel to go to your Pipeline.'
+                );
+
+                if (choice) {
+                    // Go to Investor Pack with deal ID and active strategy
+                    router.push(`/packs?deal=${dealId}&strategy=${activeStrategy}`);
+                } else {
                     router.push('/pipeline');
                 }
             } else {
