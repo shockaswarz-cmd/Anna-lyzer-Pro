@@ -7,28 +7,16 @@ import { KanbanColumn } from '@/components/pipeline/KanbanColumn';
 import { Plus, Filter, Search } from 'lucide-react';
 import { StrategyType } from '@/lib/types/deal';
 
-// Mock pipeline data - in production this would come from Supabase
-const mockPipelineData = {
-    leads: [
-        { id: '1', address: '42 Victoria Road', postcode: 'M14 5RB', price: 195000, roi: 18.2, strategy: 'HMO' as StrategyType },
-        { id: '2', address: '88 Queens Drive', postcode: 'M20 6TX', price: 155000, roi: 12.5, strategy: 'BTL' as StrategyType },
-        { id: '7', address: '17 Mill Lane', postcode: 'WA14 3EQ', price: 225000, roi: 14.8, strategy: 'BRRR' as StrategyType },
-    ],
-    viewing: [
-        { id: '3', address: '15 Park Lane', postcode: 'LS6 2QE', price: 165000, roi: 15.1, strategy: 'BTL' as StrategyType },
-    ],
-    offer: [
-        { id: '4', address: '8 Station Street', postcode: 'BN1 4DE', price: 285000, roi: 9.8, strategy: 'BRRR' as StrategyType },
-        { id: '5', address: '23 High Street', postcode: 'BS1 2ND', price: 320000, roi: 11.2, strategy: 'HMO' as StrategyType },
-    ],
-    purchased: [
-        { id: '6', address: '55 River Road', postcode: 'OX1 4TY', price: 275000, roi: 16.3, strategy: 'BRRR' as StrategyType },
-    ],
-    renting: [
-        { id: '8', address: '12 Garden Close', postcode: 'B15 3PP', price: 180000, roi: 13.7, strategy: 'BTL' as StrategyType },
-        { id: '9', address: '34 Oak Avenue', postcode: 'NG7 2HT', price: 145000, roi: 19.5, strategy: 'HMO' as StrategyType },
-    ],
-};
+import { useEffect } from 'react';
+import { useAuth } from '@/components/auth/AuthContext';
+import { getUserDeals, updateDeal, FirestoreDeal } from '@/lib/firestore/deals';
+import { Deal } from '@/lib/types/deal';
+import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
+interface PipelineData {
+    [key: string]: Deal[];
+}
 
 const columns = [
     { key: 'leads', title: 'Leads', color: 'bg-blue-500' },
@@ -39,7 +27,67 @@ const columns = [
 ];
 
 export default function PipelinePage() {
+    const { user, loading: authLoading } = useAuth();
+    const router = useRouter();
     const [searchQuery, setSearchQuery] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [deals, setDeals] = useState<Deal[]>([]);
+
+    useEffect(() => {
+        async function loadDeals() {
+            if (authLoading) return;
+
+            if (user?.uid) {
+                setLoading(true);
+                const userDeals = await getUserDeals(user.uid);
+                setDeals(userDeals);
+            }
+            setLoading(false);
+        }
+        loadDeals();
+    }, [user, authLoading]);
+
+    const handleStatusChange = async (dealId: string, newStatus: string) => {
+        // Optimistic update
+        setDeals(prev => prev.map(d =>
+            d.id === dealId ? { ...d, pipelineStatus: newStatus } as any : d
+        ));
+
+        const success = await updateDeal(dealId, { pipelineStatus: newStatus as any });
+        if (!success) {
+            // Revert on failure
+            const userDeals = await getUserDeals(user?.uid || '');
+            setDeals(userDeals);
+        }
+    };
+
+    // Group deals by status
+    const pipelineData: PipelineData = {
+        leads: [],
+        viewing: [],
+        offer: [],
+        purchased: [],
+        renting: []
+    };
+
+    deals.forEach(deal => {
+        // @ts-ignore - pipelineStatus might not exist on old deals or be typed strictly
+        const status = deal['pipelineStatus'] || 'leads';
+        if (pipelineData[status]) {
+            pipelineData[status].push(deal);
+        } else {
+            // Fallback for unknown statuses
+            pipelineData['leads'].push(deal);
+        }
+    });
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
@@ -77,8 +125,8 @@ export default function PipelinePage() {
             {/* Pipeline Stats */}
             <div className="grid grid-cols-5 gap-4 mb-6">
                 {columns.map((col) => {
-                    const deals = mockPipelineData[col.key as keyof typeof mockPipelineData];
-                    const totalValue = deals.reduce((sum, d) => sum + d.price, 0);
+                    const colDeals = pipelineData[col.key] || [];
+                    const totalValue = colDeals.reduce((sum, d) => sum + (d.property.askingPrice || 0), 0);
                     return (
                         <div key={col.key} className="p-4 rounded-lg bg-slate-800/50 border border-slate-700/50">
                             <div className="flex items-center gap-2 mb-1">
@@ -86,7 +134,7 @@ export default function PipelinePage() {
                                 <span className="text-xs text-slate-400">{col.title}</span>
                             </div>
                             <p className="text-lg font-bold text-white">£{(totalValue / 1000).toFixed(0)}k</p>
-                            <p className="text-xs text-slate-500">{deals.length} deals</p>
+                            <p className="text-xs text-slate-500">{colDeals.length} deals</p>
                         </div>
                     );
                 })}
@@ -95,13 +143,13 @@ export default function PipelinePage() {
             {/* Kanban Board */}
             <div className="flex gap-4 overflow-x-auto pb-4">
                 {columns.map((col) => {
-                    const deals = mockPipelineData[col.key as keyof typeof mockPipelineData];
+                    const colDeals = pipelineData[col.key] || [];
                     const filteredDeals = searchQuery
-                        ? deals.filter(d =>
-                            d.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            d.postcode.toLowerCase().includes(searchQuery.toLowerCase())
+                        ? colDeals.filter(d =>
+                            d.property.address.line1.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            d.property.address.postcode.toLowerCase().includes(searchQuery.toLowerCase())
                         )
-                        : deals;
+                        : colDeals;
 
                     return (
                         <KanbanColumn
@@ -114,12 +162,15 @@ export default function PipelinePage() {
                                 <DealCard
                                     key={deal.id}
                                     id={deal.id}
-                                    address={deal.address}
-                                    postcode={deal.postcode}
-                                    price={deal.price}
-                                    roi={deal.roi}
-                                    strategy={deal.strategy}
+                                    address={deal.property.address.line1}
+                                    postcode={deal.property.address.postcode}
+                                    price={deal.property.askingPrice}
+                                    // Use the first active strategy's ROI or fallback
+                                    roi={Object.values(deal.strategies).find(s => s.isActive)?.results.roi || 0}
+                                    strategy={Object.values(deal.strategies).find(s => s.isActive)?.type as StrategyType || 'BTL'}
                                     status={col.key}
+                                    onStatusChange={(newStatus) => handleStatusChange(deal.id, newStatus)}
+                                    onClick={() => router.push(`/packs?deal=${deal.id}`)}
                                 />
                             ))}
                             {filteredDeals.length === 0 && (

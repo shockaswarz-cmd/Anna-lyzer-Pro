@@ -104,8 +104,9 @@ export function DealInput({ onAnalyze, onManualEntry, isLoading }: DealInputProp
                         <form onSubmit={handleManualSubmit} className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2 md:col-span-2">
-                                    <Label>Address</Label>
+                                    <Label htmlFor="address">Address</Label>
                                     <Input
+                                        id="address"
                                         placeholder="123 High Street, Manchester"
                                         value={manualData.address}
                                         onChange={(e) => setManualData({ ...manualData, address: e.target.value })}
@@ -138,8 +139,9 @@ export function DealInput({ onAnalyze, onManualEntry, isLoading }: DealInputProp
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label>{manualData.transactionType === 'rent' ? 'Monthly Rent (£)' : 'Asking Price (£)'}</Label>
+                                    <Label htmlFor="price">{manualData.transactionType === 'rent' ? 'Monthly Rent (£)' : 'Asking Price (£)'}</Label>
                                     <Input
+                                        id="price"
                                         type="number"
                                         placeholder={manualData.transactionType === 'rent' ? '1200' : '250000'}
                                         value={manualData.price || ''}
@@ -173,7 +175,7 @@ export function DealInput({ onAnalyze, onManualEntry, isLoading }: DealInputProp
                                         value={manualData.propertyType}
                                         onValueChange={(v) => setManualData({ ...manualData, propertyType: v })}
                                     >
-                                        <SelectTrigger>
+                                        <SelectTrigger aria-label="Property Type">
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>

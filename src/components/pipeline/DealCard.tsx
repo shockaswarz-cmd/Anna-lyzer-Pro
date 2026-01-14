@@ -14,6 +14,7 @@ interface DealCardProps {
     status: string;
     imageUrl?: string;
     onClick?: () => void;
+    onStatusChange?: (newStatus: string) => void;
 }
 
 const strategyColors: Record<StrategyType, string> = {
@@ -83,6 +84,23 @@ export function DealCard({
                 </span>
                 <TrendingUp className="w-3 h-3 text-slate-500" />
             </div>
+
+            {/* Status Quick Move */}
+            {onStatusChange && (
+                <div onClick={(e) => e.stopPropagation()} className="mt-3 pt-3 border-t border-slate-700/50">
+                    <select
+                        value={status}
+                        onChange={(e) => onStatusChange(e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-700 text-xs text-slate-300 rounded px-2 py-1 focus:ring-1 focus:ring-emerald-500 outline-none"
+                    >
+                        <option value="leads">Leads</option>
+                        <option value="viewing">Viewing</option>
+                        <option value="offer">Offer Made</option>
+                        <option value="purchased">Purchased</option>
+                        <option value="renting">Renting</option>
+                    </select>
+                </div>
+            )}
         </div>
     );
 }

@@ -10,87 +10,59 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 // Mock deal for demo - in production this would come from URL params or state
-const mockDeal: Deal = {
-    id: 'demo-1',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    property: {
-        sourceUrl: 'https://rightmove.co.uk/...',
-        askingPrice: 195000,
-        propertyType: 'Terraced',
-        bedrooms: 4,
-        bathrooms: 2,
-        address: {
-            line1: '42 Victoria Road',
-            city: 'Manchester',
-            postcode: 'M14 5RB'
-        },
-        tenure: 'Freehold',
-        images: ['https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800'],
-        agentName: 'Purple Bricks'
-    },
-    strategies: {
-        BTL: {
-            type: 'BTL',
-            isActive: true,
-            assumptions: {
-                acquisition: { isR2R: false, purchasePrice: 195000, stampDuty: 5850, surveyFees: 500, legalFees: 1500, sourcingFee: 0, refurbishmentCost: 15000, furnitureCost: 0, otherCosts: 0 },
-                mortgage: { ltv: 75, interestRate: 5.5, termYears: 25, productFee: 995, monthlyPayment: 0, isInterestOnly: true },
-                income: { grossMonthlyRent: 1200, occupancyRate: 95, managementFeeRate: 10, managementFeeMonthly: 120, utilitiesMonthly: 0, insuranceMonthly: 35, councilTaxMonthly: 0, maintenanceMonthly: 50, otherMonthlyCosts: 0 },
-                params: {}
-            },
-            results: { totalCashRequired: 68845, totalInvestment: 217845, grossYield: 7.4, netYield: 4.2, monthlyCashflow: 327, annualCashflow: 3924, roi: 5.7, paybackMonths: 210 }
-        },
-        HMO: {
-            type: 'HMO',
-            isActive: false,
-            assumptions: {
-                acquisition: { isR2R: false, purchasePrice: 195000, stampDuty: 5850, surveyFees: 500, legalFees: 1500, sourcingFee: 0, refurbishmentCost: 25000, furnitureCost: 5000, otherCosts: 1500 },
-                mortgage: { ltv: 75, interestRate: 5.5, termYears: 25, productFee: 995, monthlyPayment: 0, isInterestOnly: true },
-                income: { grossMonthlyRent: 2200, occupancyRate: 92, managementFeeRate: 12, managementFeeMonthly: 264, utilitiesMonthly: 180, insuranceMonthly: 55, councilTaxMonthly: 0, maintenanceMonthly: 100, otherMonthlyCosts: 50 },
-                params: {}
-            },
-            results: { totalCashRequired: 84845, totalInvestment: 234345, grossYield: 13.5, netYield: 9.1, monthlyCashflow: 883, annualCashflow: 10596, roi: 12.5, paybackMonths: 96 }
-        },
-        BRRR: {
-            type: 'BRRR',
-            isActive: false,
-            assumptions: {
-                acquisition: { isR2R: false, purchasePrice: 195000, stampDuty: 5850, surveyFees: 500, legalFees: 1500, sourcingFee: 0, refurbishmentCost: 20000, furnitureCost: 0, otherCosts: 0 },
-                mortgage: { ltv: 75, interestRate: 5.5, termYears: 25, productFee: 995, monthlyPayment: 0, isInterestOnly: true },
-                income: { grossMonthlyRent: 1200, occupancyRate: 95, managementFeeRate: 10, managementFeeMonthly: 120, utilitiesMonthly: 0, insuranceMonthly: 35, councilTaxMonthly: 0, maintenanceMonthly: 50, otherMonthlyCosts: 0 },
-                params: {}
-            },
-            results: { totalCashRequired: 45000, totalInvestment: 222850, grossYield: 7.4, netYield: 4.0, monthlyCashflow: 285, annualCashflow: 3420, roi: 7.6, paybackMonths: 158 }
-        },
-        SA: {
-            type: 'SA',
-            isActive: false,
-            assumptions: { acquisition: { isR2R: false, purchasePrice: 0, stampDuty: 0, surveyFees: 0, legalFees: 0, sourcingFee: 0, refurbishmentCost: 0, furnitureCost: 0, otherCosts: 0 }, mortgage: { ltv: 0, interestRate: 0, termYears: 0, productFee: 0, monthlyPayment: 0, isInterestOnly: false }, income: { grossMonthlyRent: 0, occupancyRate: 0, managementFeeRate: 0, managementFeeMonthly: 0, utilitiesMonthly: 0, insuranceMonthly: 0, councilTaxMonthly: 0, maintenanceMonthly: 0, otherMonthlyCosts: 0 }, params: {} },
-            results: { totalCashRequired: 0, totalInvestment: 0, grossYield: 0, netYield: 0, monthlyCashflow: 0, annualCashflow: 0, roi: 0, paybackMonths: 0 }
-        },
-        R2R: {
-            type: 'R2R',
-            isActive: false,
-            assumptions: { acquisition: { isR2R: true, purchasePrice: 0, rentToOwner: 950, stampDuty: 0, surveyFees: 0, legalFees: 500, sourcingFee: 1500, refurbishmentCost: 2000, furnitureCost: 3000, otherCosts: 0 }, mortgage: { ltv: 0, interestRate: 0, termYears: 0, productFee: 0, monthlyPayment: 0, isInterestOnly: false }, income: { grossMonthlyRent: 1800, occupancyRate: 90, managementFeeRate: 12, managementFeeMonthly: 216, utilitiesMonthly: 150, insuranceMonthly: 40, councilTaxMonthly: 150, maintenanceMonthly: 75, otherMonthlyCosts: 0 }, params: {} },
-            results: { totalCashRequired: 7000, totalInvestment: 7000, grossYield: 0, netYield: 0, monthlyCashflow: 219, annualCashflow: 2628, roi: 37.5, paybackMonths: 32 }
-        },
-        FLIP: {
-            type: 'FLIP',
-            isActive: false,
-            assumptions: { acquisition: { isR2R: false, purchasePrice: 0, stampDuty: 0, surveyFees: 0, legalFees: 0, sourcingFee: 0, refurbishmentCost: 0, furnitureCost: 0, otherCosts: 0 }, mortgage: { ltv: 0, interestRate: 0, termYears: 0, productFee: 0, monthlyPayment: 0, isInterestOnly: false }, income: { grossMonthlyRent: 0, occupancyRate: 0, managementFeeRate: 0, managementFeeMonthly: 0, utilitiesMonthly: 0, insuranceMonthly: 0, councilTaxMonthly: 0, maintenanceMonthly: 0, otherMonthlyCosts: 0 }, params: {} },
-            results: { totalCashRequired: 0, totalInvestment: 0, grossYield: 0, netYield: 0, monthlyCashflow: 0, annualCashflow: 0, roi: 0, paybackMonths: 0 }
-        },
-    }
-};
+import { useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useAuth } from '@/components/auth/AuthContext';
+import { getDeal } from '@/lib/firestore/deals';
+import { getUserProfile } from '@/lib/firestore/user';
 
 export default function PacksPage() {
+    const searchParams = useSearchParams();
+    const { user } = useAuth();
+
+    const [deal, setDeal] = useState<Deal | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
     const [activeStrategy, setActiveStrategy] = useState<StrategyType>('HMO');
     const [branding, setBranding] = useState({
         companyName: 'Bourarro Properties',
         logoUrl: '',
         primaryColor: '#10b981'
     });
+
+    useEffect(() => {
+        async function loadData() {
+            setIsLoading(true);
+            const dealId = searchParams?.get('deal');
+            const strategyParam = searchParams?.get('strategy') as StrategyType;
+
+            // Load Deal
+            if (dealId) {
+                const fetchedDeal = await getDeal(dealId);
+                if (fetchedDeal) {
+                    setDeal(fetchedDeal);
+                    // Use param strategy, or fetch active one, or default
+                    if (strategyParam && fetchedDeal.strategies[strategyParam]) {
+                        setActiveStrategy(strategyParam);
+                    } else {
+                        // Find active strategy
+                        const active = Object.values(fetchedDeal.strategies).find(s => s.isActive);
+                        if (active) setActiveStrategy(active.type as StrategyType);
+                    }
+                }
+            }
+
+            // Load User Branding
+            if (user?.uid) {
+                const profile = await getUserProfile(user.uid);
+                if (profile && profile.branding) {
+                    setBranding(profile.branding);
+                }
+            }
+            setIsLoading(false);
+        }
+
+        loadData();
+    }, [searchParams, user]);
     const [isExporting, setIsExporting] = useState(false);
     const previewRef = useRef<HTMLDivElement>(null);
 
@@ -127,7 +99,7 @@ export default function PacksPage() {
             pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
 
             // Generate filename
-            const address = mockDeal.property.address.line1.replace(/[^a-zA-Z0-9]/g, '_');
+            const address = deal!.property.address.line1.replace(/[^a-zA-Z0-9]/g, '_');
             const filename = `Investor_Pack_${address}_${activeStrategy}.pdf`;
 
             // Download
@@ -141,11 +113,41 @@ export default function PacksPage() {
     };
 
     const handleCopyLink = () => {
+        if (!deal) return;
         // Generate shareable link with deal ID
-        const shareUrl = `${window.location.origin}/packs?deal=${mockDeal.id}&strategy=${activeStrategy}`;
+        const shareUrl = `${window.location.origin}/packs?deal=${deal.id}&strategy=${activeStrategy}`;
         navigator.clipboard.writeText(shareUrl);
         alert('Shareable link copied to clipboard!');
     };
+
+    if (isLoading && !deal) {
+        return (
+            <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+            </div>
+        );
+    }
+
+    // Check if deal exists
+    if (!deal && !isLoading) {
+        return (
+            <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center text-white p-4">
+                <FileText className="w-12 h-12 text-slate-600 mb-4" />
+                <h2 className="text-xl font-bold mb-2">No Deal Selected</h2>
+                <p className="text-slate-400 mb-6 text-center max-w-md">
+                    Please select a deal from your pipeline or analyser to generate an investor pack.
+                </p>
+                <div className="flex gap-4">
+                    <Link href="/pipeline" className="px-4 py-2 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors">
+                        Go to Pipeline
+                    </Link>
+                    <Link href="/analyser" className="px-4 py-2 bg-emerald-500 rounded-lg hover:bg-emerald-400 transition-colors font-medium">
+                        Analyze New Deal
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
@@ -197,7 +199,7 @@ export default function PacksPage() {
                     <div className="bg-slate-700/30 p-8 rounded-xl border border-slate-700">
                         <div ref={previewRef}>
                             <InvestorPackPreview
-                                deal={mockDeal}
+                                deal={deal!}
                                 strategy={activeStrategy}
                                 branding={branding}
                             />

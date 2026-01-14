@@ -15,10 +15,16 @@ import { StrategyComparison } from '@/components/strategies/StrategyComparison';
 import { RiskPanel } from '@/components/deal/RiskPanel';
 import { assessDealRisk } from '@/lib/risk/assessment';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Home, MapPin, Bed, Bath, Building2 } from 'lucide-react';
+import { Home, MapPin, Bed, Bath, Building2, Save, Loader2 } from 'lucide-react';
+import { saveDeal } from '@/lib/firestore/deals';
+import { useAuth } from '@/components/auth/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function AnalyserPage() {
+    const { user } = useAuth();
+    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
     const [deal, setDeal] = useState<Deal | null>(null);
     const [activeStrategy, setActiveStrategy] = useState<StrategyType>('BTL');
     const [error, setError] = useState<string | null>(null);
@@ -46,6 +52,33 @@ export default function AnalyserPage() {
         setDeal(result);
         if (data.transactionType === 'rent') {
             setActiveStrategy('R2R');
+        }
+    };
+
+    const handleSaveDeal = async () => {
+        if (!user) {
+            alert('Please login to save deals');
+            return;
+        }
+
+        if (!deal) return;
+
+        setIsSaving(true);
+        try {
+            const dealId = await saveDeal(user.uid, deal);
+            if (dealId) {
+                // Determine redirect based on action - could go to pipeline or packs
+                if (window.confirm('Deal saved! Go to Pipeline? Click Cancel to stay here.')) {
+                    router.push('/pipeline');
+                }
+            } else {
+                throw new Error('Failed to save');
+            }
+        } catch (error) {
+            console.error('Error saving deal:', error);
+            alert('Failed to save deal. Please try again.');
+        } finally {
+            setIsSaving(false);
         }
     };
 
@@ -198,7 +231,17 @@ export default function AnalyserPage() {
                                 {deal.property.address.city} {deal.property.address.postcode}
                             </p>
                         </div>
-                        <button onClick={() => setDeal(null)} className="text-sm font-medium text-blue-600 hover:underline">New Search</button>
+                        <div className="flex items-center gap-3">
+                            <button
+                                onClick={handleSaveDeal}
+                                disabled={isSaving}
+                                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50"
+                            >
+                                {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                                Save to Pipeline
+                            </button>
+                            <button onClick={() => setDeal(null)} className="text-sm font-medium text-slate-500 hover:text-slate-700">New Search</button>
+                        </div>
                     </header>
 
                     {/* Property Summary Bar */}

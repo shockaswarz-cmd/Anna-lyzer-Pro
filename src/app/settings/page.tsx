@@ -1,6 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/components/auth/AuthContext';
+import { getUserProfile, updateUserProfile, defaultProfile } from '@/lib/firestore/user';
+import { Loader2 } from 'lucide-react';
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,26 +23,31 @@ import {
 } from 'lucide-react';
 
 export default function SettingsPage() {
-    const [profile, setProfile] = useState({
-        name: 'John Doe',
-        email: 'john@example.com',
-        phone: '+44 7700 900123'
-    });
+    const { user, loading: authLoading } = useAuth();
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
 
-    const [branding, setBranding] = useState({
-        companyName: 'Bourarro Properties',
-        logoUrl: '',
-        primaryColor: '#10b981'
-    });
+    const [profile, setProfile] = useState(defaultProfile.profile);
+    const [branding, setBranding] = useState(defaultProfile.branding);
+    const [preferences, setPreferences] = useState(defaultProfile.preferences);
 
-    const [preferences, setPreferences] = useState({
-        defaultStrategy: 'BTL',
-        defaultLTV: 75,
-        defaultInterestRate: 5.5,
-        darkMode: true,
-        emailNotifications: true,
-        pushNotifications: false
-    });
+    useEffect(() => {
+        async function loadProfile() {
+            if (authLoading) return;
+
+            if (user?.uid) {
+                setLoading(true);
+                const data = await getUserProfile(user.uid);
+                if (data) {
+                    setProfile(data.profile);
+                    setBranding(data.branding);
+                    setPreferences(data.preferences);
+                }
+            }
+            setLoading(false);
+        }
+        loadProfile();
+    }, [user, authLoading]);
 
     const colorOptions = [
         { name: 'Emerald', value: '#10b981' },
@@ -48,10 +57,31 @@ export default function SettingsPage() {
         { name: 'Amber', value: '#f59e0b' },
     ];
 
-    const handleSave = () => {
-        // In production: save to Supabase
-        alert('Settings saved!');
+    const handleSave = async () => {
+        if (!user?.uid) return;
+
+        setSaving(true);
+        const success = await updateUserProfile(user.uid, {
+            profile,
+            branding,
+            preferences
+        });
+
+        if (success) {
+            alert('Settings saved successfully!');
+        } else {
+            alert('Failed to save settings. Please try again.');
+        }
+        setSaving(false);
     };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
@@ -152,8 +182,8 @@ export default function SettingsPage() {
                                         key={color.value}
                                         onClick={() => setBranding(b => ({ ...b, primaryColor: color.value }))}
                                         className={`w-10 h-10 rounded-lg border-2 transition-all ${branding.primaryColor === color.value
-                                                ? 'border-white scale-110 ring-2 ring-white/20'
-                                                : 'border-transparent hover:scale-105'
+                                            ? 'border-white scale-110 ring-2 ring-white/20'
+                                            : 'border-transparent hover:scale-105'
                                             }`}
                                         style={{ backgroundColor: color.value }}
                                         title={color.name}
@@ -278,10 +308,15 @@ export default function SettingsPage() {
                 <div className="flex justify-end">
                     <Button
                         onClick={handleSave}
-                        className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400"
+                        disabled={saving}
+                        className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 disabled:opacity-50"
                     >
-                        <Save className="w-4 h-4 mr-2" />
-                        Save Changes
+                        {saving ? (
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        ) : (
+                            <Save className="w-4 h-4 mr-2" />
+                        )}
+                        {saving ? 'Saving...' : 'Save Changes'}
                     </Button>
                 </div>
             </div>
