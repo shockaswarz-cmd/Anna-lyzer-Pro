@@ -19,6 +19,8 @@ export interface PropertyDetails {
     leaseYearsRemaining?: number;
     groundRent?: number;
     serviceCharge?: number;
+    size?: number;
+    sizeUnit?: 'sqft' | 'sqm';
     description?: string;
     images: string[];
     agentName?: string;

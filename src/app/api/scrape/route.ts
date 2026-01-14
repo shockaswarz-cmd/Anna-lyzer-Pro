@@ -109,6 +109,32 @@ const parsePrice = (str: string): number => {
     return 0;
 };
 
+// Helper: Combine features and description for regex searching
+const FeaturesAndDescText = (features: string[], description: string) => {
+    return features.join(' ') + ' ' + description;
+};
+
+// Helper: Parse Tenure
+const parseTenure = (text: string): 'Freehold' | 'Leasehold' | 'Share of Freehold' => {
+    const lower = text.toLowerCase();
+    if (lower.includes('share of freehold')) return 'Share of Freehold';
+    if (lower.includes('leasehold')) return 'Leasehold';
+    return 'Freehold'; // Default
+};
+
+// Helper: Parse Size
+const parseSize = (text: string): { size: number; unit: 'sqft' | 'sqm' } => {
+    const sizeRegex = /([\d,.]+)\s*(sq\s?ft|square\s?feet|sq\s?m|square\s?metres)/i;
+    const match = text.match(sizeRegex);
+    if (match) {
+        const val = parseFloat(match[1].replace(/,/g, ''));
+        const unitStr = match[2].toLowerCase();
+        const unit = unitStr.includes('m') || unitStr.includes('metres') ? 'sqm' : 'sqft';
+        return { size: val, unit };
+    }
+    return { size: 0, unit: 'sqft' };
+};
+
 // ============================================================================
 // MAIN SCRAPE HANDLER
 // ============================================================================
@@ -170,9 +196,11 @@ export async function POST(request: NextRequest) {
         const $ = cheerio.load(html);
 
         // Basic Metadata
+        // Basic Metadata
         let title = $('meta[property="og:title"]').attr('content') || $('title').text();
         let image = $('meta[property="og:image"]').attr('content');
-        let description = $('meta[property="og:description"]').attr('content') || $('meta[name="description"]').attr('content');
+        let description = ''; // Will parse full description below
+        let metaDescription = $('meta[property="og:description"]').attr('content') || $('meta[name="description"]').attr('content');
 
         // Detect Source
         let source = 'Unknown';
@@ -196,6 +224,13 @@ export async function POST(request: NextRequest) {
         let bedrooms = 0;
         let bathrooms = 0;
         let features: string[] = [];
+        let tenure: 'Freehold' | 'Leasehold' | 'Share of Freehold' = 'Freehold'; // Default fallback, but will try to detect
+        let size = 0;
+        let sizeUnit: 'sqft' | 'sqm' = 'sqft';
+
+        // Helper regex
+        const tenureRegex = /(freehold|leasehold|share of freehold)/i;
+        const sizeRegex = /([\d,.]+)\s*(sq\s?ft|square\s?feet|sq\s?m|square\s?metres)/i;
 
         // Parsing Logic
         if (source === 'Rightmove') {
@@ -209,17 +244,53 @@ export async function POST(request: NextRequest) {
             }
             $('ul[class*="KeyFeatures"] li').each((_, el) => { features.push($(el).text().trim()); });
 
+            // Rightmove Description
+            const descEl = $('div[class*="STw8udCxUaBUMfOOZu0iL"]'); // Common RM class
+            if (descEl.length) description = descEl.text().trim();
+            else description = $('div[class*="marketing-description"]').text().trim() || $('h1').next().text();
+
+            // Rightmove Tenure & Size often in features or description
+            const allText = FeaturesAndDescText(features, description);
+            tenure = parseTenure(allText);
+            const sizeData = parseSize(allText);
+            size = sizeData.size;
+            sizeUnit = sizeData.unit;
+
         } else if (source === 'Zoopla') {
             price = parsePrice($('div[data-testid="price"]').text() || $('p[data-testid="price"]').text());
             bedrooms = parseInt($('span[data-testid="beds-label"]').text()) || 0;
             bathrooms = parseInt($('span[data-testid="baths-label"]').text()) || 0;
             $('ul[data-testid="key-features-list"] li').each((_, el) => { features.push($(el).text().trim()); });
 
+            // Zoopla Description
+            description = $('div[data-testid="listing-description"]').text().trim();
+            if (!description) description = $('div[class*="css-15830to"]').text().trim();
+
+            const allText = FeaturesAndDescText(features, description);
+            tenure = parseTenure(allText); // Zoopla often has explicit tenure field too, but regex works
+            const sizeData = parseSize(allText);
+            size = sizeData.size;
+            sizeUnit = sizeData.unit;
+
         } else if (source === 'OnTheMarket') {
             price = parsePrice($('.price-data').text() || $('span[class*="price"]').text());
             const bedMatch = (title || '').match(/(\d+)\s*bed/i);
             if (bedMatch) bedrooms = parseInt(bedMatch[1]);
+
+            description = $('div[class*="description"]').text().trim();
+
+            const allText = (title || '') + ' ' + description;
+            tenure = parseTenure(allText);
+            const sizeData = parseSize(allText);
+            size = sizeData.size;
+            sizeUnit = sizeData.unit;
         }
+
+        // Final Description Fallback
+        if (!description || description.length < 50) {
+            description = metaDescription || '';
+        }
+
 
         // Generic Fallback for price
         if (price === 0) {
@@ -263,10 +334,35 @@ export async function POST(request: NextRequest) {
 
         const images: string[] = [];
         if (image) images.push(image);
-        $('img[src*="media.rightmove"], img[src*="lc.zoocdn"], img[src*="images.onthemarket"]').each((i, el) => {
-            const src = $(el).attr('src');
-            if (src && !images.includes(src) && images.length < 5) images.push(src);
+
+        // More aggressive image scraping
+        $('img').each((i, el) => {
+            const src = $(el).attr('src') || $(el).attr('data-src');
+            if (!src) return;
+
+            // Filter high quality images only
+            if (
+                (src.includes('media.rightmove') && src.includes('_max_600x600')) ||
+                (src.includes('lc.zoocdn') && parseInt($(el).attr('width') || '0') > 300) ||
+                (src.includes('images.onthemarket') && !src.includes('icon')) ||
+                (src.includes('jpg') || src.includes('jpeg') || src.includes('webp'))
+            ) {
+                if (!images.includes(src) && !src.includes('avatar') && !src.includes('logo') && !src.includes('map')) {
+                    images.push(src);
+                }
+            }
         });
+
+        // Fallback: If no good images found, grab any large ish ones
+        if (images.length <= 1) {
+            $('img').each((i, el) => {
+                const src = $(el).attr('src');
+                const width = parseInt($(el).attr('width') || '0');
+                if (src && width > 400 && !images.includes(src)) {
+                    images.push(src);
+                }
+            });
+        }
 
         console.log(`[Scraper] Success (${fetchMethod}): ${source} - ${postcode} - £${price}`);
 
@@ -281,10 +377,13 @@ export async function POST(request: NextRequest) {
                 price,
                 bedrooms,
                 bathrooms,
-                features: features.slice(0, 10),
+                features: features.slice(0, 15),
                 propertyType: type,
-                images: images.length > 0 ? images : [''],
+                images: images.length > 0 ? images : [''], // Send all images
                 description: description || '',
+                tenure,
+                size,
+                sizeUnit,
                 fetchMethod
             }
         });

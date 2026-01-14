@@ -41,8 +41,8 @@ export function Sidebar() {
 
     return (
         <aside className={cn(
-            'sticky left-0 top-0 h-screen bg-slate-900 border-r border-slate-800 flex flex-col transition-all duration-300 z-50 flex-shrink-0',
-            collapsed ? 'w-16' : 'w-64'
+            'sticky left-0 top-0 h-screen bg-slate-900/95 backdrop-blur-xl border-r border-slate-800/50 flex flex-col transition-all duration-300 z-50 flex-shrink-0 shadow-xl shadow-black/20',
+            collapsed ? 'w-[72px]' : 'w-[260px]'
         )}>
             {/* Logo Header */}
             <div className="h-16 flex items-center justify-between px-4 border-b border-slate-800">
@@ -64,7 +64,7 @@ export function Sidebar() {
             </div>
 
             {/* Navigation Links */}
-            <nav className="flex-1 py-6 px-3 space-y-2">
+            <nav className="flex-1 py-6 px-3 space-y-1.5 overflow-y-auto">
                 {navItems.map((item) => {
                     const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
                     const Icon = item.icon;
@@ -74,15 +74,22 @@ export function Sidebar() {
                             key={item.href}
                             href={item.href}
                             className={cn(
-                                'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all',
+                                'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative',
                                 isActive
-                                    ? 'bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-400 border border-emerald-500/30'
-                                    : 'text-slate-400 hover:text-white hover:bg-slate-800',
+                                    ? 'bg-gradient-to-r from-emerald-500/15 to-cyan-500/15 text-white'
+                                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60',
                                 collapsed && 'justify-center px-2'
                             )}
                             title={collapsed ? item.label : undefined}
                         >
-                            <Icon className={cn('w-5 h-5 flex-shrink-0', isActive && 'text-emerald-400')} />
+                            {/* Active indicator bar */}
+                            {isActive && (
+                                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-emerald-400 to-cyan-400 rounded-r-full" />
+                            )}
+                            <Icon className={cn(
+                                'w-5 h-5 flex-shrink-0 transition-colors',
+                                isActive ? 'text-emerald-400' : 'group-hover:text-emerald-400'
+                            )} />
                             {!collapsed && (
                                 <span className="text-sm font-medium">{item.label}</span>
                             )}

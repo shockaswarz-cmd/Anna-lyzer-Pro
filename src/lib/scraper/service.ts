@@ -14,6 +14,9 @@ interface ScrapedData {
     propertyType: string;
     images: string[];
     description: string;
+    tenure?: 'Freehold' | 'Leasehold' | 'Share of Freehold';
+    size?: number;
+    sizeUnit?: 'sqft' | 'sqm';
 }
 
 // Default assumptions for calculations
@@ -117,7 +120,9 @@ export function createDealFromManual(data: ManualPropertyData): Deal {
             city: data.address.split(',')[1]?.trim() || '',
             postcode: data.postcode
         },
-        tenure: 'Freehold',
+        tenure: 'Freehold', // Manual default, will update later
+        size: undefined,
+        sizeUnit: 'sqft',
         description: '',
         images: [],
         agentName: 'Manual Entry'
@@ -169,7 +174,9 @@ export async function scrapeDeal(url: string): Promise<Deal> {
             city: scraped.address.split(',')[1]?.trim() || '',
             postcode: scraped.postcode
         },
-        tenure: 'Freehold',
+        tenure: scraped.tenure || 'Freehold',
+        size: scraped.size || 0,
+        sizeUnit: scraped.sizeUnit || 'sqft',
         description: scraped.description,
         images: scraped.images.filter(Boolean),
         agentName: scraped.source

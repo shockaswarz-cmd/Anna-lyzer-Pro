@@ -23,6 +23,9 @@ export interface ManualPropertyData {
     bathrooms: number;
     propertyType: string;
     transactionType: 'sale' | 'rent';
+    tenure: 'Freehold' | 'Leasehold' | 'Share of Freehold';
+    size?: number;
+    sizeUnit?: 'sqft' | 'sqm';
 }
 
 export function DealInput({ onAnalyze, onManualEntry, isLoading }: DealInputProps) {
@@ -34,7 +37,10 @@ export function DealInput({ onAnalyze, onManualEntry, isLoading }: DealInputProp
         bedrooms: 3,
         bathrooms: 1,
         propertyType: 'Terraced',
-        transactionType: 'sale'
+        transactionType: 'sale',
+        tenure: 'Freehold',
+        size: 0,
+        sizeUnit: 'sqft'
     });
 
     const handleUrlSubmit = (e: React.FormEvent) => {
@@ -60,7 +66,7 @@ export function DealInput({ onAnalyze, onManualEntry, isLoading }: DealInputProp
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <Tabs defaultValue="url" className="w-full">
+                <Tabs id="deal-input-tabs" defaultValue="url" className="w-full">
                     <TabsList className="grid w-full grid-cols-2 mb-4">
                         <TabsTrigger value="url">
                             <Search className="mr-2 h-4 w-4" />
@@ -187,6 +193,48 @@ export function DealInput({ onAnalyze, onManualEntry, isLoading }: DealInputProp
                                             <SelectItem value="Other">Other</SelectItem>
                                         </SelectContent>
                                     </Select>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label>Tenure</Label>
+                                    <Select
+                                        value={manualData.tenure}
+                                        onValueChange={(v) => setManualData({ ...manualData, tenure: v as any })}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Freehold">Freehold</SelectItem>
+                                            <SelectItem value="Leasehold">Leasehold</SelectItem>
+                                            <SelectItem value="Share of Freehold">Share of Freehold</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <div className="space-y-2 col-span-2 md:col-span-1">
+                                    <Label>Size</Label>
+                                    <div className="flex gap-2">
+                                        <Input
+                                            type="number"
+                                            placeholder="e.g. 850"
+                                            value={manualData.size || ''}
+                                            onChange={(e) => setManualData({ ...manualData, size: Number(e.target.value) })}
+                                            className="flex-1"
+                                        />
+                                        <Select
+                                            value={manualData.sizeUnit}
+                                            onValueChange={(v) => setManualData({ ...manualData, sizeUnit: v as any })}
+                                        >
+                                            <SelectTrigger className="w-[100px]">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="sqft">sq ft</SelectItem>
+                                                <SelectItem value="sqm">sq m</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
                                 </div>
                             </div>
 

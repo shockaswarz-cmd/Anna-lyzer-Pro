@@ -113,7 +113,7 @@ test.describe('Settings Page', () => {
         await page.goto('/settings');
 
         // Verify settings sections exist
-        await expect(page.getByText(/profile/i)).toBeVisible();
-        await expect(page.getByText(/branding/i)).toBeVisible();
+        await expect(page.getByRole('tab', { name: 'Profile' })).toBeVisible();
+        await expect(page.getByRole('tab', { name: 'branding' })).toBeVisible();
     });
 });

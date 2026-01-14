@@ -15,7 +15,8 @@ import { StrategyComparison } from '@/components/strategies/StrategyComparison';
 import { RiskPanel } from '@/components/deal/RiskPanel';
 import { assessDealRisk } from '@/lib/risk/assessment';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Home, MapPin, Bed, Bath, Building2, Save, Loader2 } from 'lucide-react';
+import { Home, MapPin, Bed, Bath, Building2, Save, Loader2, Ruler, FileText, ChevronDown, ChevronUp } from 'lucide-react';
+import { DealGallery } from '@/components/deal/DealGallery';
 import { saveDeal } from '@/lib/firestore/deals';
 import { useAuth } from '@/components/auth/AuthContext';
 import { useRouter } from 'next/navigation';
@@ -28,6 +29,7 @@ export default function AnalyserPage() {
     const [deal, setDeal] = useState<Deal | null>(null);
     const [activeStrategy, setActiveStrategy] = useState<StrategyType>('BTL');
     const [error, setError] = useState<string | null>(null);
+    const [showFullDescription, setShowFullDescription] = useState(false);
 
     const handleAnalyze = async (url: string) => {
         setIsLoading(true);
@@ -60,25 +62,17 @@ export default function AnalyserPage() {
             alert('Please login to save deals');
             return;
         }
-
         if (!deal) return;
 
         setIsSaving(true);
         try {
             const dealId = await saveDeal(user.uid, deal);
             if (dealId) {
-                // Update deal with the saved ID for navigation
                 setDeal(prev => prev ? { ...prev, id: dealId } : null);
-
-                // Offer navigation options
                 const choice = window.confirm(
-                    'Deal saved successfully!\n\n' +
-                    'Click OK to generate an Investor Pack for this deal.\n' +
-                    'Click Cancel to go to your Pipeline.'
+                    'Deal saved successfully!\n\nClick OK to generate an Investor Pack.\nClick Cancel to go to your Pipeline.'
                 );
-
                 if (choice) {
-                    // Go to Investor Pack with deal ID and active strategy
                     router.push(`/packs?deal=${dealId}&strategy=${activeStrategy}`);
                 } else {
                     router.push('/pipeline');
@@ -96,30 +90,11 @@ export default function AnalyserPage() {
 
     const handleCostChange = (newCosts: any) => {
         if (!deal) return;
-
         setDeal(prev => {
             if (!prev) return null;
-            const updated = {
-                ...prev,
-                strategies: {
-                    ...prev.strategies,
-                    [activeStrategy]: {
-                        ...prev.strategies[activeStrategy],
-                        assumptions: {
-                            ...prev.strategies[activeStrategy].assumptions,
-                            acquisition: newCosts
-                        }
-                    }
-                }
-            };
-
+            const updated = { ...prev, strategies: { ...prev.strategies, [activeStrategy]: { ...prev.strategies[activeStrategy], assumptions: { ...prev.strategies[activeStrategy].assumptions, acquisition: newCosts } } } };
             const strat = updated.strategies[activeStrategy];
-            strat.results = calculateMetrics(
-                strat.assumptions.acquisition,
-                strat.assumptions.mortgage,
-                strat.assumptions.income
-            );
-
+            strat.results = calculateMetrics(strat.assumptions.acquisition, strat.assumptions.mortgage, strat.assumptions.income);
             return updated;
         });
     };
@@ -128,25 +103,9 @@ export default function AnalyserPage() {
         if (!deal) return;
         setDeal(prev => {
             if (!prev) return null;
-            const updated = {
-                ...prev,
-                strategies: {
-                    ...prev.strategies,
-                    [activeStrategy]: {
-                        ...prev.strategies[activeStrategy],
-                        assumptions: {
-                            ...prev.strategies[activeStrategy].assumptions,
-                            mortgage: newMortgage
-                        }
-                    }
-                }
-            };
+            const updated = { ...prev, strategies: { ...prev.strategies, [activeStrategy]: { ...prev.strategies[activeStrategy], assumptions: { ...prev.strategies[activeStrategy].assumptions, mortgage: newMortgage } } } };
             const strat = updated.strategies[activeStrategy];
-            strat.results = calculateMetrics(
-                strat.assumptions.acquisition,
-                strat.assumptions.mortgage,
-                strat.assumptions.income
-            );
+            strat.results = calculateMetrics(strat.assumptions.acquisition, strat.assumptions.mortgage, strat.assumptions.income);
             return updated;
         });
     };
@@ -155,25 +114,9 @@ export default function AnalyserPage() {
         if (!deal) return;
         setDeal(prev => {
             if (!prev) return null;
-            const updated = {
-                ...prev,
-                strategies: {
-                    ...prev.strategies,
-                    [activeStrategy]: {
-                        ...prev.strategies[activeStrategy],
-                        assumptions: {
-                            ...prev.strategies[activeStrategy].assumptions,
-                            income: newIncome
-                        }
-                    }
-                }
-            };
+            const updated = { ...prev, strategies: { ...prev.strategies, [activeStrategy]: { ...prev.strategies[activeStrategy], assumptions: { ...prev.strategies[activeStrategy].assumptions, income: newIncome } } } };
             const strat = updated.strategies[activeStrategy];
-            strat.results = calculateMetrics(
-                strat.assumptions.acquisition,
-                strat.assumptions.mortgage,
-                strat.assumptions.income
-            );
+            strat.results = calculateMetrics(strat.assumptions.acquisition, strat.assumptions.mortgage, strat.assumptions.income);
             return updated;
         });
     };
@@ -182,28 +125,9 @@ export default function AnalyserPage() {
         if (!deal) return;
         setDeal(prev => {
             if (!prev) return null;
-            const updated = {
-                ...prev,
-                strategies: {
-                    ...prev.strategies,
-                    HMO: {
-                        ...prev.strategies.HMO,
-                        assumptions: {
-                            ...prev.strategies.HMO.assumptions,
-                            income: {
-                                ...prev.strategies.HMO.assumptions.income,
-                                grossMonthlyRent: totalRent
-                            }
-                        }
-                    }
-                }
-            };
+            const updated = { ...prev, strategies: { ...prev.strategies, HMO: { ...prev.strategies.HMO, assumptions: { ...prev.strategies.HMO.assumptions, income: { ...prev.strategies.HMO.assumptions.income, grossMonthlyRent: totalRent } } } } };
             const strat = updated.strategies.HMO;
-            strat.results = calculateMetrics(
-                strat.assumptions.acquisition,
-                strat.assumptions.mortgage,
-                strat.assumptions.income
-            );
+            strat.results = calculateMetrics(strat.assumptions.acquisition, strat.assumptions.mortgage, strat.assumptions.income);
             return updated;
         });
     };
@@ -212,175 +136,187 @@ export default function AnalyserPage() {
         setActiveStrategy(type);
     }
 
-    return (
-        <div className="container mx-auto py-12 px-4 space-y-8 min-h-screen bg-slate-50">
+    // Helper to truncate description
+    const truncatedDescription = deal?.property.description?.slice(0, 300) || '';
+    const hasLongDescription = (deal?.property.description?.length || 0) > 300;
 
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
             {!deal ? (
-                <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-8">
+                <div className="flex flex-col items-center justify-center min-h-[80vh] space-y-8 px-4">
                     <div className="text-center space-y-4">
-                        <h1 className="text-5xl font-extrabold tracking-tight lg:text-6xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+                        <h1 className="text-5xl font-extrabold tracking-tight lg:text-6xl bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
                             Anna Lyzer
                         </h1>
-                        <p className="text-xl text-muted-foreground max-w-[600px] mx-auto">
+                        <p className="text-xl text-slate-400 max-w-[600px] mx-auto">
                             Professional deal sourcing logic. Analyze purchases or R2R opportunities.
                         </p>
                     </div>
                     <DealInput onAnalyze={handleAnalyze} onManualEntry={handleManualEntry} isLoading={isLoading} />
                     {error && (
-                        <div className="w-full max-w-2xl mx-auto p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-                            <strong>Scraping Error:</strong> {error}
-                            <p className="mt-2 text-xs">Tip: Use "Manual Entry" tab to input property details directly.</p>
+                        <div className="w-full max-w-2xl mx-auto p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
+                            <strong>Error:</strong> {error}
                         </div>
                     )}
                 </div>
             ) : (
-                <div className="space-y-6">
-                    <header className="flex justify-between items-start pb-6 border-b">
-                        <div>
-                            <h2 className="text-2xl font-bold">{deal.property.address.line1}</h2>
-                            <p className="text-muted-foreground flex items-center gap-2">
-                                <MapPin className="h-4 w-4" />
-                                {deal.property.address.city} {deal.property.address.postcode}
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <button
-                                onClick={handleSaveDeal}
-                                disabled={isSaving}
-                                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50"
-                            >
-                                {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                                Save to Pipeline
-                            </button>
-                            <button onClick={() => setDeal(null)} className="text-sm font-medium text-slate-500 hover:text-slate-700">New Search</button>
-                        </div>
-                    </header>
+                // SINGLE UNIFIED SCROLL CONTAINER
+                <div className="h-screen overflow-y-auto custom-scrollbar">
+                    {/* ===== TOP SECTION: CONTEXT ===== */}
+                    <div className="border-b border-slate-800 bg-slate-900/30">
+                        <div className="flex flex-col xl:flex-row">
+                            {/* Left: Gallery */}
+                            <div className="xl:w-[30%] p-3 border-b xl:border-b-0 xl:border-r border-slate-800">
+                                <DealGallery
+                                    images={deal.property.images}
+                                    title={deal.property.address.line1}
+                                    className="h-[250px] xl:h-[300px]"
+                                />
+                            </div>
 
-                    {/* Property Summary Bar */}
-                    <div className="flex flex-wrap gap-4 p-4 bg-white rounded-lg border shadow-sm">
-                        <div className="flex items-center gap-2">
-                            <Home className="h-5 w-5 text-slate-500" />
-                            <span className="font-semibold">£{deal.property.askingPrice.toLocaleString()}</span>
-                            <span className="text-xs text-muted-foreground">{deal.strategies.R2R.isActive ? 'pcm' : ''}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Building2 className="h-5 w-5 text-slate-500" />
-                            <span>{deal.property.propertyType}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Bed className="h-5 w-5 text-slate-500" />
-                            <span>{deal.property.bedrooms} Beds</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Bath className="h-5 w-5 text-slate-500" />
-                            <span>{deal.property.bathrooms} Baths</span>
+                            {/* Right: Property Details */}
+                            <div className="xl:w-[70%] flex flex-col p-4">
+                                {/* Header Row */}
+                                <div className="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h2 className="text-2xl font-bold text-white mb-1">{deal.property.address.line1}</h2>
+                                        <p className="text-slate-400 flex items-center gap-2 text-sm">
+                                            <MapPin className="h-4 w-4 text-emerald-500" />
+                                            {deal.property.address.city}, {deal.property.address.postcode}
+                                        </p>
+                                    </div>
+                                    <div className="flex gap-2 shrink-0">
+                                        <button
+                                            onClick={handleSaveDeal}
+                                            disabled={isSaving}
+                                            className="flex items-center gap-2 px-3 py-1.5 bg-sky-600 text-white rounded-lg hover:bg-sky-500 transition-all font-medium text-xs disabled:opacity-50"
+                                        >
+                                            {isSaving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
+                                            Save Deal
+                                        </button>
+                                        <button onClick={() => setDeal(null)} className="px-3 py-1.5 text-xs text-slate-400 hover:text-white transition-colors border border-slate-700 rounded-lg hover:border-slate-500">
+                                            New Search
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Metrics Grid */}
+                                <div className="grid grid-cols-3 md:grid-cols-5 gap-3 mb-4">
+                                    <MetricCard icon={Home} label="Price" value={`£${deal.property.askingPrice.toLocaleString()}`} color="text-emerald-400" />
+                                    <MetricCard icon={Bed} label="Beds" value={deal.property.bedrooms} color="text-purple-400" />
+                                    <MetricCard icon={Bath} label="Baths" value={deal.property.bathrooms} color="text-amber-400" />
+                                    <MetricCard icon={Building2} label="Type" value={deal.property.propertyType} color="text-cyan-400" />
+                                    {deal.property.size && (
+                                        <MetricCard icon={Ruler} label="Size" value={`${deal.property.size} ${deal.property.sizeUnit}`} color="text-pink-400" />
+                                    )}
+                                </div>
+
+                                {/* Description - Collapsible, not sticky */}
+                                {deal.property.description && (
+                                    <div className="p-3 bg-slate-950/30 rounded-lg border border-slate-800/50">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <h4 className="flex items-center gap-2 text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                                                <FileText className="w-3 h-3 text-slate-500" /> Property Description
+                                            </h4>
+                                            {hasLongDescription && (
+                                                <button
+                                                    onClick={() => setShowFullDescription(!showFullDescription)}
+                                                    className="text-xs text-emerald-400 hover:text-emerald-300 flex items-center gap-1"
+                                                >
+                                                    {showFullDescription ? <><ChevronUp className="w-3 h-3" /> Less</> : <><ChevronDown className="w-3 h-3" /> More</>}
+                                                </button>
+                                            )}
+                                        </div>
+                                        <p className="text-xs text-slate-400 leading-relaxed whitespace-pre-line">
+                                            {showFullDescription ? deal.property.description : truncatedDescription}
+                                            {!showFullDescription && hasLongDescription && '...'}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        {/* Left Column: Input Forms */}
-                        <div className="lg:col-span-2 space-y-6">
-                            {/* Strategy Comparison Dashboard */}
-                            <StrategyComparison
-                                deal={deal}
-                                onSelectStrategy={(type) => setActiveStrategy(type)}
-                            />
+                    {/* ===== BOTTOM SECTION: ANALYSIS ===== */}
+                    <div className="flex flex-col xl:flex-row min-h-[60vh] bg-slate-950">
+                        {/* INPUTS (Left) */}
+                        <div className="xl:w-[60%] border-b xl:border-b-0 xl:border-r border-slate-800">
+                            <Tabs value={activeStrategy} onValueChange={(v) => activateStrategy(v as StrategyType)} className="h-full flex flex-col">
+                                <div className="px-4 py-3 border-b border-slate-800 bg-slate-900/20 sticky top-0 z-10 backdrop-blur-md">
+                                    <TabsList className="grid grid-cols-4 w-full max-w-md">
+                                        <TabsTrigger value="BTL">Buy to Let</TabsTrigger>
+                                        <TabsTrigger value="BRRR">BRRR</TabsTrigger>
+                                        <TabsTrigger value="HMO">HMO</TabsTrigger>
+                                        <TabsTrigger value="R2R">Rent to Rent</TabsTrigger>
+                                    </TabsList>
+                                </div>
 
-                            <Tabs value={activeStrategy} onValueChange={(v) => activateStrategy(v as StrategyType)}>
-                                <TabsList className="mb-4">
-                                    <TabsTrigger value="BTL">Buy-to-Let</TabsTrigger>
-                                    <TabsTrigger value="BRRR">BRRR</TabsTrigger>
-                                    <TabsTrigger value="HMO">HMO</TabsTrigger>
-                                    <TabsTrigger value="R2R">Rent-to-Rent</TabsTrigger>
-                                </TabsList>
+                                <div className="p-4">
+                                    <TabsContent value="BTL" className="space-y-6 mt-0">
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                            <div className="space-y-6">
+                                                <AcquisitionCostsParams data={deal.strategies.BTL.assumptions.acquisition} onChange={handleCostChange} />
+                                                <MortgageParams data={deal.strategies.BTL.assumptions.mortgage} acquisition={deal.strategies.BTL.assumptions.acquisition} onChange={handleMortgageChange} />
+                                            </div>
+                                            <div>
+                                                <IncomeParams data={deal.strategies.BTL.assumptions.income} isR2R={false} onChange={handleIncomeChange} />
+                                            </div>
+                                        </div>
+                                    </TabsContent>
 
-                                <TabsContent value="BTL" className="space-y-6">
-                                    <AcquisitionCostsParams
-                                        data={deal.strategies.BTL.assumptions.acquisition}
-                                        onChange={handleCostChange}
-                                    />
-                                    <MortgageParams
-                                        data={deal.strategies.BTL.assumptions.mortgage}
-                                        acquisition={deal.strategies.BTL.assumptions.acquisition}
-                                        onChange={handleMortgageChange}
-                                    />
-                                    <IncomeParams
-                                        data={deal.strategies.BTL.assumptions.income}
-                                        isR2R={false}
-                                        onChange={handleIncomeChange}
-                                    />
-                                </TabsContent>
+                                    <TabsContent value="BRRR" className="space-y-6 mt-0">
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                            <div className="space-y-6">
+                                                <AcquisitionCostsParams data={deal.strategies.BRRR.assumptions.acquisition} onChange={handleCostChange} />
+                                                <BRRRParams purchasePrice={deal.strategies.BRRR.assumptions.acquisition.purchasePrice} refurbCost={deal.strategies.BRRR.assumptions.acquisition.refurbishmentCost} onBRRRChange={() => { }} />
+                                                <MortgageParams data={deal.strategies.BRRR.assumptions.mortgage} acquisition={deal.strategies.BRRR.assumptions.acquisition} onChange={handleMortgageChange} />
+                                            </div>
+                                            <div>
+                                                <IncomeParams data={deal.strategies.BRRR.assumptions.income} isR2R={false} onChange={handleIncomeChange} />
+                                            </div>
+                                        </div>
+                                    </TabsContent>
 
-                                <TabsContent value="BRRR" className="space-y-6">
-                                    <AcquisitionCostsParams
-                                        data={deal.strategies.BRRR.assumptions.acquisition}
-                                        onChange={handleCostChange}
-                                    />
-                                    <BRRRParams
-                                        purchasePrice={deal.strategies.BRRR.assumptions.acquisition.purchasePrice}
-                                        refurbCost={deal.strategies.BRRR.assumptions.acquisition.refurbishmentCost}
-                                        onBRRRChange={(params) => {
-                                            // Store BRRR-specific params - could extend strategy params
-                                            console.log('BRRR params:', params);
-                                        }}
-                                    />
-                                    <MortgageParams
-                                        data={deal.strategies.BRRR.assumptions.mortgage}
-                                        acquisition={deal.strategies.BRRR.assumptions.acquisition}
-                                        onChange={handleMortgageChange}
-                                    />
-                                    <IncomeParams
-                                        data={deal.strategies.BRRR.assumptions.income}
-                                        isR2R={false}
-                                        onChange={handleIncomeChange}
-                                    />
-                                </TabsContent>
+                                    <TabsContent value="HMO" className="space-y-6 mt-0">
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                            <div className="space-y-6">
+                                                <AcquisitionCostsParams data={deal.strategies.HMO.assumptions.acquisition} onChange={handleCostChange} />
+                                                <HMOParams bedrooms={deal.property.bedrooms} onRoomsChange={handleHMORoomsChange} />
+                                                <MortgageParams data={deal.strategies.HMO.assumptions.mortgage} acquisition={deal.strategies.HMO.assumptions.acquisition} onChange={handleMortgageChange} />
+                                            </div>
+                                            <div>
+                                                <IncomeParams data={deal.strategies.HMO.assumptions.income} isR2R={false} onChange={handleIncomeChange} />
+                                            </div>
+                                        </div>
+                                    </TabsContent>
 
-                                <TabsContent value="HMO" className="space-y-6">
-                                    <AcquisitionCostsParams
-                                        data={deal.strategies.HMO.assumptions.acquisition}
-                                        onChange={handleCostChange}
-                                    />
-                                    <HMOParams
-                                        bedrooms={deal.property.bedrooms}
-                                        onRoomsChange={handleHMORoomsChange}
-                                    />
-                                    <MortgageParams
-                                        data={deal.strategies.HMO.assumptions.mortgage}
-                                        acquisition={deal.strategies.HMO.assumptions.acquisition}
-                                        onChange={handleMortgageChange}
-                                    />
-                                    <IncomeParams
-                                        data={deal.strategies.HMO.assumptions.income}
-                                        isR2R={false}
-                                        onChange={handleIncomeChange}
-                                    />
-                                </TabsContent>
-
-                                <TabsContent value="R2R" className="space-y-6">
-                                    <AcquisitionCostsParams
-                                        data={deal.strategies.R2R.assumptions.acquisition}
-                                        onChange={handleCostChange}
-                                    />
-                                    <IncomeParams
-                                        data={deal.strategies.R2R.assumptions.income}
-                                        isR2R={true}
-                                        onChange={handleIncomeChange}
-                                    />
-                                    <div className="p-4 text-sm text-slate-500 bg-sky-50 rounded">
-                                        R2R Analysis uses Monthly Rent to Owner instead of Purchase Price. Capital Deployed = Setup costs only.
-                                    </div>
-                                </TabsContent>
+                                    <TabsContent value="R2R" className="space-y-6 mt-0">
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                            <div className="space-y-6">
+                                                <AcquisitionCostsParams data={deal.strategies.R2R.assumptions.acquisition} onChange={handleCostChange} />
+                                                <div className="p-3 text-xs text-sky-400 bg-sky-950/20 border border-sky-900 rounded">
+                                                    R2R Analysis uses Monthly Rent to Owner instead of Purchase Price.
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <IncomeParams data={deal.strategies.R2R.assumptions.income} isR2R={true} onChange={handleIncomeChange} />
+                                            </div>
+                                        </div>
+                                    </TabsContent>
+                                </div>
                             </Tabs>
                         </div>
 
-                        {/* Right Column: Results & Property Info */}
-                        <div className="space-y-6">
+                        {/* RESULTS (Right) */}
+                        <div className="xl:w-[40%] p-4 space-y-4 bg-slate-900/10">
                             <StrategySummary
                                 results={deal.strategies[activeStrategy]?.results || deal.strategies.BTL.results}
                                 title={activeStrategy}
                             />
-
+                            <StrategyComparison
+                                deal={deal}
+                                onSelectStrategy={(type) => setActiveStrategy(type)}
+                            />
                             <RiskPanel
                                 assessment={assessDealRisk(
                                     deal.property,
@@ -389,24 +325,24 @@ export default function AnalyserPage() {
                                     deal.strategies[activeStrategy].assumptions.mortgage
                                 )}
                             />
-
-                            {deal.property.images && deal.property.images[0] && (
-                                <div className="aspect-video bg-muted rounded-lg flex items-center justify-center relative overflow-hidden shadow-sm">
-                                    <img src={deal.property.images[0]} alt="Property" className="object-cover w-full h-full" />
-                                </div>
-                            )}
-
-                            {deal.property.description && (
-                                <div className="p-4 bg-white rounded border">
-                                    <h3 className="font-semibold mb-2">Deal Notes</h3>
-                                    <p className="text-sm text-muted-foreground">{deal.property.description?.substring(0, 200)}...</p>
-                                </div>
-                            )}
                         </div>
                     </div>
                 </div>
             )}
+        </div>
+    );
+}
 
+function MetricCard({ icon: Icon, label, value, color }: { icon: any, label: string, value: any, color: string }) {
+    return (
+        <div className="bg-slate-900/50 p-2 rounded-lg border border-slate-800/50 flex flex-col items-center justify-center text-center">
+            <div className="flex items-center gap-1.5 text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-0.5">
+                <Icon className={`w-3 h-3 ${color}`} />
+                {label}
+            </div>
+            <div className="text-sm font-bold text-white truncate max-w-full px-1">
+                {value ?? '-'}
+            </div>
         </div>
     );
 }

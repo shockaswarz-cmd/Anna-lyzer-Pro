@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
     BarChart3,
@@ -8,234 +9,315 @@ import {
     PiggyBank,
     AlertTriangle,
     ArrowRight,
-    Building2
+    Building2,
+    FileText,
+    Loader2,
+    Sparkles
 } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { GlassCard, GlassCardHeader, GlassCardContent, StatCard } from '@/components/ui/GlassCard';
+import { AnimatedCurrency, AnimatedPercentage, AnimatedCounter } from '@/components/ui/AnimatedCounter';
+import { useAuth } from '@/components/auth/AuthContext';
+import { getUserDeals } from '@/lib/firestore/deals';
+import { Deal, StrategyType } from '@/lib/types/deal';
+import { cn } from '@/lib/utils';
 
-// Mock data for dashboard - in production this would come from Supabase
-const mockPortfolioStats = {
-    totalDeals: 12,
-    totalValue: 2450000,
-    avgRoi: 14.2,
-    avgCashflow: 485,
-    topStrategy: 'HMO',
-    activeRisks: 3
-};
+interface PortfolioStats {
+    totalDeals: number;
+    totalValue: number;
+    avgRoi: number;
+    avgCashflow: number;
+    strategyBreakdown: Record<string, number>;
+}
 
-const mockRecentDeals = [
-    { id: '1', address: '42 Victoria Road, Manchester', postcode: 'M14 5RB', price: 195000, roi: 18.2, strategy: 'HMO', status: 'analyzing' },
-    { id: '2', address: '15 Park Lane, Leeds', postcode: 'LS6 2QE', price: 165000, roi: 15.1, strategy: 'BTL', status: 'offer_made' },
-    { id: '3', address: '8 Station Street, Brighton', postcode: 'BN1 4DE', price: 285000, roi: 9.8, strategy: 'BRRR', status: 'purchased' },
-];
+function calculatePortfolioStats(deals: Deal[]): PortfolioStats {
+    if (deals.length === 0) {
+        return {
+            totalDeals: 0,
+            totalValue: 0,
+            avgRoi: 0,
+            avgCashflow: 0,
+            strategyBreakdown: {},
+        };
+    }
+
+    let totalValue = 0;
+    let totalRoi = 0;
+    let totalCashflow = 0;
+    const strategyCount: Record<string, number> = {};
+
+    deals.forEach((deal) => {
+        totalValue += deal.property.askingPrice;
+
+        // Find active strategy
+        const activeStrategy = Object.values(deal.strategies).find(s => s.isActive);
+        if (activeStrategy) {
+            totalRoi += activeStrategy.results?.roi || 0;
+            totalCashflow += activeStrategy.results?.monthlyCashflow || 0;
+            strategyCount[activeStrategy.type] = (strategyCount[activeStrategy.type] || 0) + 1;
+        }
+    });
+
+    return {
+        totalDeals: deals.length,
+        totalValue,
+        avgRoi: totalRoi / deals.length,
+        avgCashflow: totalCashflow / deals.length,
+        strategyBreakdown: strategyCount,
+    };
+}
 
 export default function DashboardPage() {
+    const { user } = useAuth();
+    const [deals, setDeals] = useState<Deal[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [stats, setStats] = useState<PortfolioStats | null>(null);
+
+    useEffect(() => {
+        async function fetchDeals() {
+            if (!user?.uid) {
+                setLoading(false);
+                return;
+            }
+
+            try {
+                const userDeals = await getUserDeals(user.uid);
+                setDeals(userDeals);
+                setStats(calculatePortfolioStats(userDeals));
+            } catch (error) {
+                console.error('Failed to fetch deals:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchDeals();
+    }, [user]);
+
+    // Strategy colors for chart
+    const strategyColors: Record<string, { bg: string; text: string }> = {
+        BTL: { bg: 'bg-cyan-500', text: 'text-cyan-400' },
+        HMO: { bg: 'bg-emerald-500', text: 'text-emerald-400' },
+        BRRR: { bg: 'bg-purple-500', text: 'text-purple-400' },
+        R2R: { bg: 'bg-amber-500', text: 'text-amber-400' },
+        SA: { bg: 'bg-pink-500', text: 'text-pink-400' },
+        FLIP: { bg: 'bg-rose-500', text: 'text-rose-400' },
+    };
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-            {/* Navigation Header */}
-            <header className="border-b border-slate-700/50 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-50">
-                <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-                    <div className="flex items-center gap-8">
-                        <h1 className="text-xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                            Anna Lyzer
-                        </h1>
-                        <nav className="hidden md:flex items-center gap-6">
-                            <Link href="/dashboard" className="text-sm font-medium text-emerald-400">Dashboard</Link>
-                            <Link href="/analyser" className="text-sm font-medium text-slate-400 hover:text-white transition-colors">Analyser</Link>
-                            <Link href="/pipeline" className="text-sm font-medium text-slate-400 hover:text-white transition-colors">Pipeline</Link>
-                            <Link href="/settings" className="text-sm font-medium text-slate-400 hover:text-white transition-colors">Settings</Link>
-                        </nav>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-xs font-bold text-slate-900">
-                            MA
+        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+            {/* Page Header */}
+            <header className="sticky top-0 z-30 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/50">
+                <div className="px-6 lg:px-8 py-4">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-2xl font-bold text-white">Portfolio Dashboard</h1>
+                            <p className="text-sm text-slate-400 mt-0.5">Track your property investments at a glance</p>
                         </div>
+                        <Link
+                            href="/analyser"
+                            className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-xl text-sm font-semibold text-white hover:from-emerald-400 hover:to-cyan-400 transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30"
+                        >
+                            <Sparkles className="w-4 h-4" />
+                            <span>Analyze New Deal</span>
+                            <ArrowRight className="w-4 h-4" />
+                        </Link>
                     </div>
                 </div>
             </header>
 
-            <main className="container mx-auto px-6 py-8 space-y-8">
-                {/* Page Title */}
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h2 className="text-3xl font-bold text-white">Portfolio Dashboard</h2>
-                        <p className="text-slate-400 mt-1">Track your property investments at a glance</p>
+            <main className="px-6 lg:px-8 py-8 space-y-8">
+                {loading ? (
+                    <div className="flex items-center justify-center py-20">
+                        <Loader2 className="w-8 h-8 animate-spin text-emerald-400" />
                     </div>
-                    <Link
-                        href="/analyser"
-                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-lg text-sm font-medium text-white hover:from-emerald-400 hover:to-cyan-400 transition-all shadow-lg shadow-emerald-500/20"
-                    >
-                        <span>Analyze New Deal</span>
-                        <ArrowRight className="w-4 h-4" />
-                    </Link>
-                </div>
+                ) : (
+                    <>
+                        {/* Stats Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                            <StatCard
+                                label="Total Deals"
+                                value={<AnimatedCounter value={stats?.totalDeals || 0} />}
+                                subtext="Active properties"
+                                icon={<Building2 className="w-5 h-5" />}
+                                gradient="emerald"
+                            />
+                            <StatCard
+                                label="Portfolio Value"
+                                value={<AnimatedCurrency value={stats?.totalValue || 0} compact />}
+                                subtext="Combined asset value"
+                                icon={<PiggyBank className="w-5 h-5" />}
+                                gradient="cyan"
+                            />
+                            <StatCard
+                                label="Average ROI"
+                                value={<AnimatedPercentage value={stats?.avgRoi || 0} />}
+                                subtext="Across all strategies"
+                                icon={<TrendingUp className="w-5 h-5" />}
+                                trend={stats && stats.avgRoi > 0 ? { value: 2.3, positive: true } : undefined}
+                                gradient="purple"
+                            />
+                            <StatCard
+                                label="Avg Monthly Cashflow"
+                                value={<AnimatedCurrency value={stats?.avgCashflow || 0} />}
+                                subtext="Per property"
+                                icon={<BarChart3 className="w-5 h-5" />}
+                                gradient="amber"
+                            />
+                        </div>
 
-                {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <Card className="bg-slate-800/50 border-slate-700/50 backdrop-blur-sm">
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium text-slate-400">Total Deals</CardTitle>
-                            <Building2 className="w-4 h-4 text-emerald-400" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-bold text-white">{mockPortfolioStats.totalDeals}</div>
-                            <p className="text-xs text-slate-500 mt-1">Active properties</p>
-                        </CardContent>
-                    </Card>
-
-                    <Card className="bg-slate-800/50 border-slate-700/50 backdrop-blur-sm">
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium text-slate-400">Portfolio Value</CardTitle>
-                            <PiggyBank className="w-4 h-4 text-cyan-400" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-bold text-white">£{(mockPortfolioStats.totalValue / 1000000).toFixed(2)}M</div>
-                            <p className="text-xs text-slate-500 mt-1">Combined asset value</p>
-                        </CardContent>
-                    </Card>
-
-                    <Card className="bg-slate-800/50 border-slate-700/50 backdrop-blur-sm">
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium text-slate-400">Average ROI</CardTitle>
-                            <TrendingUp className="w-4 h-4 text-green-400" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-bold text-white">{mockPortfolioStats.avgRoi}%</div>
-                            <p className="text-xs text-slate-500 mt-1">Across all strategies</p>
-                        </CardContent>
-                    </Card>
-
-                    <Card className="bg-slate-800/50 border-slate-700/50 backdrop-blur-sm">
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium text-slate-400">Avg Monthly Cashflow</CardTitle>
-                            <BarChart3 className="w-4 h-4 text-purple-400" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-bold text-white">£{mockPortfolioStats.avgCashflow}</div>
-                            <p className="text-xs text-slate-500 mt-1">Per property</p>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                {/* Recent Deals & Quick Actions */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Recent Deals Table */}
-                    <Card className="lg:col-span-2 bg-slate-800/50 border-slate-700/50 backdrop-blur-sm">
-                        <CardHeader>
-                            <CardTitle className="text-white">Recent Deals</CardTitle>
-                            <CardDescription className="text-slate-400">Your latest property analyses</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="space-y-4">
-                                {mockRecentDeals.map((deal) => (
-                                    <div
-                                        key={deal.id}
-                                        className="flex items-center justify-between p-4 rounded-lg bg-slate-700/30 hover:bg-slate-700/50 transition-colors cursor-pointer"
-                                    >
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center">
-                                                <Home className="w-5 h-5 text-emerald-400" />
-                                            </div>
-                                            <div>
-                                                <p className="font-medium text-white">{deal.address}</p>
-                                                <p className="text-xs text-slate-400">{deal.postcode}</p>
-                                            </div>
+                        {/* Main Content Grid */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            {/* Recent Deals */}
+                            <GlassCard className="lg:col-span-2">
+                                <GlassCardHeader>
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <h2 className="text-lg font-semibold text-white">Recent Deals</h2>
+                                            <p className="text-sm text-slate-400">Your latest property analyses</p>
                                         </div>
-                                        <div className="flex items-center gap-6">
-                                            <div className="text-right">
-                                                <p className="text-sm font-medium text-white">£{deal.price.toLocaleString()}</p>
-                                                <p className="text-xs text-slate-400">{deal.strategy}</p>
-                                            </div>
-                                            <div className="text-right">
-                                                <p className="text-sm font-bold text-emerald-400">{deal.roi}% ROI</p>
-                                                <span className={`text-xs px-2 py-0.5 rounded-full ${deal.status === 'purchased' ? 'bg-green-500/20 text-green-400' :
-                                                    deal.status === 'offer_made' ? 'bg-yellow-500/20 text-yellow-400' :
-                                                        'bg-blue-500/20 text-blue-400'
-                                                    }`}>
-                                                    {deal.status.replace('_', ' ')}
-                                                </span>
-                                            </div>
-                                        </div>
+                                        <Link
+                                            href="/pipeline"
+                                            className="text-sm text-emerald-400 hover:text-emerald-300 font-medium"
+                                        >
+                                            View all →
+                                        </Link>
                                     </div>
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
+                                </GlassCardHeader>
+                                <GlassCardContent className="p-0">
+                                    {deals.length === 0 ? (
+                                        <div className="py-12 text-center">
+                                            <Home className="w-12 h-12 mx-auto text-slate-600 mb-4" />
+                                            <p className="text-slate-400">No deals yet</p>
+                                            <p className="text-sm text-slate-500 mt-1">Analyze your first property to get started</p>
+                                        </div>
+                                    ) : (
+                                        <div className="divide-y divide-slate-800/50">
+                                            {deals.slice(0, 5).map((deal) => {
+                                                const activeStrategy = Object.values(deal.strategies).find(s => s.isActive);
+                                                const roi = activeStrategy?.results?.roi || 0;
 
-                    {/* Quick Actions & Alerts */}
-                    <Card className="bg-slate-800/50 border-slate-700/50 backdrop-blur-sm">
-                        <CardHeader>
-                            <CardTitle className="text-white">Alerts</CardTitle>
-                            <CardDescription className="text-slate-400">Items requiring attention</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-                                <div className="flex items-center gap-2 text-yellow-400 text-sm font-medium">
-                                    <AlertTriangle className="w-4 h-4" />
-                                    <span>Article 4 Alert</span>
-                                </div>
-                                <p className="text-xs text-slate-400 mt-1">
-                                    42 Victoria Road is in an Article 4 area. Check HMO planning requirements.
-                                </p>
-                            </div>
+                                                return (
+                                                    <Link
+                                                        key={deal.id}
+                                                        href={`/packs?deal=${deal.id}`}
+                                                        className="flex items-center justify-between p-4 hover:bg-slate-800/30 transition-colors group"
+                                                    >
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center group-hover:from-emerald-500/30 group-hover:to-cyan-500/30 transition-colors">
+                                                                <Home className="w-5 h-5 text-emerald-400" />
+                                                            </div>
+                                                            <div>
+                                                                <p className="font-medium text-white group-hover:text-emerald-400 transition-colors">
+                                                                    {deal.property.address.line1}
+                                                                </p>
+                                                                <p className="text-xs text-slate-500">{deal.property.address.postcode}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex items-center gap-6">
+                                                            <div className="text-right">
+                                                                <p className="text-sm font-semibold text-white">
+                                                                    £{deal.property.askingPrice.toLocaleString()}
+                                                                </p>
+                                                                <span className={cn(
+                                                                    'text-xs px-2 py-0.5 rounded-full',
+                                                                    strategyColors[activeStrategy?.type || 'BTL']?.bg + '/20',
+                                                                    strategyColors[activeStrategy?.type || 'BTL']?.text
+                                                                )}>
+                                                                    {activeStrategy?.type || 'BTL'}
+                                                                </span>
+                                                            </div>
+                                                            <div className="text-right min-w-[70px]">
+                                                                <p className={cn(
+                                                                    'text-sm font-bold',
+                                                                    roi >= 10 ? 'text-emerald-400' : roi >= 5 ? 'text-amber-400' : 'text-slate-400'
+                                                                )}>
+                                                                    {roi.toFixed(1)}% ROI
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </Link>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </GlassCardContent>
+                            </GlassCard>
 
-                            <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                                <div className="flex items-center gap-2 text-blue-400 text-sm font-medium">
-                                    <TrendingUp className="w-4 h-4" />
-                                    <span>Strategy Suggestion</span>
-                                </div>
-                                <p className="text-xs text-slate-400 mt-1">
-                                    15 Park Lane shows 23% higher ROI with HMO strategy vs BTL.
-                                </p>
-                            </div>
+                            {/* Strategy Distribution & Actions */}
+                            <div className="space-y-6">
+                                {/* Strategy Breakdown */}
+                                <GlassCard>
+                                    <GlassCardHeader>
+                                        <h2 className="text-lg font-semibold text-white">Strategy Mix</h2>
+                                        <p className="text-sm text-slate-400">Portfolio breakdown</p>
+                                    </GlassCardHeader>
+                                    <GlassCardContent>
+                                        {stats && Object.keys(stats.strategyBreakdown).length > 0 ? (
+                                            <>
+                                                <div className="h-3 rounded-full bg-slate-800 overflow-hidden flex">
+                                                    {Object.entries(stats.strategyBreakdown).map(([strategy, count]) => {
+                                                        const percentage = (count / stats.totalDeals) * 100;
+                                                        return (
+                                                            <div
+                                                                key={strategy}
+                                                                className={cn('h-full', strategyColors[strategy]?.bg)}
+                                                                style={{ width: `${percentage}%` }}
+                                                                title={`${strategy}: ${count} deals`}
+                                                            />
+                                                        );
+                                                    })}
+                                                </div>
+                                                <div className="flex flex-wrap gap-3 mt-4">
+                                                    {Object.entries(stats.strategyBreakdown).map(([strategy, count]) => {
+                                                        const percentage = Math.round((count / stats.totalDeals) * 100);
+                                                        return (
+                                                            <div key={strategy} className="flex items-center gap-1.5">
+                                                                <div className={cn('w-2.5 h-2.5 rounded-full', strategyColors[strategy]?.bg)} />
+                                                                <span className="text-xs text-slate-400">{strategy} ({percentage}%)</span>
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <p className="text-sm text-slate-500 text-center py-4">No data yet</p>
+                                        )}
+                                    </GlassCardContent>
+                                </GlassCard>
 
-                            <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-                                <div className="flex items-center gap-2 text-emerald-400 text-sm font-medium">
-                                    <PiggyBank className="w-4 h-4" />
-                                    <span>Milestone</span>
-                                </div>
-                                <p className="text-xs text-slate-400 mt-1">
-                                    Portfolio exceeded £2M total value! 🎉
-                                </p>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                {/* Strategy Distribution */}
-                <Card className="bg-slate-800/50 border-slate-700/50 backdrop-blur-sm">
-                    <CardHeader>
-                        <CardTitle className="text-white">Strategy Distribution</CardTitle>
-                        <CardDescription className="text-slate-400">Portfolio breakdown by investment strategy</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="flex items-center gap-4">
-                            <div className="flex-1 h-4 rounded-full bg-slate-700 overflow-hidden flex">
-                                <div className="bg-emerald-500 w-[40%]" title="HMO" />
-                                <div className="bg-cyan-500 w-[30%]" title="BTL" />
-                                <div className="bg-purple-500 w-[20%]" title="BRRR" />
-                                <div className="bg-yellow-500 w-[10%]" title="R2R" />
+                                {/* Quick Actions */}
+                                <GlassCard>
+                                    <GlassCardHeader>
+                                        <h2 className="text-lg font-semibold text-white">Quick Actions</h2>
+                                    </GlassCardHeader>
+                                    <GlassCardContent className="space-y-2">
+                                        <Link
+                                            href="/analyser"
+                                            className="flex items-center gap-3 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20 transition-colors"
+                                        >
+                                            <Sparkles className="w-5 h-5" />
+                                            <span className="font-medium">Analyze New Property</span>
+                                        </Link>
+                                        <Link
+                                            href="/pipeline"
+                                            className="flex items-center gap-3 p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 hover:bg-cyan-500/20 transition-colors"
+                                        >
+                                            <Building2 className="w-5 h-5" />
+                                            <span className="font-medium">View Full Pipeline</span>
+                                        </Link>
+                                        <Link
+                                            href="/packs"
+                                            className="flex items-center gap-3 p-3 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 hover:bg-purple-500/20 transition-colors"
+                                        >
+                                            <FileText className="w-5 h-5" />
+                                            <span className="font-medium">Generate Investor Pack</span>
+                                        </Link>
+                                    </GlassCardContent>
+                                </GlassCard>
                             </div>
                         </div>
-                        <div className="flex items-center gap-6 mt-4">
-                            <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                                <span className="text-xs text-slate-400">HMO (40%)</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 rounded-full bg-cyan-500" />
-                                <span className="text-xs text-slate-400">BTL (30%)</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 rounded-full bg-purple-500" />
-                                <span className="text-xs text-slate-400">BRRR (20%)</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                                <span className="text-xs text-slate-400">R2R (10%)</span>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
+                    </>
+                )}
             </main>
         </div>
     );

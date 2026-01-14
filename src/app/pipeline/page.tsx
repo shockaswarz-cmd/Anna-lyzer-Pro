@@ -4,8 +4,10 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { DealCard } from '@/components/pipeline/DealCard';
 import { KanbanColumn } from '@/components/pipeline/KanbanColumn';
-import { Plus, Filter, Search } from 'lucide-react';
+import { Plus, Filter, Search, Sparkles, Building2, TrendingUp } from 'lucide-react';
 import { StrategyType } from '@/lib/types/deal';
+import { GlassCard, StatCard } from '@/components/ui/GlassCard';
+import { AnimatedCurrency } from '@/components/ui/AnimatedCounter';
 
 import { useEffect } from 'react';
 import { useAuth } from '@/components/auth/AuthContext';
@@ -13,6 +15,7 @@ import { getUserDeals, updateDeal, FirestoreDeal } from '@/lib/firestore/deals';
 import { Deal } from '@/lib/types/deal';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 interface PipelineData {
     [key: string]: Deal[];
@@ -90,9 +93,9 @@ export default function PipelinePage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
+        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-6 flex flex-col h-screen overflow-hidden">
             {/* Page Header */}
-            <div className="flex items-center justify-between mb-8">
+            <header className="flex items-center justify-between mb-8 flex-shrink-0">
                 <div>
                     <h1 className="text-2xl font-bold text-white">Deal Pipeline</h1>
                     <p className="text-slate-400 mt-1">Track and manage your property deals</p>
@@ -105,7 +108,7 @@ export default function PipelinePage() {
                             placeholder="Search deals..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="pl-10 pr-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500/50 w-64"
+                            className="pl-10 pr-4 py-2 rounded-xl bg-slate-900/50 border border-slate-800 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 w-64 transition-all"
                         />
                     </div>
                     <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 border border-slate-700 text-sm text-slate-300 hover:bg-slate-700 transition-colors">
@@ -114,13 +117,13 @@ export default function PipelinePage() {
                     </button>
                     <Link
                         href="/analyser"
-                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-lg text-sm font-medium text-white hover:from-emerald-400 hover:to-cyan-400 transition-all shadow-lg shadow-emerald-500/20"
+                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-xl text-sm font-semibold text-white hover:from-emerald-400 hover:to-cyan-400 transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30"
                     >
-                        <Plus className="w-4 h-4" />
+                        <Sparkles className="w-4 h-4" />
                         Add Deal
                     </Link>
                 </div>
-            </div>
+            </header>
 
             {/* Pipeline Stats */}
             <div className="grid grid-cols-5 gap-4 mb-6">
@@ -128,20 +131,29 @@ export default function PipelinePage() {
                     const colDeals = pipelineData[col.key] || [];
                     const totalValue = colDeals.reduce((sum, d) => sum + (d.property.askingPrice || 0), 0);
                     return (
-                        <div key={col.key} className="p-4 rounded-lg bg-slate-800/50 border border-slate-700/50">
-                            <div className="flex items-center gap-2 mb-1">
-                                <div className={`w-2 h-2 rounded-full ${col.color}`} />
-                                <span className="text-xs text-slate-400">{col.title}</span>
+                        <GlassCard key={col.key} className="p-4" gradient="none">
+                            <div className="flex items-center gap-2 mb-2">
+                                <div className={`w-2 h-2 rounded-full shadow-[0_0_8px] shadow-current ${col.color.replace('bg-', 'text-')}`} />
+                                <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">{col.title}</span>
                             </div>
-                            <p className="text-lg font-bold text-white">£{(totalValue / 1000).toFixed(0)}k</p>
-                            <p className="text-xs text-slate-500">{colDeals.length} deals</p>
-                        </div>
+                            <div className="flex items-baseline justify-between">
+                                <AnimatedCurrency value={totalValue} compact className="text-lg font-bold text-white relative z-10" />
+                                <span className={cn(
+                                    "text-[10px] font-bold px-2 py-0.5 rounded-md border",
+                                    col.color.replace('bg-', 'bg-').replace('500', '500/10'),
+                                    col.color.replace('bg-', 'text-').replace('500', '400'),
+                                    col.color.replace('bg-', 'border-').replace('500', '500/20')
+                                )}>
+                                    {colDeals.length}
+                                </span>
+                            </div>
+                        </GlassCard>
                     );
                 })}
             </div>
 
             {/* Kanban Board */}
-            <div className="flex gap-4 overflow-x-auto pb-4">
+            <div className="flex gap-5 overflow-x-auto pb-6 flex-1 min-h-0 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
                 {columns.map((col) => {
                     const colDeals = pipelineData[col.key] || [];
                     const filteredDeals = searchQuery
