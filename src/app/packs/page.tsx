@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, Suspense } from 'react';
 import { InvestorPackPreview } from '@/components/pack/InvestorPackPreview';
 import { PackControls } from '@/components/pack/PackControls';
 import { StrategyType, Deal } from '@/lib/types/deal';
@@ -16,7 +16,20 @@ import { useAuth } from '@/components/auth/AuthContext';
 import { getDeal } from '@/lib/firestore/deals';
 import { getUserProfile } from '@/lib/firestore/user';
 
+// Wrap in Suspense for Next.js SSR compatibility
 export default function PacksPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+            </div>
+        }>
+            <PacksPageContent />
+        </Suspense>
+    );
+}
+
+function PacksPageContent() {
     const searchParams = useSearchParams();
     const { user } = useAuth();
 

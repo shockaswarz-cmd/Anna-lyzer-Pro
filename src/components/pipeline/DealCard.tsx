@@ -35,7 +35,8 @@ export function DealCard({
     strategy,
     status,
     imageUrl,
-    onClick
+    onClick,
+    onStatusChange
 }: DealCardProps) {
     return (
         <div
