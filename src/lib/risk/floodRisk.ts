@@ -96,6 +96,7 @@ export async function getFloodRisk(postcode: string): Promise<FloodRiskResult> {
  */
 async function fetchActiveWarnings(postcode: string): Promise<FloodWarning[]> {
     try {
+        void postcode;
         // EA API endpoint for flood warnings by county/area
         // For more accurate results, we'd need to geocode the postcode first
         const response = await fetch(
@@ -111,7 +112,7 @@ async function fetchActiveWarnings(postcode: string): Promise<FloodWarning[]> {
             return [];
         }
 
-        const data = await response.json();
+        await response.json();
 
         // EA API returns flood warnings, we'd match by location
         // For now, return empty as we can't reliably match without geocoding

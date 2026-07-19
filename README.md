@@ -12,7 +12,7 @@
 
 ## Tech Stack
 
-- **Framework**: Next.js 15 (App Router)
+- **Framework**: Next.js 16 (App Router)
 - **Styling**: Tailwind CSS + Shadcn UI
 - **Backend/Auth**: Firebase (Auth + Firestore)
 - **Scraping**: Firecrawl SDK + Axios/Cheerio Fallback
@@ -65,7 +65,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the app.
 
 ## Deployment
 
-This project is optimized for deployment on **Vercel**.
+This project is optimized for deployment on **Vercel**. For the full production checklist, environment requirements, rollback options, and DigitalOcean/Netlify alternatives, see [`docs/hosting-plan.md`](docs/hosting-plan.md).
 
 1. Link your project:
    ```bash

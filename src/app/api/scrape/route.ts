@@ -3,6 +3,7 @@ import FirecrawlApp from '@mendable/firecrawl-js';
 import axios, { AxiosError } from 'axios';
 import * as cheerio from 'cheerio';
 import UserAgent from 'user-agents';
+import { validatePropertyPortalUrl } from '@/lib/validation/propertyInput';
 
 // ============================================================================
 // CONFIGURATION
@@ -143,12 +144,15 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { url } = body;
 
-    if (!url) {
-        return NextResponse.json({ success: false, error: 'URL is required' }, { status: 400 });
+    const validation = validatePropertyPortalUrl(String(url || ''));
+    if (!validation.ok) {
+        return NextResponse.json({ success: false, error: validation.error }, { status: 400 });
     }
 
+    const safeUrl = validation.url;
+
     // Rate Limit Check
-    const domain = getDomain(url);
+    const domain = getDomain(safeUrl);
     const rateCheck = checkRateLimit(domain);
     if (!rateCheck.allowed) {
         return NextResponse.json({
@@ -164,9 +168,9 @@ export async function POST(request: NextRequest) {
     try {
         if (!FIRECRAWL_API_KEY) throw new Error('Firecrawl API Key missing');
 
-        console.log(`[Scraper] Attempting Firecrawl: ${url}`);
+        console.log(`[Scraper] Attempting Firecrawl: ${safeUrl}`);
         const app = new FirecrawlApp({ apiKey: FIRECRAWL_API_KEY });
-        const scrapeResult = await app.scrape(url, { formats: ['html'] }) as any;
+        const scrapeResult = await app.scrape(safeUrl, { formats: ['html'] }) as any;
 
         if (!scrapeResult.success || !scrapeResult.html) {
             throw new Error(scrapeResult.error || 'No HTML returned');
@@ -180,8 +184,8 @@ export async function POST(request: NextRequest) {
         // 2. Try Legacy Fallback
         try {
             fetchMethod = 'Legacy Fallback';
-            console.log(`[Scraper] Attempting Legacy Fetch: ${url}`);
-            html = await fetchWithRetry(url);
+            console.log(`[Scraper] Attempting Legacy Fetch: ${safeUrl}`);
+            html = await fetchWithRetry(safeUrl);
         } catch (fallbackError: any) {
             console.error('[Scraper] All methods failed.');
             return NextResponse.json({
@@ -197,20 +201,20 @@ export async function POST(request: NextRequest) {
 
         // Basic Metadata
         // Basic Metadata
-        let title = $('meta[property="og:title"]').attr('content') || $('title').text();
-        let image = $('meta[property="og:image"]').attr('content');
+        const title = $('meta[property="og:title"]').attr('content') || $('title').text();
+        const image = $('meta[property="og:image"]').attr('content');
         let description = ''; // Will parse full description below
-        let metaDescription = $('meta[property="og:description"]').attr('content') || $('meta[name="description"]').attr('content');
+        const metaDescription = $('meta[property="og:description"]').attr('content') || $('meta[name="description"]').attr('content');
 
         // Detect Source
         let source = 'Unknown';
-        if (url.includes('rightmove.co.uk')) source = 'Rightmove';
-        else if (url.includes('zoopla.co.uk')) source = 'Zoopla';
-        else if (url.includes('onthemarket.com')) source = 'OnTheMarket';
+        if (safeUrl.includes('rightmove.co.uk')) source = 'Rightmove';
+        else if (safeUrl.includes('zoopla.co.uk')) source = 'Zoopla';
+        else if (safeUrl.includes('onthemarket.com')) source = 'OnTheMarket';
 
         // Detect Transaction Type
         let transactionType: 'sale' | 'rent' = 'sale';
-        const lowerUrl = url.toLowerCase();
+        const lowerUrl = safeUrl.toLowerCase();
         const lowerTitle = (title || '').toLowerCase();
 
         if (
@@ -223,14 +227,10 @@ export async function POST(request: NextRequest) {
         let price = 0;
         let bedrooms = 0;
         let bathrooms = 0;
-        let features: string[] = [];
+        const features: string[] = [];
         let tenure: 'Freehold' | 'Leasehold' | 'Share of Freehold' = 'Freehold'; // Default fallback, but will try to detect
         let size = 0;
         let sizeUnit: 'sqft' | 'sqm' = 'sqft';
-
-        // Helper regex
-        const tenureRegex = /(freehold|leasehold|share of freehold)/i;
-        const sizeRegex = /([\d,.]+)\s*(sq\s?ft|square\s?feet|sq\s?m|square\s?metres)/i;
 
         // Parsing Logic
         if (source === 'Rightmove') {
@@ -371,7 +371,7 @@ export async function POST(request: NextRequest) {
             data: {
                 source,
                 transactionType,
-                url,
+                url: safeUrl,
                 address: address.trim(),
                 postcode,
                 price,

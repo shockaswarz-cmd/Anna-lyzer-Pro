@@ -1,5 +1,6 @@
 import { PropertyDetails, Deal, StrategyType, AcquisitionCosts, MortgageDetails, IncomeExpenses, AnalysisResults } from "../types/deal";
 import { ManualPropertyData } from "@/components/deal/DealInput";
+import { normalizePostcode, splitAddress, toPositiveNumber, validatePropertyPortalUrl } from "@/lib/validation/propertyInput";
 
 interface ScrapedData {
     source: string;
@@ -38,7 +39,7 @@ const getDefaultMortgage = (price: number): MortgageDetails => ({
     interestRate: 5.5,
     termYears: 25,
     productFee: 995,
-    monthlyPayment: 0,
+    monthlyPayment: Math.round((price * 0.75 * 0.055) / 12),
     isInterestOnly: true
 });
 
@@ -107,23 +108,26 @@ function createStrategy(type: StrategyType, isActive: boolean, price: number, be
 // Create deal from manual entry
 export function createDealFromManual(data: ManualPropertyData): Deal {
     const isRental = data.transactionType === 'rent';
-    const price = data.price;
-    const bedrooms = data.bedrooms || 3;
+    const price = toPositiveNumber(data.price);
+    const bedrooms = Math.max(1, Math.round(toPositiveNumber(data.bedrooms, 1)));
+    const bathrooms = Math.max(1, Math.round(toPositiveNumber(data.bathrooms, 1)));
+    const address = splitAddress(data.address);
 
     const property: PropertyDetails = {
+        sourceUrl: data.sourceUrl?.trim() || undefined,
         askingPrice: price,
         propertyType: mapPropertyType(data.propertyType),
-        bedrooms: bedrooms,
-        bathrooms: data.bathrooms || 1,
+        bedrooms,
+        bathrooms,
         address: {
-            line1: data.address.split(',')[0] || data.address,
-            city: data.address.split(',')[1]?.trim() || '',
-            postcode: data.postcode
+            line1: address.line1,
+            city: address.city,
+            postcode: normalizePostcode(data.postcode)
         },
-        tenure: 'Freehold', // Manual default, will update later
-        size: undefined,
-        sizeUnit: 'sqft',
-        description: '',
+        tenure: data.tenure,
+        size: data.size && data.size > 0 ? data.size : undefined,
+        sizeUnit: data.sizeUnit || 'sqft',
+        description: data.description?.trim() || '',
         images: [],
         agentName: 'Manual Entry'
     };
@@ -146,10 +150,15 @@ export function createDealFromManual(data: ManualPropertyData): Deal {
 
 // Scrape deal from URL
 export async function scrapeDeal(url: string): Promise<Deal> {
+    const validation = validatePropertyPortalUrl(url);
+    if (!validation.ok) {
+        throw new Error(validation.error);
+    }
+
     const response = await fetch('/api/scrape', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url })
+        body: JSON.stringify({ url: validation.url })
     });
 
     const result = await response.json();
@@ -171,8 +180,8 @@ export async function scrapeDeal(url: string): Promise<Deal> {
         bathrooms: scraped.bathrooms || 1,
         address: {
             line1: scraped.address.split(',')[0] || scraped.address,
-            city: scraped.address.split(',')[1]?.trim() || '',
-            postcode: scraped.postcode
+            city: scraped.address.split(',').slice(1).map((part) => part.trim()).filter(Boolean).join(', '),
+            postcode: normalizePostcode(scraped.postcode)
         },
         tenure: scraped.tenure || 'Freehold',
         size: scraped.size || 0,

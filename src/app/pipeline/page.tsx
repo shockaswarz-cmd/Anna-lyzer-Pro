@@ -4,14 +4,14 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { DealCard } from '@/components/pipeline/DealCard';
 import { KanbanColumn } from '@/components/pipeline/KanbanColumn';
-import { Plus, Filter, Search, Sparkles, Building2, TrendingUp } from 'lucide-react';
+import { Filter, Search, Sparkles } from 'lucide-react';
 import { StrategyType } from '@/lib/types/deal';
-import { GlassCard, StatCard } from '@/components/ui/GlassCard';
+import { GlassCard } from '@/components/ui/GlassCard';
 import { AnimatedCurrency } from '@/components/ui/AnimatedCounter';
 
 import { useEffect } from 'react';
 import { useAuth } from '@/components/auth/AuthContext';
-import { getUserDeals, updateDeal, FirestoreDeal } from '@/lib/firestore/deals';
+import { getUserDeals, updateDeal } from '@/lib/firestore/deals';
 import { Deal } from '@/lib/types/deal';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -50,13 +50,13 @@ export default function PipelinePage() {
         loadDeals();
     }, [user, authLoading]);
 
-    const handleStatusChange = async (dealId: string, newStatus: string) => {
+    const handleStatusChange = async (dealId: string, newStatus: Deal['pipelineStatus']) => {
         // Optimistic update
         setDeals(prev => prev.map(d =>
-            d.id === dealId ? { ...d, pipelineStatus: newStatus } as any : d
+            d.id === dealId ? { ...d, pipelineStatus: newStatus } : d
         ));
 
-        const success = await updateDeal(dealId, { pipelineStatus: newStatus as any });
+        const success = await updateDeal(dealId, { pipelineStatus: newStatus });
         if (!success) {
             // Revert on failure
             const userDeals = await getUserDeals(user?.uid || '');
@@ -74,8 +74,7 @@ export default function PipelinePage() {
     };
 
     deals.forEach(deal => {
-        // @ts-ignore - pipelineStatus might not exist on old deals or be typed strictly
-        const status = deal['pipelineStatus'] || 'leads';
+        const status = deal.pipelineStatus || 'leads';
         if (pipelineData[status]) {
             pipelineData[status].push(deal);
         } else {

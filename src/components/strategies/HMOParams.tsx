@@ -69,7 +69,7 @@ export function HMOParams({ bedrooms, onRoomsChange }: HMOParamsProps) {
             </CardHeader>
             <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                    {rooms.map((room, idx) => (
+                    {rooms.map((room) => (
                         <div key={room.id} className="relative p-3 bg-white rounded-lg border shadow-sm">
                             <button
                                 onClick={() => removeRoom(room.id)}

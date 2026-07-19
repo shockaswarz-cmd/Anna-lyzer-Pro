@@ -3,7 +3,7 @@
 import { Deal, StrategyType, AnalysisResults } from '@/lib/types/deal';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowUpRight, ArrowDownRight, Minus, Trophy, TrendingUp, Wallet, Clock } from 'lucide-react';
+import { ArrowUpRight, Trophy, TrendingUp, Wallet, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface StrategyComparisonProps {

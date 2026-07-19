@@ -1,8 +1,8 @@
 'use client';
 
-import { Deal, StrategyType, AnalysisResults } from '@/lib/types/deal';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MapPin, Home, Bed, Bath, Building2, TrendingUp, ShieldCheck, Calendar } from 'lucide-react';
+/* eslint-disable @next/next/no-img-element */
+import { Deal, StrategyType } from '@/lib/types/deal';
+import { MapPin, Bed, Bath, Building2, TrendingUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface InvestorPackPreviewProps {

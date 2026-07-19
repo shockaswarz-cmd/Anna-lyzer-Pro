@@ -110,6 +110,7 @@ export async function getComparables(
 
     // Calculate yield benchmark
     const yieldBenchmark = (adjustedAvgRent * 12 / adjustedAvgPrice) * 100;
+    const priceVariance = Math.abs((askingPrice - adjustedAvgPrice) / adjustedAvgPrice);
 
     return {
         areaAveragePrice: adjustedAvgPrice,
@@ -118,7 +119,7 @@ export async function getComparables(
         rentalYieldBenchmark: Math.round(yieldBenchmark * 10) / 10,
         averageRent: adjustedAvgRent,
         dataDate: new Date().toISOString().split('T')[0],
-        confidence: postcodeArea === 'DEFAULT' ? 'low' : 'medium',
+        confidence: postcodeArea === 'DEFAULT' ? 'low' : priceVariance > 0.35 ? 'low' : 'medium',
         source: 'Regional Estimates (Land Registry HPI benchmarks)'
     };
 }
