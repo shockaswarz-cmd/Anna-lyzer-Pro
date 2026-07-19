@@ -89,5 +89,6 @@ export interface Deal {
     updatedAt: string;
     property: PropertyDetails;
     strategies: Record<StrategyType, StrategyResult>;
+    pipelineStatus?: 'leads' | 'viewing' | 'offer' | 'purchased' | 'renting';
     notes?: string;
 }

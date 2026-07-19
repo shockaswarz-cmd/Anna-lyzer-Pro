@@ -1,10 +1,10 @@
 'use client';
 
-import { IncomeExpenses, AcquisitionCosts } from '@/lib/types/deal';
+import { IncomeExpenses } from '@/lib/types/deal';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PoundSterling, Percent } from 'lucide-react';
+import { PoundSterling } from 'lucide-react';
 
 interface IncomeParamsProps {
     data: IncomeExpenses;

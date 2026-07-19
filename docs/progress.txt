@@ -17,5 +17,40 @@ PHASE VII: UI OPTIMIZATION
     - Collapsible description and compact gallery
 
 NEXT STEPS:
-- Full E2E regression test (V-001)
-- Final deployment (V-002)
+- Final production deployment (V-002) after operator approval of hosting target/env/domain
+
+PHASE VIII: COURTINA PROPERTY ANALYZER UPGRADE
+----------------------------------------------
+[x] C-001: Multica coordination
+    - Created Multica parent issue AST-33
+    - Updated Claude Code Multica agent model to fable-5
+    - Set Claude Code description as architect/designer/senior debugger/review agent
+[x] C-002: Analysis input hardening
+    - Added UK postcode normalization and validation
+    - Added supported portal URL validation for Rightmove, Zoopla, and OnTheMarket
+    - Added server-side scraper URL validation before Firecrawl/fallback fetch
+    - Manual entry now captures optional source URL, tenure, size, and notes/description
+[x] C-003: Dashboard redesign
+    - Rebuilt /dashboard as a deal command centre with action rail, metrics, workflow cards, and competitor-informed diligence cues
+[x] C-004: Investor CRM
+    - Added /investors route
+    - Added local-storage investor profiles with create/edit/delete support
+    - Captures budget, target ROI, location focus, strategy focus, risk profile, requirements, and notes
+[x] C-005: Verification
+    - npm run test:run: 20 tests passed
+    - npm run build: passed, generated /investors route
+    - npm run lint: passed cleanly with 0 warnings after cleanup
+    - Local production server verified on port 3100 for /dashboard, /analyser, /investors
+[x] C-006: Production readiness plan
+    - Added docs/hosting-plan.md with Vercel, Netlify, and DigitalOcean options
+    - Added approval gates, env requirements, rollback plan, and smoke checklist
+    - Removed unused deprecated @modelcontextprotocol/server-github package to cut high audit advisories
+[x] C-007: Architecture and UX review
+    - Added docs/architecture-ux-review.md
+    - Completed review despite Multica Claude Code runtime auth blocker
+    - Accepted for preview/PR; production still gated on env and deployment approval
+
+OPEN RISKS:
+- FIRECRAWL_API_KEY is not present on this server, so scraper will use fallback until configured.
+- Firebase env is not present on this server, so investor CRM currently uses browser local storage; Firestore persistence is the next upgrade.
+- Production/public hosting still needs operator approval and hosting target/env confirmation.

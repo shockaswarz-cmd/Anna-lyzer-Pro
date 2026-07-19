@@ -8,6 +8,7 @@ import {
     Kanban,
     Settings,
     FileText,
+    Users,
     ChevronLeft,
     ChevronRight,
     Sparkles,
@@ -30,6 +31,7 @@ const navItems: NavItem[] = [
     { label: 'Analyser', href: '/analyser', icon: Search },
     { label: 'Pipeline', href: '/pipeline', icon: Kanban },
     { label: 'Investor Packs', href: '/packs', icon: FileText },
+    { label: 'Investors', href: '/investors', icon: Users },
     { label: 'Settings', href: '/settings', icon: Settings },
 ];
 

@@ -3,11 +3,13 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Search, Loader2, PenLine } from 'lucide-react';
+import { Search, Loader2, PenLine, Link2, AlertCircle } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { isValidUkPostcode, normalizePostcode, validatePropertyPortalUrl } from '@/lib/validation/propertyInput';
 
 interface DealInputProps {
     onAnalyze: (url: string) => void;
@@ -26,10 +28,13 @@ export interface ManualPropertyData {
     tenure: 'Freehold' | 'Leasehold' | 'Share of Freehold';
     size?: number;
     sizeUnit?: 'sqft' | 'sqm';
+    sourceUrl?: string;
+    description?: string;
 }
 
 export function DealInput({ onAnalyze, onManualEntry, isLoading }: DealInputProps) {
     const [url, setUrl] = useState('');
+    const [validationError, setValidationError] = useState<string | null>(null);
     const [manualData, setManualData] = useState<ManualPropertyData>({
         address: '',
         postcode: '',
@@ -45,16 +50,39 @@ export function DealInput({ onAnalyze, onManualEntry, isLoading }: DealInputProp
 
     const handleUrlSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (url.trim()) {
-            onAnalyze(url);
+        const validation = validatePropertyPortalUrl(url);
+        if (!validation.ok) {
+            setValidationError(validation.error);
+            return;
         }
+        setValidationError(null);
+        onAnalyze(validation.url);
     };
 
     const handleManualSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (manualData.address && manualData.price > 0) {
-            onManualEntry(manualData);
+        const errors: string[] = [];
+        if (!manualData.address.trim()) errors.push('Address is required.');
+        if (!isValidUkPostcode(manualData.postcode)) errors.push('Enter a valid UK postcode, for example M14 6AF.');
+        if (manualData.price <= 0) errors.push(manualData.transactionType === 'rent' ? 'Monthly rent must be greater than zero.' : 'Asking price must be greater than zero.');
+        if (manualData.bedrooms < 1) errors.push('Bedrooms must be at least 1.');
+        if (manualData.bathrooms < 1) errors.push('Bathrooms must be at least 1.');
+        if (manualData.sourceUrl) {
+            const sourceUrlValidation = validatePropertyPortalUrl(manualData.sourceUrl);
+            if (!sourceUrlValidation.ok) errors.push(`Source URL: ${sourceUrlValidation.error}`);
         }
+
+        if (errors.length) {
+            setValidationError(errors.join(' '));
+            return;
+        }
+
+        setValidationError(null);
+        onManualEntry({
+            ...manualData,
+            postcode: normalizePostcode(manualData.postcode),
+            sourceUrl: manualData.sourceUrl?.trim() || undefined,
+        });
     };
 
     return (
@@ -78,16 +106,26 @@ export function DealInput({ onAnalyze, onManualEntry, isLoading }: DealInputProp
                         </TabsTrigger>
                     </TabsList>
 
+                    {validationError && (
+                        <div className="mb-4 flex items-start gap-2 rounded-xl border border-amber-400/30 bg-amber-500/10 p-3 text-sm text-amber-200">
+                            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                            <p>{validationError}</p>
+                        </div>
+                    )}
+
                     <TabsContent value="url">
-                        <form onSubmit={handleUrlSubmit} className="flex gap-4">
+                        <form onSubmit={handleUrlSubmit} className="flex flex-col gap-3 md:flex-row">
                             <Input
                                 placeholder="https://www.rightmove.co.uk/properties/..."
                                 value={url}
-                                onChange={(e) => setUrl(e.target.value)}
+                                onChange={(e) => {
+                                    setUrl(e.target.value);
+                                    setValidationError(null);
+                                }}
                                 disabled={isLoading}
                                 className="flex-1 h-12 text-lg"
                             />
-                            <Button type="submit" size="lg" disabled={isLoading || !url} className="h-12 px-8">
+                            <Button type="submit" size="lg" disabled={isLoading || !url.trim()} className="h-12 px-8">
                                 {isLoading ? (
                                     <>
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -116,6 +154,16 @@ export function DealInput({ onAnalyze, onManualEntry, isLoading }: DealInputProp
                                         placeholder="123 High Street, Manchester"
                                         value={manualData.address}
                                         onChange={(e) => setManualData({ ...manualData, address: e.target.value })}
+                                    />
+                                </div>
+
+                                <div className="space-y-2 md:col-span-2">
+                                    <Label htmlFor="sourceUrl" className="flex items-center gap-2"><Link2 className="h-3.5 w-3.5" /> Optional source URL</Label>
+                                    <Input
+                                        id="sourceUrl"
+                                        placeholder="Rightmove, Zoopla, or OnTheMarket link used for reference"
+                                        value={manualData.sourceUrl || ''}
+                                        onChange={(e) => setManualData({ ...manualData, sourceUrl: e.target.value })}
                                     />
                                 </div>
 
@@ -199,7 +247,7 @@ export function DealInput({ onAnalyze, onManualEntry, isLoading }: DealInputProp
                                     <Label>Tenure</Label>
                                     <Select
                                         value={manualData.tenure}
-                                        onValueChange={(v) => setManualData({ ...manualData, tenure: v as any })}
+                                        onValueChange={(v) => setManualData({ ...manualData, tenure: v as 'Freehold' | 'Leasehold' | 'Share of Freehold' })}
                                     >
                                         <SelectTrigger>
                                             <SelectValue />
@@ -217,6 +265,7 @@ export function DealInput({ onAnalyze, onManualEntry, isLoading }: DealInputProp
                                     <div className="flex gap-2">
                                         <Input
                                             type="number"
+                                            min={0}
                                             placeholder="e.g. 850"
                                             value={manualData.size || ''}
                                             onChange={(e) => setManualData({ ...manualData, size: Number(e.target.value) })}
@@ -224,7 +273,7 @@ export function DealInput({ onAnalyze, onManualEntry, isLoading }: DealInputProp
                                         />
                                         <Select
                                             value={manualData.sizeUnit}
-                                            onValueChange={(v) => setManualData({ ...manualData, sizeUnit: v as any })}
+                                            onValueChange={(v) => setManualData({ ...manualData, sizeUnit: v as 'sqft' | 'sqm' })}
                                         >
                                             <SelectTrigger className="w-[100px]">
                                                 <SelectValue />
@@ -236,9 +285,20 @@ export function DealInput({ onAnalyze, onManualEntry, isLoading }: DealInputProp
                                         </Select>
                                     </div>
                                 </div>
+
+                                <div className="space-y-2 md:col-span-2">
+                                    <Label htmlFor="description">Notes / property description</Label>
+                                    <Textarea
+                                        id="description"
+                                        placeholder="Lease length, refurb scope, local demand notes, agent comments..."
+                                        value={manualData.description || ''}
+                                        onChange={(e) => setManualData({ ...manualData, description: e.target.value })}
+                                        rows={4}
+                                    />
+                                </div>
                             </div>
 
-                            <Button type="submit" className="w-full h-12" disabled={!manualData.address || manualData.price <= 0}>
+                            <Button type="submit" className="w-full h-12" disabled={!manualData.address.trim() || manualData.price <= 0}>
                                 <PenLine className="mr-2 h-4 w-4" />
                                 Analyze This Deal
                             </Button>

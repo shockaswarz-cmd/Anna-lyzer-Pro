@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { assessDealRisk, RiskAssessment } from '../assessment';
+import { assessDealRisk } from '../assessment';
 import { PropertyDetails, AcquisitionCosts, IncomeExpenses, MortgageDetails } from '../../types/deal';
 
 // Test fixtures

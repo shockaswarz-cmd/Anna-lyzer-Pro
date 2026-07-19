@@ -1,21 +1,22 @@
 'use client';
 
 import { useState } from 'react';
+import type { ReactNode } from 'react';
 import { DealInput, ManualPropertyData } from '@/components/deal/DealInput';
 import { scrapeDeal, createDealFromManual } from '@/lib/scraper/service';
-import { Deal, StrategyType } from '@/lib/types/deal';
+import { Deal, StrategyType, AcquisitionCosts, MortgageDetails, IncomeExpenses } from '@/lib/types/deal';
 import { calculateMetrics } from '@/lib/calculators/calculator';
 import { AcquisitionCostsParams } from '@/components/strategies/AcquisitionCostsParams';
 import { MortgageParams } from '@/components/strategies/MortgageParams';
 import { IncomeParams } from '@/components/strategies/IncomeParams';
 import { HMOParams } from '@/components/strategies/HMOParams';
-import { BRRRParams, BRRRValues } from '@/components/strategies/BRRRParams';
+import { BRRRParams } from '@/components/strategies/BRRRParams';
 import { StrategySummary } from '@/components/strategies/StrategySummary';
 import { StrategyComparison } from '@/components/strategies/StrategyComparison';
 import { RiskPanel } from '@/components/deal/RiskPanel';
 import { assessDealRisk } from '@/lib/risk/assessment';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Home, MapPin, Bed, Bath, Building2, Save, Loader2, Ruler, FileText, ChevronDown, ChevronUp } from 'lucide-react';
+import { Home, MapPin, Bed, Bath, Building2, Save, Loader2, Ruler, FileText, ChevronDown, ChevronUp, ExternalLink, type LucideIcon } from 'lucide-react';
 import { DealGallery } from '@/components/deal/DealGallery';
 import { saveDeal } from '@/lib/firestore/deals';
 import { useAuth } from '@/components/auth/AuthContext';
@@ -40,9 +41,9 @@ export default function AnalyserPage() {
             if (result.strategies.R2R.isActive) {
                 setActiveStrategy('R2R');
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Failed to analyze:', err);
-            setError(err.message || 'Failed to analyze the property. Try Manual Entry instead.');
+            setError(err instanceof Error ? err.message : 'Failed to analyze the property. Try Manual Entry instead.');
         } finally {
             setIsLoading(false);
         }
@@ -88,7 +89,7 @@ export default function AnalyserPage() {
         }
     };
 
-    const handleCostChange = (newCosts: any) => {
+    const handleCostChange = (newCosts: AcquisitionCosts) => {
         if (!deal) return;
         setDeal(prev => {
             if (!prev) return null;
@@ -99,7 +100,7 @@ export default function AnalyserPage() {
         });
     };
 
-    const handleMortgageChange = (newMortgage: any) => {
+    const handleMortgageChange = (newMortgage: MortgageDetails) => {
         if (!deal) return;
         setDeal(prev => {
             if (!prev) return null;
@@ -110,7 +111,7 @@ export default function AnalyserPage() {
         });
     };
 
-    const handleIncomeChange = (newIncome: any) => {
+    const handleIncomeChange = (newIncome: IncomeExpenses) => {
         if (!deal) return;
         setDeal(prev => {
             if (!prev) return null;
@@ -182,8 +183,18 @@ export default function AnalyserPage() {
                                         <h2 className="text-2xl font-bold text-white mb-1">{deal.property.address.line1}</h2>
                                         <p className="text-slate-400 flex items-center gap-2 text-sm">
                                             <MapPin className="h-4 w-4 text-emerald-500" />
-                                            {deal.property.address.city}, {deal.property.address.postcode}
+                                            {deal.property.address.city || 'City unknown'}, {deal.property.address.postcode || 'Postcode missing'}
                                         </p>
+                                        {deal.property.sourceUrl && (
+                                            <a
+                                                href={deal.property.sourceUrl}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-medium text-cyan-200 hover:bg-cyan-400/20"
+                                            >
+                                                <ExternalLink className="h-3.5 w-3.5" /> Source listing
+                                            </a>
+                                        )}
                                     </div>
                                     <div className="flex gap-2 shrink-0">
                                         <button
@@ -333,7 +344,7 @@ export default function AnalyserPage() {
     );
 }
 
-function MetricCard({ icon: Icon, label, value, color }: { icon: any, label: string, value: any, color: string }) {
+function MetricCard({ icon: Icon, label, value, color }: { icon: LucideIcon, label: string, value: ReactNode, color: string }) {
     return (
         <div className="bg-slate-900/50 p-2 rounded-lg border border-slate-800/50 flex flex-col items-center justify-center text-center">
             <div className="flex items-center gap-1.5 text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-0.5">

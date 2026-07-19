@@ -1,5 +1,6 @@
 'use client';
 
+/* eslint-disable @next/next/no-img-element */
 import { Deal, StrategyType } from '@/lib/types/deal';
 import { Home, MapPin, TrendingUp, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -14,7 +15,7 @@ interface DealCardProps {
     status: string;
     imageUrl?: string;
     onClick?: () => void;
-    onStatusChange?: (newStatus: string) => void;
+    onStatusChange?: (newStatus: NonNullable<Deal['pipelineStatus']>) => void;
 }
 
 const strategyColors: Record<StrategyType, { bg: string; text: string; border: string }> = {
@@ -119,7 +120,7 @@ export function DealCard({
                 >
                     <select
                         value={status}
-                        onChange={(e) => onStatusChange(e.target.value)}
+                        onChange={(e) => onStatusChange(e.target.value as NonNullable<Deal['pipelineStatus']>)}
                         className="w-full bg-slate-950 border border-slate-800 text-xs text-slate-300 rounded px-2 py-1.5 focus:ring-1 focus:ring-emerald-500/50 outline-none cursor-pointer"
                     >
                         <option value="leads">Leads</option>
